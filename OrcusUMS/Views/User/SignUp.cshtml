@@ -19,6 +19,8 @@
     <link rel="stylesheet" href="~/css/main.css">
     <link rel="stylesheet" href="~/css/authentication.css">
     <link rel="stylesheet" href="~/css/color_skins.css">
+    <link rel="stylesheet" href="~/plugins/sweetalert/sweetalert.css">
+    <script src="~/plugins/sweetalert/sweetalert.min.js"></script>
 </head>
 
 <body class="theme-purple authentication sidebar-collapse">
@@ -36,7 +38,7 @@
             <div class="navbar-collapse">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" asp-action="">Home</a>
+                        <a class="nav-link" asp-action="Index" asp-controller="Home">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Search Result</a>
@@ -60,7 +62,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link btn btn-white btn-round" asp-action="">SIGN IN</a>
+                        <a class="nav-link btn btn-white btn-round" asp-action="SignIn">SIGN IN</a>
                     </li>
                 </ul>
             </div>
@@ -72,7 +74,7 @@
         <div class="container">
             <div class="col-md-12 content-center">
                 <div class="card-plain">
-                    <form class="form" method="" action="#">
+                    <form class="form" method="post" action="SignUp">
                         <div class="header">
                             <div class="logo-container">
                                 <img src="https://thememakker.com/templates/oreo/html/assets/images/logo.svg" alt="">
@@ -82,19 +84,37 @@
                         </div>
                         <div class="content">
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Enter User Name">
+                                <input type="text" class="form-control" name="UserName" placeholder="Enter User Name">
                                 <span class="input-group-addon">
                                     <i class="zmdi zmdi-account-circle"></i>
                                 </span>
                             </div>
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Enter Email">
+                                <input type="text" class="form-control" name="DefaultEmail" placeholder="Enter Email">
                                 <span class="input-group-addon">
                                     <i class="zmdi zmdi-email"></i>
                                 </span>
                             </div>
                             <div class="input-group">
-                                <input type="password" placeholder="Password" class="form-control" />
+                                <input type="password" class="form-control" name="Password" placeholder="Password" />
+                                <span class="input-group-addon">
+                                    <i class="zmdi zmdi-lock"></i>
+                                </span>
+                            </div>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="FirstName" placeholder="First Name" />
+                                <span class="input-group-addon">
+                                    <i class="zmdi zmdi-lock"></i>
+                                </span>
+                            </div>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="MiddleName" placeholder="Middle Name" />
+                                <span class="input-group-addon">
+                                    <i class="zmdi zmdi-lock"></i>
+                                </span>
+                            </div>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="LastName" placeholder="Last Name" />
                                 <span class="input-group-addon">
                                     <i class="zmdi zmdi-lock"></i>
                                 </span>
@@ -107,7 +127,7 @@
                             </label>
                         </div>
                         <div class="footer text-center">
-                            <a href="index.html" class="btn btn-primary btn-round btn-lg btn-block waves-effect waves-light">SIGN UP</a>
+                            <button type="submit" class="btn btn-primary btn-round btn-lg btn-block waves-effect waves-light">SIGN UP</button>
                         </div>
                     </form>
                 </div>
@@ -137,11 +157,15 @@
     <script src="~/bundles/libscripts.bundle.js"></script>
     <script src="~/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
     <script>
+        let loadedMsg = '@System.Web.HttpUtility.JavaScriptStringEncode(Model)';
         $(".navbar-toggler").on('click', function () {
             $("html").toggleClass("nav-open");
         });
         $(document).ready(() => {
-            $('.page-header-image').css('background-image', 'url("../images/login.jpg")');
+            $('.page-header-image').css('background-image', 'url("/images/login.jpg")');
+            if (loadedMsg != '' && loadedMsg != null && loadedMsg != undefined && loadedMsg != NaN) {
+                swal("Failed!", loadedMsg, "error");
+            }
         });
     </script>
 </body>

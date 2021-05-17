@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Repositories;
+using Services.Abstraction;
+using Services.Implementation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +27,43 @@ namespace OrcusUMS
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            // Repositories
+
+            services.AddScoped<IActivityTypeRepo, ActivityTypeRepo>();
+            services.AddScoped(typeof(IActivityTypeRepo), typeof(ActivityTypeRepo));
+
+            services.AddScoped<IAddressRepo, AddressRepo>();
+            services.AddScoped(typeof(IAddressRepo), typeof(AddressRepo));
+
+            services.AddScoped<IEmailIdRepo, EmailIdRepo>();
+            services.AddScoped(typeof(IEmailIdRepo), typeof(EmailIdRepo));
+
+            services.AddScoped<INumberRepo, NumberRepo>();
+            services.AddScoped(typeof(INumberRepo), typeof(NumberRepo));
+
+            services.AddScoped<ISubscriptionRepo, SubscriptionRepo>();
+            services.AddScoped(typeof(ISubscriptionRepo), typeof(SubscriptionRepo));
+
+            services.AddScoped<ISubscriptionLogRepo, SubscriptionLogRepo>();
+            services.AddScoped(typeof(ISubscriptionLogRepo), typeof(SubscriptionLogRepo));
+
+            services.AddScoped<IUserRepo, UserRepo>();
+            services.AddScoped(typeof(IUserRepo), typeof(UserRepo));
+
+            services.AddScoped<IUserActivityLogRepo, UserActivityLogRepo>();
+            services.AddScoped(typeof(IUserActivityLogRepo), typeof(UserActivityLogRepo));
+
+            services.AddScoped<ICrashLogRepo, CrashLogRepo>();
+            services.AddScoped(typeof(ICrashLogRepo), typeof(CrashLogRepo));
+
+            // Services
+
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped(typeof(IUserService), typeof(UserService));
+
+            services.AddScoped<IUserActivityLogRepo, UserActivityLogRepo>();
+            services.AddScoped(typeof(IUserActivityLogRepo), typeof(UserActivityLogRepo));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,7 +90,7 @@ namespace OrcusUMS
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=User}/{action=SignIn}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

@@ -19,6 +19,7 @@ namespace Entities
 
         public virtual DbSet<ActivityType> ActivityTypes { get; set; }
         public virtual DbSet<Address> Addresses { get; set; }
+        public virtual DbSet<CrashLog> CrashLogs { get; set; }
         public virtual DbSet<EmailId> EmailIds { get; set; }
         public virtual DbSet<Number> Numbers { get; set; }
         public virtual DbSet<Subscription> Subscriptions { get; set; }
@@ -68,6 +69,23 @@ namespace Entities
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Addresses_User");
+            });
+
+            modelBuilder.Entity<CrashLog>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("CrashLog");
+
+                entity.Property(e => e.ClassName).HasMaxLength(20);
+
+                entity.Property(e => e.ErrorInner).HasMaxLength(50);
+
+                entity.Property(e => e.ErrorMessage).HasMaxLength(50);
+
+                entity.Property(e => e.MethodName).HasMaxLength(20);
+
+                entity.Property(e => e.TimeStamp).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<EmailId>(entity =>
