@@ -1,0 +1,153 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Abel", sans-serif;
+    scroll-behavior: smooth;
+}
+
+#NavBarSection .navbar-nav {
+    display: inline-block;
+    width: auto!important;
+}
+
+    #NavBarSection .navbar-nav a {
+        text-decoration: none;
+        font-family: "Raleway", sans-serif;
+        font-weight: 600;
+        letter-spacing: 0.3rem;
+        color: white;
+        border: 1px solid transparent;
+        padding: 10px 15px;
+        margin: 0 5px;
+    }
+
+#NavBarSection ul li a:hover {
+    transition: 0.5s ease;
+    border: 1px solid white;
+    background-color: white;
+    color: black;
+}
+
+.button a {
+    color: #fff200;
+    border: 1px solid #fff200;
+}
+
+.button a:hover {
+    color: black;
+    background-color: #fff200;
+}
+
+.header h1 {
+    font-family: "Raleway", sans-serif;
+    font-size: 4rem;
+    font-weight: 600;
+    letter-spacing: 0.2rem;
+    color: white;
+    padding: 45% 20px 8px;
+}
+
+.header p {
+    font-family: "Raleway", sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.2rem;
+    color: white;
+    padding: 10px 15px;
+}
+
+#NavBarSection {
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+#NavBarSection .bg-dark {
+    /*background-color: black !important;*/
+    /*border-bottom: 1px solid white;*/
+}
+
+.navbar-brand img{
+    height: 5vh;
+}
+
+.landing-section {
+    position: relative;
+    top: 0%;
+    width: auto;
+    height: 100vh;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    backdrop-filter: opacity(80%);
+    background-attachment: fixed;
+}
+
+.landing-section .content {
+    font-size: 2rem;
+    position: relative;
+    top: 50%;
+    text-align: center;
+    color: white;
+    transform: translateY(-50%);
+}
+
+button, .button {
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.15rem;
+    color: black;
+    background-color: #fff200;
+    padding: 10px 30px;
+    border: none;
+    cursor: pointer;
+    color: black;
+    border: 2px solid #fff200;
+}
+
+button:hover, .button:hover {
+    transition: 0.5s;
+    text-decoration: none;
+    color: #fff200;
+    border: 2px solid #fff200;
+    background-color: transparent;
+}
+
+#navbarCollapse .nav-button {
+    color: #fff200;
+    border: 1px solid #fff200;
+}
+
+    #navbarCollapse .nav-button:hover {
+        color: black;
+        background-color: #fff200;
+    }
+
+#navbarCollapse .nav-link{
+    border-radius: 0;
+}
+
+.logo {
+    font-size: 1rem !important;
+    font-weight: 600;
+    letter-spacing: 0.5rem;
+    color: white;
+    margin-left: 50px;
+}
+
+#ServicesSection {
+    padding-top: 10vh;
+    padding-bottom: 10vh;
+    color: white;
+}
+
+#ServicesSection .row .card {
+    margin: 2%;
+    padding: 2%;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    padding-top: 5vh;
+    padding-bottom: 5vh;
+}
+
+    #ServicesSection .h1{
+        padding-bottom: 6vh;
+    }

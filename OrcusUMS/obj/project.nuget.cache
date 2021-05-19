@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "aiu+tY5ysDJN91SX1PWDDqIw4pTeHe7FhGjYxEEvFJRs9QzulO8b42EBkYvUfPiypmgX6H/m1//CH2mbaV7dCw==",
+  "dgSpecHash": "2vEx4LfIIjl7X2rL8khahkG8d8apWP+643WEGdIC6LV7q5k8tYWWlsA7wkrdlvl825mbX/uRilB1N7AiNq+Jdg==",
   "success": true,
   "projectFilePath": "D:\\Projects\\Team Projects\\OrcusUMS\\OrcusUMS\\WebApplication.csproj",
   "expectedPackageFiles": [
@@ -10,6 +10,7 @@
     "C:\\Users\\nafis\\.nuget\\packages\\k4os.compression.lz4\\1.1.11\\k4os.compression.lz4.1.1.11.nupkg.sha512",
     "C:\\Users\\nafis\\.nuget\\packages\\k4os.compression.lz4.streams\\1.1.11\\k4os.compression.lz4.streams.1.1.11.nupkg.sha512",
     "C:\\Users\\nafis\\.nuget\\packages\\k4os.hash.xxhash\\1.0.6\\k4os.hash.xxhash.1.0.6.nupkg.sha512",
+    "C:\\Users\\nafis\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\5.0.6\\microsoft.aspnetcore.authentication.jwtbearer.5.0.6.nupkg.sha512",
     "C:\\Users\\nafis\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
     "C:\\Users\\nafis\\.nuget\\packages\\microsoft.entityframeworkcore\\5.0.6\\microsoft.entityframeworkcore.5.0.6.nupkg.sha512",
     "C:\\Users\\nafis\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\5.0.6\\microsoft.entityframeworkcore.abstractions.5.0.6.nupkg.sha512",
@@ -32,6 +33,8 @@
     "C:\\Users\\nafis\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.0\\microsoft.extensions.primitives.5.0.0.nupkg.sha512",
     "C:\\Users\\nafis\\.nuget\\packages\\microsoft.identitymodel.jsonwebtokens\\6.11.0\\microsoft.identitymodel.jsonwebtokens.6.11.0.nupkg.sha512",
     "C:\\Users\\nafis\\.nuget\\packages\\microsoft.identitymodel.logging\\6.11.0\\microsoft.identitymodel.logging.6.11.0.nupkg.sha512",
+    "C:\\Users\\nafis\\.nuget\\packages\\microsoft.identitymodel.protocols\\6.7.1\\microsoft.identitymodel.protocols.6.7.1.nupkg.sha512",
+    "C:\\Users\\nafis\\.nuget\\packages\\microsoft.identitymodel.protocols.openidconnect\\6.7.1\\microsoft.identitymodel.protocols.openidconnect.6.7.1.nupkg.sha512",
     "C:\\Users\\nafis\\.nuget\\packages\\microsoft.identitymodel.tokens\\6.11.0\\microsoft.identitymodel.tokens.6.11.0.nupkg.sha512",
     "C:\\Users\\nafis\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "C:\\Users\\nafis\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",

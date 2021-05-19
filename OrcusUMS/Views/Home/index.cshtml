@@ -1,4 +1,4 @@
-﻿@{ 
+﻿@{
     ViewData["Title"] = "Home Page";
     Layout = null;
 }
@@ -9,166 +9,108 @@
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
     <title>Orcus User Portal :: Home</title>
     <script src="~/bundles/libscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js ( jquery.v3.2.1, Bootstrap4 js) -->
-    @*<link rel="stylesheet" href="~/plugins/bootstrap/css/bootstrap.min.css">*@
+    <link rel="stylesheet" href="~/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/main.css" />
+    <link rel="stylesheet" href="~/css/Home.css" />
 </head>
-<section class="content home">
-    <div class="wrapper">
+
+<body class="theme-purple ls-toggle-menu">
+    <section id="NavBarSection" class="bg-dark">
         <div class="container">
-            <div class="nav">
-                <div class="logo">
-                    LOGO
-                </div>
-                <div class="menu">
-                    <ul class="navMenu">
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Listining</a></li>
-                        <li><a href="#">Locations</a></li>
-                        <li><a asp-action="SignIn" asp-controller="User">Sign In</a></li>
-                        <li><a asp-action="SignUp" asp-controller="User">Registration</a></li>
+            @*<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">*@
+            <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+                <a class="navbar-brand logo" href="#">
+                    <img src="https://thememakker.com/templates/oreo/html/assets/images/logo.svg" alt="Orcus User Portal" />
+                    <span class="h3">Orcus User Portal</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#ServicesSection">Services in Orcus</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-button" asp-action="SignIn" asp-controller="User">Sign In</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-button" asp-action="SignUp" asp-controller="User">Register</a>
+                        </li>
                     </ul>
                 </div>
-            </div>
-            <div class="header">
-                <h1>The Spark Dimond</h1>
-                <p>New area / Future City</p>
-                <button type="button">View Details</button>
+            </nav>
+        </div>
+    </section>
+
+    <section id="Body">
+        <div class="landing-section">
+            <div class="content">
+                <h1>Orcus User Portal</h1>
+                <p>The No.1 E-Commerce Solution Platform of Bangladesh</p>
+                <a class="button" asp-action="SignUp" asp-controller="User" type="button">Register Now!</a>
             </div>
         </div>
-    </div>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Abel", sans-serif;
-            font-size: 10px;
-            scroll-behavior: smooth;
-        }
-
-        .wrapper {
-            width: auto;
-            height: 100vh;
-            background-position: center;
-            background-size: cover;
-            background-repeat: no-repeat;
-            backdrop-filter: opacity(80%);
-        }
-
-        .Container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 80px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.521);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 50px;
-        }
-
-        .logo {
-            font-family: "Abel", sans-serif;
-            font-size: 2.5rem;
-            font-weight: 600;
-            letter-spacing: 0.7rem;
-            color: white;
-            margin: 4%;
-        }
-
-        .menu {
-            display: inline-block;
-            line-height: 80px;
-        }
-
-            .menu ul {
-                list-style: none;
-                /* display: flex;
-                flex-direction: row;
-                justify-content: center;
-                align-items: center; */
-            }
-
-                .menu ul li {
-                    display: inline-block;
-                }
-
-                    .menu ul li a {
-                        text-decoration: none;
-                        font-family: "Raleway", sans-serif;
-                        font-size: 1.2rem;
-                        font-weight: 600;
-                        letter-spacing: 0.1rem;
-                        color: white;
-                        border: 1px solid transparent;
-                        border-radius: 4px;
-                        padding: 10px 15px;
-                        margin: 0 5px;
-                        transition: 0.5s ease;
-                    }
-
-                        .menu ul li a:hover {
-                            border-color: white;
-                        }
-
-                    .menu ul li:nth-child(5) a {
-                        color: #fff200;
-                        border: 1px solid #fff200;
-                    }
-
-                    .menu ul li:nth-child(4) a:hover {
-                        color: black;
-                        background-color: #fff200;
-                    }
-
-                    .menu ul li:nth-child(5) a:hover {
-                        color: black;
-                        background-color: #fff200;
-                    }
-
-        .header {
-            text-align: center;
-        }
-
-            .header h1 {
-                font-family: "Raleway", sans-serif;
-                font-size: 4rem;
-                font-weight: 600;
-                letter-spacing: 0.2rem;
-                color: white;
-                padding: 45% 20px 8px;
-            }
-
-            .header p {
-                font-family: "Raleway", sans-serif;
-                font-size: 1.5rem;
-                font-weight: 600;
-                letter-spacing: 0.2rem;
-                color: white;
-                padding: 10px 15px;
-            }
-
-        button {
-            font-size: 1.5rem;
-            font-weight: 600;
-            letter-spacing: 0.15rem;
-            color: black;
-            background-color: #fff200;
-            padding: 20px 30px;
-            margin: 50px 5px 0;
-            border: none;
-            cursor: pointer;
-        }
-    </style>
+        <div id="ServicesSection" class="container">
+            <h1 class="h1 text-center">Services In Orcus Digital Platform</h1>
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <div class="card">
+                        <i class="zmdi zmdi-shopping-cart"></i>
+                        <br />
+                        <h1 class="h4">Complete E-Commerce Solution</h1>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="card">
+                        <i class="material-icons">store</i>
+                        <br />
+                        <h1 class="h4">Inventory Management Solution</h1>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="card">
+                        <i class="material-icons">flight_takeoff</i>
+                        <br />
+                        <h1 class="h4">
+                            Home Delivery Service
+                            <br />
+                            (Inside Dhaka Only)
+                        </h1>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="card">
+                        <i class="material-icons">videogame_asset</i>
+                        <br />
+                        <h1 class="h4">Online Games</h1>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="card">
+                        <i class="material-icons">people_outline</i>
+                        <br />
+                        <h1 class="h4">Digital Marketing</h1>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="card">
+                        <i class="material-icons">people_outline</i>
+                        <br />
+                        <h1 class="h4">Chat Bot Solution</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
     <script>
-        $('.wrapper').css('background-image', 'linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/images/HomeBG.jpg")');
+        $('.landing-section').css('background-image', 'linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/images/HomeBG.jpg")');
+        $('#NavBarSection .nav-item').click((elem) => {
+            $('#NavBarSection .nav-item').removeClass('active');
+            $(elem.target).parent().addClass('active');
+        });
     </script>
-</section>
+</body>

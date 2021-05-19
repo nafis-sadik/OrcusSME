@@ -25,20 +25,20 @@ namespace OrcusUMS.Controllers
         [HttpPost]
         public IActionResult SignIn(string userName, string pass)
         {
-            bool? operation = _userService.LogIn(userName, pass);
-            if (operation == true)
-                return RedirectToAction("Index", "Home");
-            else if (operation == null)
-                return View(model: "User Not Foud!");
+            string response = _userService.LogIn(userName, pass);
+            if (!string.IsNullOrEmpty(response))
+                return Ok(response);
+            else if (response == null)
+                return Conflict(CommonConstants.HttpResponseMessages.UserNotFound);
             else
-                return View(model: "Password Was Wrong!");
+                return Conflict(CommonConstants.HttpResponseMessages.PasswordMismatched);
         }
         [HttpPost]
         public IActionResult SignUp(UserModel user)
         {
             if (_userService.SignUp(user))
                 // Session not kept yet
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Dashboard");
             else
                 return View(model: "User Registration Failed! Please try again.");
         }

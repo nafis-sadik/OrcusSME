@@ -31,5 +31,10 @@ namespace Entities.Models
             public const string Cancel = "C";
             public const string Archived = "D";
         }
+        public static class HttpResponseMessages
+        {
+            public const string UserNotFound = "User Not Found";
+            public const string PasswordMismatched = "Password Mismatched";
+        }
     }
 }

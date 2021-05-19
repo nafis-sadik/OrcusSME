@@ -20,16 +20,16 @@ namespace Services.Implementation
             _userActivityLogRepo = userActivityLogRepo;
         }
 
-        public bool? LogIn(string userId, string password)
+        public string LogIn(string userId, string password)
         {
             User user = _userRepo.AsQueryable().FirstOrDefault(x => x.UserName == userId || x.UserId == userId);
             if (user == null)
                 return null;
 
             if (BCryptHelper.CheckPassword(password, user.Password))
-                return true;
+                return CommonRepo.GenerateJwtToken(user.UserId);
             else
-                return false;
+                return "";
         }
 
         public bool SignUp(UserModel _user)

@@ -72,3 +72,6 @@ D:\Projects\Team Projects\OrcusUMS\OrcusUMS\obj\Debug\net5.0\WebApplication.genr
 D:\Projects\Team Projects\OrcusUMS\OrcusUMS\obj\Debug\net5.0\Razor\Views\DashBoard\index.cshtml.g.cs
 D:\Projects\Team Projects\OrcusUMS\OrcusUMS\obj\Debug\net5.0\Razor\Views\DashBoard\Index2.cshtml.g.cs
 D:\Projects\Team Projects\OrcusUMS\OrcusUMS\obj\Debug\net5.0\Razor\Views\DashBoard\Privacy.cshtml.g.cs
+D:\Projects\Team Projects\OrcusUMS\OrcusUMS\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\Projects\Team Projects\OrcusUMS\OrcusUMS\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.dll
+D:\Projects\Team Projects\OrcusUMS\OrcusUMS\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll

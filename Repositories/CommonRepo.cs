@@ -10,16 +10,15 @@ namespace Repositories
 {
     public static class CommonRepo
     {
-        public static string GenerateJwtToken(UserModel user)
+        public static string GenerateJwtToken(string userId)
         {
-            //generate token that is valid for 7 days
+            // generate token that is valid for 7 days
             var tokenHandler = new JwtSecurityTokenHandler();
             byte[] tokenKey = Encoding.ASCII.GetBytes(CommonConstants.PasswordConfig.Salt);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] {
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim("id", user.UserId.ToString())
+                    new Claim("UserId", userId)
                 }),
                 Expires = DateTime.UtcNow.AddDays(CommonConstants.PasswordConfig.SaltExpire),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey),

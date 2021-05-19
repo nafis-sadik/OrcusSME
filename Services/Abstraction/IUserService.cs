@@ -8,6 +8,6 @@ namespace Services.Abstraction
     public interface IUserService
     {
         public bool SignUp(UserModel user);
-        public bool? LogIn(string userId, string password);
+        public string LogIn(string userId, string password);
     }
 }
