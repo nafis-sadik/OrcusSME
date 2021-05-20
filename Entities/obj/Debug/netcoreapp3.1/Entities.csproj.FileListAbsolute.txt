@@ -1,9 +1,0 @@
-D:\Projects\Team Projects\OrcusUMS\Entities\bin\Debug\netcoreapp3.1\Entities.deps.json
-D:\Projects\Team Projects\OrcusUMS\Entities\bin\Debug\netcoreapp3.1\Entities.dll
-D:\Projects\Team Projects\OrcusUMS\Entities\bin\Debug\netcoreapp3.1\Entities.pdb
-D:\Projects\Team Projects\OrcusUMS\Entities\obj\Debug\netcoreapp3.1\Entities.csprojAssemblyReference.cache
-D:\Projects\Team Projects\OrcusUMS\Entities\obj\Debug\netcoreapp3.1\Entities.AssemblyInfoInputs.cache
-D:\Projects\Team Projects\OrcusUMS\Entities\obj\Debug\netcoreapp3.1\Entities.AssemblyInfo.cs
-D:\Projects\Team Projects\OrcusUMS\Entities\obj\Debug\netcoreapp3.1\Entities.csproj.CoreCompileInputs.cache
-D:\Projects\Team Projects\OrcusUMS\Entities\obj\Debug\netcoreapp3.1\Entities.dll
-D:\Projects\Team Projects\OrcusUMS\Entities\obj\Debug\netcoreapp3.1\Entities.pdb

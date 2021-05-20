@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WebApplication.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class DashboardController : Controller
     {
         public IActionResult Index()
