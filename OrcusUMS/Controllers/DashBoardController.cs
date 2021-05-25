@@ -10,9 +10,6 @@ namespace WebApplication.Controllers
     [Authorize]
     public class DashboardController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        public IActionResult Index() => View();
     }
 }

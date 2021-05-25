@@ -28,7 +28,10 @@ namespace OrcusUMS.Controllers
             string response = _userService.LogIn(userName, pass);
             if (!string.IsNullOrEmpty(response))
                 return Ok(response);
+<<<<<<< HEAD
                 // return RedirectToAction("Index", "Dashboard");
+=======
+>>>>>>> 06e6058c31ad8980cb1053f95a545e1a05a6aebb
             else if (response == null)
                 return Conflict(CommonConstants.HttpResponseMessages.UserNotFound);
             else
