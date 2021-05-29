@@ -1,0 +1,14 @@
+D:\Projects\Team Projects\OrcusUMS\Services\bin\Debug\netcoreapp3.1\Services.deps.json
+D:\Projects\Team Projects\OrcusUMS\Services\bin\Debug\netcoreapp3.1\Services.dll
+D:\Projects\Team Projects\OrcusUMS\Services\bin\Debug\netcoreapp3.1\Services.pdb
+D:\Projects\Team Projects\OrcusUMS\Services\bin\Debug\netcoreapp3.1\Entities.dll
+D:\Projects\Team Projects\OrcusUMS\Services\bin\Debug\netcoreapp3.1\Repositories.dll
+D:\Projects\Team Projects\OrcusUMS\Services\bin\Debug\netcoreapp3.1\Repositories.pdb
+D:\Projects\Team Projects\OrcusUMS\Services\bin\Debug\netcoreapp3.1\Entities.pdb
+D:\Projects\Team Projects\OrcusUMS\Services\obj\Debug\netcoreapp3.1\Services.csprojAssemblyReference.cache
+D:\Projects\Team Projects\OrcusUMS\Services\obj\Debug\netcoreapp3.1\Services.AssemblyInfoInputs.cache
+D:\Projects\Team Projects\OrcusUMS\Services\obj\Debug\netcoreapp3.1\Services.AssemblyInfo.cs
+D:\Projects\Team Projects\OrcusUMS\Services\obj\Debug\netcoreapp3.1\Services.csproj.CoreCompileInputs.cache
+D:\Projects\Team Projects\OrcusUMS\Services\obj\Debug\netcoreapp3.1\Services.csproj.CopyComplete
+D:\Projects\Team Projects\OrcusUMS\Services\obj\Debug\netcoreapp3.1\Services.dll
+D:\Projects\Team Projects\OrcusUMS\Services\obj\Debug\netcoreapp3.1\Services.pdb

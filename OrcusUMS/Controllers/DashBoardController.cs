@@ -7,9 +7,13 @@ using System.Threading.Tasks;
 
 namespace WebApplication.Controllers
 {
-    [Authorize]
     public class DashboardController : Controller
     {
         public IActionResult Index() => View();
+        [Authorize]
+        public IActionResult GetSubscriptions()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
