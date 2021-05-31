@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Entities
 {
-    public partial class ActivityType
+    public partial class Activitytype
     {
         public decimal ActivityTypeId { get; set; }
         public string ActivityName { get; set; }

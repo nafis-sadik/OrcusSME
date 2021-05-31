@@ -11,14 +11,14 @@ namespace Repositories
 {
     public class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
-        private OrcusUMSContext db;
+        private orcus_umsContext db;
         private DbSet<T> _dbSet;
 
         //private readonly IDbContextTransaction transaction;
 
         internal RepositoryBase()
         {
-            db = new OrcusUMSContext(new DbContextOptions<OrcusUMSContext>());
+            db = new orcus_umsContext(new DbContextOptions<orcus_umsContext>());
             _dbSet = db.Set<T>();
             //transaction = db.Database.BeginTransaction();
         }
@@ -84,6 +84,15 @@ namespace Repositories
             {
                 entity.State = EntityState.Detached;
             }
+        }
+        public int GetMaxPK(string pkPropertyName)
+        {
+            // TODO: add argument checks
+            var parameter = Expression.Parameter(typeof(T));
+            var body = Expression.Property(parameter, pkPropertyName);
+            var lambda = Expression.Lambda<Func<T, int>>(body, parameter);
+            var result = _dbSet.Max(lambda);
+            return result;
         }
     }
 }

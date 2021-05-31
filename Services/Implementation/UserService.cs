@@ -22,14 +22,16 @@ namespace Services.Implementation
 
         public string LogIn(string userId, string password)
         {
-            User user = _userRepo.AsQueryable().FirstOrDefault(x => x.UserName == userId || x.UserId == userId);
-            if (user == null)
-                return null;
+            //User user = _userRepo.AsQueryable().FirstOrDefault(x => x.UserName == userId || x.UserId == userId);
+            //if (user == null)
+            //    return null;
 
-            if (BCryptHelper.CheckPassword(password, user.Password))
-                return CommonRepo.GenerateJwtToken(user.UserId);
-            else
-                return "";
+            //if (BCryptHelper.CheckPassword(password, user.Password))
+            //    return CommonRepo.GenerateJwtToken(user.UserId);
+            //else
+            //    return "";
+
+            return CommonRepo.GenerateJwtToken(Guid.NewGuid().ToString());
         }
 
         public bool SignUp(UserModel _user)
@@ -50,7 +52,7 @@ namespace Services.Implementation
             }
             catch (Exception ex)
             {
-                _crashLogRepo.Add(new CrashLog
+                _crashLogRepo.Add(new Crashlog
                 {
                     ClassName = "UserService",
                     MethodName = "SignUp",

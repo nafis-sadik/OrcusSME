@@ -19,5 +19,6 @@ namespace Repositories
         void Save();
         void Rollback();
         void Dispose();
+        public int GetMaxPK(string pkPropertyName);
     }
 }

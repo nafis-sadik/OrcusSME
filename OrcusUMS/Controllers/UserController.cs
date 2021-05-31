@@ -15,10 +15,13 @@ namespace OrcusUMS.Controllers
         {
             _userService = userService;
         }
+
         [HttpGet]
         public IActionResult SignIn() => View();
+
         [HttpGet]
         public IActionResult SignUp() => View();
+
         [HttpGet]
         public IActionResult ForgotPassword() => View();
 
@@ -33,6 +36,7 @@ namespace OrcusUMS.Controllers
             else
                 return Conflict(CommonConstants.HttpResponseMessages.PasswordMismatched);
         }
+
         [HttpPost]
         public IActionResult SignUp(UserModel user)
         {
@@ -42,6 +46,7 @@ namespace OrcusUMS.Controllers
             else
                 return View(model: "User Registration Failed! Please try again.");
         }
+
         public IActionResult LogOut()
         {
             return RedirectToAction("SignIn", "User");

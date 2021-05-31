@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Entities
 {
-    public partial class EmailId
+    public partial class Emailid
     {
         public string UserId { get; set; }
         public string MailId { get; set; }

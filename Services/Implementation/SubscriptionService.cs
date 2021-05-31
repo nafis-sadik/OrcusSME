@@ -1,20 +1,98 @@
-﻿using Services.Abstraction;
+﻿using Entities;
+using Entities.Models;
+using Services.Abstraction;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Repositories;
+using System.Linq;
 
 namespace Services.Implementation
 {
     public class SubscriptionService : ISubscriptionService
     {
-        public bool GetSubscriptions(string UserId)
+        private readonly ISubscriptionLogRepo _subscriptionLogRepo;
+        private readonly ISubscriptionRepo _subscriptionRepo;
+        private readonly ICrashLogRepo _crashLogRepo;
+
+        public SubscriptionService(ISubscriptionLogRepo subscriptionLogRepo, ISubscriptionRepo subscriptionRepo, ICrashLogRepo crashLogRepo)
         {
-            throw new NotImplementedException();
+            _subscriptionLogRepo = subscriptionLogRepo;
+            _subscriptionRepo = subscriptionRepo;
+            _crashLogRepo = crashLogRepo;
         }
 
-        public bool Subscribe(int SubscriptionId)
+        public IEnumerable<SubscribedService> GetActiveSubscriptions(string userId)
         {
-            throw new NotImplementedException();
+            IQueryable<Subscriptionlog> SubscriptionLogs = _subscriptionLogRepo.AsQueryable().Where(x => x.SubscriptionDate > DateTime.Now);
+            List<SubscribedService> subscriptions = new List<SubscribedService>();
+            foreach(Subscriptionlog subscriptionHistory in SubscriptionLogs)
+            {
+                subscriptions.Add(new SubscribedService {
+                    SubscriptionId = (int)subscriptionHistory.SubscriptionId,
+                    ServiceName = subscriptionHistory.Subscription.SubscriptionName,
+                    SubscriptionName = "Dana Shop"
+                });
+            }
+            return subscriptions;
         }
+
+        public IEnumerable<SubscribedService> GetSubscriptionHistory(Pagination pagination, string userId)
+        {
+            IQueryable<Subscriptionlog> SubscriptionLogs = _subscriptionLogRepo.AsQueryable().Where(x => x.UserId == userId).Skip(pagination.Skip).Take(pagination.PageSize);
+            List<SubscribedService> subscriptions = new List<SubscribedService>();
+            foreach (Subscriptionlog subscriptionHistory in SubscriptionLogs)
+            {
+                subscriptions.Add(new SubscribedService
+                {
+                    SubscriptionId = (int)subscriptionHistory.SubscriptionId,
+                    ServiceName = subscriptionHistory.Subscription.SubscriptionName,
+                    SubscriptionName = "Dana Shop",
+                    ExpirationDate = subscriptionHistory.ExpirationDate,
+                    SubscriptionDate = subscriptionHistory.SubscriptionDate,
+                    SubscriptionPrice = (int)subscriptionHistory.Subscription.SubscriptionPrice
+                });
+            }
+            return subscriptions;
+        }
+
+        public bool Subscribe(string UserId, int SubscriptionId)
+        {
+            try
+            {
+                IQueryable<Subscriptionlog> subscriptionLogs = _subscriptionLogRepo.AsQueryable().Where(x => x.UserId == UserId && x.SubscriptionId == SubscriptionId && x.ExpirationDate > DateTime.Today);
+                Subscription subscriptions = _subscriptionRepo.Get(SubscriptionId);
+                if (subscriptionLogs == null)
+                    _subscriptionLogRepo.Add(new Subscriptionlog
+                    {
+                        SubscriptionId = SubscriptionId,
+                        SubscriptionDate = DateTime.Now,
+                        ExpirationDate = DateTime.Now.AddMonths((int)_subscriptionRepo.Get(SubscriptionId).DurationMonths),
+                        UserId = UserId
+                    });
+                else
+                {
+                    foreach (Subscriptionlog subscription in subscriptionLogs)
+                    {
+                        subscription.ExpirationDate = DateTime.Now.AddMonths((int)_subscriptionRepo.Get(SubscriptionId).DurationMonths);
+                        _subscriptionLogRepo.Update(subscription);
+                    }
+                }
+                return true;
+            } catch (Exception ex) {
+                _crashLogRepo.Add(new Crashlog
+                {
+                    ClassName = "SubscriptionService",
+                    Data = UserId.ToString() + " " + SubscriptionId.ToString(),
+                    ErrorInner = ex.InnerException != null ? ex.InnerException.Message : "",
+                    ErrorMessage = ex.Message,
+                    MethodName = "Subscribe",
+                    TimeStamp = DateTime.Now
+                });
+                return false;
+            }
+        }
+
+        public bool HasSubscription(string userId, int subscriptionId) => _subscriptionLogRepo.AsQueryable().Where(x => x.UserId == userId && x.SubscriptionId == subscriptionId) != null;
     }
 }
