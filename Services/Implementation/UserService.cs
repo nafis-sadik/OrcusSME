@@ -1,10 +1,14 @@
 ﻿using Repositories;
-using Entities.Models;
+using Models;
 using Services.Abstraction;
 using System;
 using System.Linq;
 using Entities;
-using DevOne.Security.Cryptography.BCrypt;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using DataLayer;
 
 namespace Services.Implementation
 {
@@ -20,35 +24,46 @@ namespace Services.Implementation
             _userActivityLogRepo = userActivityLogRepo;
         }
 
-        public string LogIn(string userId, string password)
+        private string GenerateJwtToken(string userId)
         {
-            //User user = _userRepo.AsQueryable().FirstOrDefault(x => x.UserName == userId || x.UserId == userId);
-            //if (user == null)
-            //    return null;
-
-            //if (BCryptHelper.CheckPassword(password, user.Password))
-            //    return CommonRepo.GenerateJwtToken(user.UserId);
-            //else
-            //    return "";
-
-            return CommonRepo.GenerateJwtToken(Guid.NewGuid().ToString());
+            // generate token that is valid for 7 days
+            var tokenHandler = new JwtSecurityTokenHandler();
+            byte[] tokenKey = Encoding.ASCII.GetBytes(CommonConstants.PasswordConfig.Salt);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[] {
+                    new Claim("UserId", userId)
+                }),
+                Expires = DateTime.UtcNow.AddDays(CommonConstants.PasswordConfig.SaltExpire),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey),
+                SecurityAlgorithms.HmacSha256Signature)
+            };
+            SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
 
-        public bool SignUp(UserModel _user)
+        public bool? LogIn(string userName, string pass, out string token)
         {
-            User user = new User
-            {
-                UserId = Guid.NewGuid().ToString(),
-                FirstName = _user.FirstName,
-                MiddleName = _user.MiddleName,
-                LastName = _user.LastName,
-                Status = CommonConstants.StatusTypes.Active,
-                Password = BCryptHelper.HashPassword(_user.Password, BCryptHelper.GenerateSalt(CommonConstants.PasswordConfig.SaltGeneratorLogRounds)),
-                UserName = _user.UserName
-            };
+            throw new NotImplementedException();
+        }
+
+        public bool SignUp(UserModel user, out string token)
+        {
+            token = "";
             try
             {
-                _userRepo.Add(user);
+                _userRepo.Add(new User
+                {
+                    UserId = Guid.NewGuid().ToString(),
+                    FirstName = user.FirstName,
+                    MiddleName = user.MiddleName,
+                    LastName = user.LastName,
+                    Status = CommonConstants.StatusTypes.Active,
+                    Password = BCrypt.Net.BCrypt.EnhancedHashPassword(user.Password),
+                    UserName = user.UserName
+                });
+                token = GenerateJwtToken(user.UserId);
+                return true;
             }
             catch (Exception ex)
             {
@@ -57,13 +72,12 @@ namespace Services.Implementation
                     ClassName = "UserService",
                     MethodName = "SignUp",
                     ErrorMessage = ex.Message,
-                    ErrorInner = ex.InnerException.Message,
+                    ErrorInner = (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException ? ex.InnerException.Message : ex.Message),
                     Data = user.ToString(),
                     TimeStamp = DateTime.Now
                 });
                 return false;
             }
-            return true;
         }
     }
 }

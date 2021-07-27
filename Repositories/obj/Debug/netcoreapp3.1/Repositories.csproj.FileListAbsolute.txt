@@ -1,4 +1,3 @@
-D:\Projects\Team Projects\OrcusUMS\Repositories\obj\Debug\netcoreapp3.1\Repositories.csprojAssemblyReference.cache
 D:\Projects\Team Projects\OrcusUMS\Repositories\obj\Debug\netcoreapp3.1\Repositories.AssemblyInfoInputs.cache
 D:\Projects\Team Projects\OrcusUMS\Repositories\obj\Debug\netcoreapp3.1\Repositories.AssemblyInfo.cs
 D:\Projects\Team Projects\OrcusUMS\Repositories\obj\Debug\netcoreapp3.1\Repositories.csproj.CoreCompileInputs.cache
@@ -10,3 +9,4 @@ D:\Projects\Team Projects\OrcusUMS\Repositories\bin\Debug\netcoreapp3.1\Entities
 D:\Projects\Team Projects\OrcusUMS\Repositories\obj\Debug\netcoreapp3.1\Repositories.csproj.CopyComplete
 D:\Projects\Team Projects\OrcusUMS\Repositories\obj\Debug\netcoreapp3.1\Repositories.dll
 D:\Projects\Team Projects\OrcusUMS\Repositories\obj\Debug\netcoreapp3.1\Repositories.pdb
+D:\Projects\Team Projects\OrcusUMS\Repositories\obj\Debug\netcoreapp3.1\Repositories.csproj.AssemblyReference.cache
