@@ -10,6 +10,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Repositories;
+using Repositories.Abstraction;
+using Repositories.Implementation;
 using Services.Abstraction;
 using Services.Implementation;
 using System;
@@ -68,9 +70,12 @@ namespace WebAPI
 
             services.AddScoped<ICrashLogRepo, CrashLogRepo>();
             services.AddScoped(typeof(ICrashLogRepo), typeof(CrashLogRepo));
-
+            
             services.AddScoped<IUserActivityLogRepo, UserActivityLogRepo>();
             services.AddScoped(typeof(IUserActivityLogRepo), typeof(UserActivityLogRepo));
+
+            services.AddScoped<IEmailIdRepo, EmailIdRepo>();
+            services.AddScoped(typeof(IEmailIdRepo), typeof(EmailIdRepo));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -92,6 +97,10 @@ namespace WebAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(AdibasCORSPolicy);
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

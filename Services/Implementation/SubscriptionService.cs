@@ -24,9 +24,9 @@ namespace Services.Implementation
 
         public IEnumerable<SubscribedService> GetActiveSubscriptions(string userId)
         {
-            IQueryable<Subscriptionlog> SubscriptionLogs = _subscriptionLogRepo.AsQueryable().Where(x => x.SubscriptionDate > DateTime.Now);
+            IQueryable<SubscriptionLog> SubscriptionLogs = _subscriptionLogRepo.AsQueryable().Where(x => x.SubscriptionDate > DateTime.Now);
             List<SubscribedService> subscriptions = new List<SubscribedService>();
-            foreach(Subscriptionlog subscriptionHistory in SubscriptionLogs)
+            foreach(SubscriptionLog subscriptionHistory in SubscriptionLogs)
             {
                 subscriptions.Add(new SubscribedService {
                     SubscriptionId = (int)subscriptionHistory.SubscriptionId,
@@ -39,9 +39,9 @@ namespace Services.Implementation
 
         public IEnumerable<SubscribedService> GetSubscriptionHistory(Pagination pagination, string userId)
         {
-            IQueryable<Subscriptionlog> SubscriptionLogs = _subscriptionLogRepo.AsQueryable().Where(x => x.UserId == userId).Skip(pagination.Skip).Take(pagination.PageSize);
+            IQueryable<SubscriptionLog> SubscriptionLogs = _subscriptionLogRepo.AsQueryable().Where(x => x.UserId == userId).Skip(pagination.Skip).Take(pagination.PageSize);
             List<SubscribedService> subscriptions = new List<SubscribedService>();
-            foreach (Subscriptionlog subscriptionHistory in SubscriptionLogs)
+            foreach (SubscriptionLog subscriptionHistory in SubscriptionLogs)
             {
                 subscriptions.Add(new SubscribedService
                 {
@@ -60,10 +60,10 @@ namespace Services.Implementation
         {
             try
             {
-                IQueryable<Subscriptionlog> subscriptionLogs = _subscriptionLogRepo.AsQueryable().Where(x => x.UserId == UserId && x.SubscriptionId == SubscriptionId && x.ExpirationDate > DateTime.Today);
+                IQueryable<SubscriptionLog> subscriptionLogs = _subscriptionLogRepo.AsQueryable().Where(x => x.UserId == UserId && x.SubscriptionId == SubscriptionId && x.ExpirationDate > DateTime.Today);
                 Subscription subscriptions = _subscriptionRepo.Get(SubscriptionId);
                 if (subscriptionLogs == null)
-                    _subscriptionLogRepo.Add(new Subscriptionlog
+                    _subscriptionLogRepo.Add(new SubscriptionLog
                     {
                         SubscriptionId = SubscriptionId,
                         SubscriptionDate = DateTime.Now,
@@ -72,7 +72,7 @@ namespace Services.Implementation
                     });
                 else
                 {
-                    foreach (Subscriptionlog subscription in subscriptionLogs)
+                    foreach (SubscriptionLog subscription in subscriptionLogs)
                     {
                         subscription.ExpirationDate = DateTime.Now.AddMonths((int)_subscriptionRepo.Get(SubscriptionId).DurationMonths);
                         _subscriptionLogRepo.Update(subscription);
@@ -80,7 +80,7 @@ namespace Services.Implementation
                 }
                 return true;
             } catch (Exception ex) {
-                _crashLogRepo.Add(new Crashlog
+                _crashLogRepo.Add(new CrashLog
                 {
                     ClassName = "SubscriptionService",
                     Data = UserId.ToString() + " " + SubscriptionId.ToString(),

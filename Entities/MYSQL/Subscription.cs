@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace Entities
+namespace MySQL
 {
     public partial class Subscription
     {
@@ -11,5 +11,8 @@ namespace Entities
         public string SubscriptionName { get; set; }
         public decimal? SubscriptionPrice { get; set; }
         public decimal? DurationMonths { get; set; }
+        public int? ProductId { get; set; }
+
+        public virtual Product Product { get; set; }
     }
 }

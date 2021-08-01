@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace Entities
+namespace MySQL
 {
     public partial class Product
     {

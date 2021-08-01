@@ -3,16 +3,10 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace Entities
+namespace MySQL
 {
     public partial class User
     {
-        public User()
-        {
-            EmailIds = new HashSet<EmailId>();
-            UserActivityLogs = new HashSet<UserActivityLog>();
-        }
-
         public string UserId { get; set; }
         public string UserName { get; set; }
         public string FirstName { get; set; }
@@ -22,8 +16,5 @@ namespace Entities
         public string Status { get; set; }
         public string Password { get; set; }
         public decimal? AccountBalance { get; set; }
-
-        public virtual ICollection<EmailId> EmailIds { get; set; }
-        public virtual ICollection<UserActivityLog> UserActivityLogs { get; set; }
     }
 }

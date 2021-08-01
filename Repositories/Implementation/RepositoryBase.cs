@@ -1,24 +1,25 @@
 ﻿using Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Repositories.Abstraction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace Repositories
+namespace Repositories.Implementation
 {
     public class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
-        private orcus_umsContext db;
-        private DbSet<T> _dbSet;
+        internal OrcusUMSContext db;
+        internal DbSet<T> _dbSet;
 
         //private readonly IDbContextTransaction transaction;
 
         internal RepositoryBase()
         {
-            db = new orcus_umsContext(new DbContextOptions<orcus_umsContext>());
+            db = new OrcusUMSContext(new DbContextOptions<OrcusUMSContext>());
             _dbSet = db.Set<T>();
             //transaction = db.Database.BeginTransaction();
         }

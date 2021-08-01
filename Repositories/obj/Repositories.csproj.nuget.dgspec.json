@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Projects\\Team Projects\\OrcusUMS\\Repositories\\Repositories.csproj": {}
+    "D:\\Projects\\Team Projects\\OrcusSME\\Repositories\\Repositories.csproj": {}
   },
   "projects": {
-    "D:\\Projects\\Team Projects\\OrcusUMS\\Entities\\DataLayer.csproj": {
+    "D:\\Projects\\Team Projects\\OrcusSME\\Entities\\DataLayer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Projects\\Team Projects\\OrcusUMS\\Entities\\DataLayer.csproj",
+        "projectUniqueName": "D:\\Projects\\Team Projects\\OrcusSME\\Entities\\DataLayer.csproj",
         "projectName": "DataLayer",
-        "projectPath": "D:\\Projects\\Team Projects\\OrcusUMS\\Entities\\DataLayer.csproj",
+        "projectPath": "D:\\Projects\\Team Projects\\OrcusSME\\Entities\\DataLayer.csproj",
         "packagesPath": "C:\\Users\\nafis\\.nuget\\packages\\",
-        "outputPath": "D:\\Projects\\Team Projects\\OrcusUMS\\Entities\\obj\\",
+        "outputPath": "D:\\Projects\\Team Projects\\OrcusSME\\Entities\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -47,6 +47,10 @@
               "target": "Package",
               "version": "[5.0.8, )"
             },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[5.0.8, )"
+            },
             "Microsoft.Extensions.Configuration": {
               "target": "Package",
               "version": "[5.0.0, )"
@@ -55,9 +59,13 @@
               "target": "Package",
               "version": "[5.0.0, )"
             },
-            "MySql.EntityFrameworkCore": {
+            "Microsoft.Extensions.Configuration.UserSecrets": {
               "target": "Package",
               "version": "[5.0.0, )"
+            },
+            "MySql.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[5.0.5, )"
             }
           },
           "imports": [
@@ -79,14 +87,14 @@
         }
       }
     },
-    "D:\\Projects\\Team Projects\\OrcusUMS\\Repositories\\Repositories.csproj": {
+    "D:\\Projects\\Team Projects\\OrcusSME\\Repositories\\Repositories.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Projects\\Team Projects\\OrcusUMS\\Repositories\\Repositories.csproj",
+        "projectUniqueName": "D:\\Projects\\Team Projects\\OrcusSME\\Repositories\\Repositories.csproj",
         "projectName": "Repositories",
-        "projectPath": "D:\\Projects\\Team Projects\\OrcusUMS\\Repositories\\Repositories.csproj",
+        "projectPath": "D:\\Projects\\Team Projects\\OrcusSME\\Repositories\\Repositories.csproj",
         "packagesPath": "C:\\Users\\nafis\\.nuget\\packages\\",
-        "outputPath": "D:\\Projects\\Team Projects\\OrcusUMS\\Repositories\\obj\\",
+        "outputPath": "D:\\Projects\\Team Projects\\OrcusSME\\Repositories\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -106,8 +114,8 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "D:\\Projects\\Team Projects\\OrcusUMS\\Entities\\DataLayer.csproj": {
-                "projectPath": "D:\\Projects\\Team Projects\\OrcusUMS\\Entities\\DataLayer.csproj"
+              "D:\\Projects\\Team Projects\\OrcusSME\\Entities\\DataLayer.csproj": {
+                "projectPath": "D:\\Projects\\Team Projects\\OrcusSME\\Entities\\DataLayer.csproj"
               }
             }
           }
