@@ -64,6 +64,9 @@ namespace WebAPI
             services.AddScoped<IUserService, UserService>();
             services.AddScoped(typeof(IUserService), typeof(UserService));
 
+            services.AddScoped<IOutletManagerService, OutletManagerService>();
+            services.AddScoped(typeof(IOutletManagerService), typeof(OutletManagerService));
+
             // Repos
             services.AddScoped<IUserRepo, UserRepo>();
             services.AddScoped(typeof(IUserRepo), typeof(UserRepo));
@@ -77,7 +80,11 @@ namespace WebAPI
             services.AddScoped<IEmailIdRepo, EmailIdRepo>();
             services.AddScoped(typeof(IEmailIdRepo), typeof(EmailIdRepo));
 
+            services.AddScoped<IOutletManagerRepo, OutletManagerRepo>();
+            services.AddScoped(typeof(IOutletManagerRepo), typeof(OutletManagerRepo));
+
             services.AddControllers();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPI", Version = "v1" });

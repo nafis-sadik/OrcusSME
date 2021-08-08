@@ -22,6 +22,7 @@ namespace Entities
         public virtual DbSet<CrashLog> CrashLogs { get; set; }
         public virtual DbSet<EmailId> EmailIds { get; set; }
         public virtual DbSet<Number> Numbers { get; set; }
+        public virtual DbSet<Outlet> Outlets { get; set; }
         public virtual DbSet<Subscription> Subscriptions { get; set; }
         public virtual DbSet<SubscriptionLog> SubscriptionLogs { get; set; }
         public virtual DbSet<User> Users { get; set; }
@@ -151,6 +152,20 @@ namespace Entities
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Numbers_User");
+            });
+
+            modelBuilder.Entity<Outlet>(entity =>
+            {
+                entity.Property(e => e.OutletId).HasColumnType("numeric(18, 0)");
+
+                entity.Property(e => e.OutletName).HasMaxLength(50);
+
+                entity.Property(e => e.UserId).HasMaxLength(50);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Outlets)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_Outlets_User");
             });
 
             modelBuilder.Entity<Subscription>(entity =>

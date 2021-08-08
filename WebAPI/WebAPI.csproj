@@ -15,4 +15,10 @@
     <ProjectReference Include="..\Services\Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Entities">
+      <HintPath>..\Entities\bin\Debug\netcoreapp3.1\Entities.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

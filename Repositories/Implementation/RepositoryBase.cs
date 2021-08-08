@@ -38,6 +38,21 @@ namespace Repositories.Implementation
             DetachAllEntities();
             return _dbSet.Find(id);
         }
+        public virtual T Get(decimal id)
+        {
+            DetachAllEntities();
+            return _dbSet.Find(id);
+        }
+        public virtual T Get(float id)
+        {
+            DetachAllEntities();
+            return _dbSet.Find(id);
+        }
+        public virtual T Get(string id)
+        {
+            DetachAllEntities();
+            return _dbSet.Find(id);
+        }
         public virtual void Update(T entity)
         {
             _dbSet.Update(entity);
@@ -61,19 +76,16 @@ namespace Repositories.Implementation
         public virtual IEnumerable<T> GetAll() => _dbSet.ToList();
         public virtual void Commit()
         {
-            //transaction.Commit();
             DetachAllEntities();
         }
         public virtual void Save() => db.SaveChanges();
         public virtual void Rollback()
         {
-            //transaction.Rollback();
             DetachAllEntities();
         }
         public virtual void Dispose()
         {
             db.Dispose();
-            //transaction.Dispose();
         }
         public void DetachAllEntities()
         {

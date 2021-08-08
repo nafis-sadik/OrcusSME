@@ -11,8 +11,8 @@ using DataLayer;
 namespace Application.Controllers
 {
     [Route("api/User")]
-    //[ApiController]
-    public class UserController : ControllerBase
+    [ApiController]
+    public class UserController
     {
         private readonly IUserService _userServices;
         public UserController(IUserService userServices)
@@ -24,27 +24,27 @@ namespace Application.Controllers
         [Route("LogIn")]
         public IActionResult LogIn(UserModel user)
         {
-            bool? logInResponse = _userServices.LogIn(user.UserName, user.Password, out string token);
+            bool? logInResponse = _userServices.LogIn(user.UserName, user.Password, out string token, out string userId);
 
             if (logInResponse == true)
-                return Ok(token);
+                return new OkObjectResult(new { Response = token, UserId = userId });
             else if (logInResponse == false)
-                return Conflict(CommonConstants.HttpResponseMessages.PasswordMismatched);
+                return new ConflictObjectResult(new { Response = CommonConstants.HttpResponseMessages.PasswordMismatched });
             else
-                return Conflict(CommonConstants.HttpResponseMessages.UserNotFound);
+                return new ConflictObjectResult(new { Response = CommonConstants.HttpResponseMessages.UserNotFound });
         }
 
         [HttpPut]
         [Route("SignUp")]
         public IActionResult SignUp(UserModel user)
         {
-            bool? signUpResponse = _userServices.SignUp(user, out string token);
+            bool? signUpResponse = _userServices.SignUp(user, out string token, out string userId);
             if (signUpResponse == true)
-                return Ok(token);
+                return new OkObjectResult(new { Response = token, UserId = userId });
             else if (signUpResponse == null)
-                return Conflict(token);
+                return new ConflictObjectResult(new { Response = token });
             else
-                return Conflict("Internal Error");
+                return new ConflictObjectResult(new { Response = "Internal Error" });
         }
 
         [HttpGet]
@@ -52,9 +52,9 @@ namespace Application.Controllers
         public IActionResult ArchiveAccount(string id)
         {
             if (_userServices.ArchiveAccount(id))
-                return Ok();
+                return new OkObjectResult(new { Response = "Success" });
             else
-                return Conflict();
+                return new ConflictObjectResult(new { Response = "Internal Error" });
         }
 
         [HttpGet]
@@ -62,9 +62,9 @@ namespace Application.Controllers
         public IActionResult PermanantDelete(string id)
         {
             if (_userServices.DeleteAccount(id))
-                return Ok();
+                return new OkObjectResult(new { Response = "Success" });
             else
-                return Conflict();
+                return new ConflictObjectResult(new { Response = "Error" });
         }
 
         [HttpGet]
@@ -72,9 +72,9 @@ namespace Application.Controllers
         public IActionResult ResetPassword(string id)
         {
             if (_userServices.ResetPassword(id))
-                return Ok();
+                return new OkObjectResult(new { Response = "Success" });
             else
-                return Conflict();
+                return new ConflictObjectResult(new { Response = "Error" });
         }
     }
 }

@@ -10,6 +10,7 @@ namespace Entities
         public User()
         {
             EmailIds = new HashSet<EmailId>();
+            Outlets = new HashSet<Outlet>();
             UserActivityLogs = new HashSet<UserActivityLog>();
         }
 
@@ -24,6 +25,7 @@ namespace Entities
         public decimal? AccountBalance { get; set; }
 
         public virtual ICollection<EmailId> EmailIds { get; set; }
+        public virtual ICollection<Outlet> Outlets { get; set; }
         public virtual ICollection<UserActivityLog> UserActivityLogs { get; set; }
     }
 }

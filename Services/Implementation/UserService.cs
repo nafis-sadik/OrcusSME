@@ -19,6 +19,7 @@ namespace Services.Implementation
         private readonly ICrashLogRepo _crashLogRepo;
         private readonly IUserActivityLogRepo _userActivityLogRepo;
         private readonly IEmailIdRepo _emailIdRepo;
+
         public UserService(IUserRepo userRepo, ICrashLogRepo crashLogRepo, IUserActivityLogRepo userActivityLogRepo, IEmailIdRepo emailIdRepo)
         {
             _userRepo = userRepo;
@@ -45,10 +46,12 @@ namespace Services.Implementation
             return tokenHandler.WriteToken(token);
         }
 
-        public bool? LogIn(string userName, string pass, out string token)
+        public bool? LogIn(string userName, string pass, out string token, out string userId)
         {
             token = "";
+            userId = "";
             User user = _userRepo.FindUser(userName, pass);
+            userId = user.UserId;
             if (user == null)
                 return null;
             else
@@ -62,10 +65,10 @@ namespace Services.Implementation
             }
         }
 
-        public bool? SignUp(UserModel user, out string token)
+        public bool? SignUp(UserModel user, out string token, out string userId)
         {
             token = "";
-
+            userId = "";
             User existingUser = _userRepo.AsQueryable().FirstOrDefault(x => x.UserName == user.UserName);
             if (existingUser != null)
             {
@@ -82,7 +85,7 @@ namespace Services.Implementation
 
             try
             {
-                string userId = Guid.NewGuid().ToString();
+                userId = Guid.NewGuid().ToString();
 
                 _userRepo.Add(new User
                 {
