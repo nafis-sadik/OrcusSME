@@ -13,10 +13,13 @@ namespace Repositories.Implementation
 
         public bool RegisterNewOutlet(Outlet outlet)
         {
-            if (db.Outlets.Where(x => x.UserId == outlet.UserId && x.OutletName == outlet.OutletName).Count() >= 0)
+            if (db.Outlets.Where(x => x.UserId == outlet.UserId && x.OutletName == outlet.OutletName).Count() > 0)
                 return false;
             else
+            {
                 db.Outlets.Add(outlet);
+                db.SaveChanges();
+            }
             return true;
         }
 

@@ -78,13 +78,13 @@ namespace Entities
 
                 entity.Property(e => e.CrashLogId).ValueGeneratedNever();
 
-                entity.Property(e => e.ClassName).HasMaxLength(20);
+                entity.Property(e => e.ClassName)
+                    .IsRequired()
+                    .HasMaxLength(20);
 
-                entity.Property(e => e.ErrorInner).HasMaxLength(50);
-
-                entity.Property(e => e.ErrorMessage).HasMaxLength(50);
-
-                entity.Property(e => e.MethodName).HasMaxLength(20);
+                entity.Property(e => e.MethodName)
+                    .IsRequired()
+                    .HasMaxLength(20);
 
                 entity.Property(e => e.TimeStamp).HasColumnType("datetime");
             });
@@ -158,13 +158,23 @@ namespace Entities
             {
                 entity.Property(e => e.OutletId).HasColumnType("numeric(18, 0)");
 
+                entity.Property(e => e.EcomUrl).HasColumnName("EComURL");
+
                 entity.Property(e => e.OutletName).HasMaxLength(50);
 
-                entity.Property(e => e.UserId).HasMaxLength(50);
+                entity.Property(e => e.Status)
+                    .IsRequired()
+                    .HasMaxLength(1)
+                    .IsFixedLength(true);
+
+                entity.Property(e => e.UserId)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Outlets)
                     .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Outlets_User");
             });
 

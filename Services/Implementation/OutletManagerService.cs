@@ -176,7 +176,49 @@ namespace Services.Implementation
             }
             return response;
         }
-         
+
+        public bool? OrderSite(decimal OutletId, out string response)
+        {
+            try
+            {
+                Outlet OutletData = _outletManagerRepo.Get(OutletId);
+
+                if (!string.IsNullOrEmpty(OutletData.SiteUrl))
+                {
+                    response = "You already have a site for this outlet</br>Visit : " + OutletData.SiteUrl;
+                    return false;
+                }
+
+                OutletData.RequestSite = true;
+                _outletManagerRepo.Update(OutletData);
+                response = "Site order placed successfully";
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _outletManagerRepo.Rollback();
+
+                int pk;
+                if (_crashLogRepo.AsQueryable().Count() <= 0)
+                    pk = 0;
+                else
+                    pk = _crashLogRepo.AsQueryable().Max(x => x.CrashLogId) + 1;
+
+                _crashLogRepo.Add(new CrashLog
+                {
+                    CrashLogId = pk,
+                    ClassName = "OutletManagerService",
+                    MethodName = "OrderSite",
+                    ErrorMessage = ex.Message,
+                    ErrorInner = (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException ? ex.InnerException.Message : ex.Message),
+                    Data = null,
+                    TimeStamp = DateTime.Now
+                });
+                response = "An internal error has occured";
+                return null;
+            }
+        }
+
         public List<Models.Outlet> UpdateOutlet(Models.Outlet outlet)
         {
             List<Models.Outlet> response = new List<Models.Outlet>();

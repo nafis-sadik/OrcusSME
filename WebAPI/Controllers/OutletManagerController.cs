@@ -81,5 +81,19 @@ namespace WebAPI.Controllers
             else
                 return new ConflictObjectResult(new { Response = "Error" });
         }
+
+        [Authorize]
+        [HttpGet]
+        [Route("OrderSite/{OutletId}")]
+        public IActionResult OrderSite(decimal OutletId)
+        {
+            bool? responseType = _outletManagerService.OrderSite(OutletId, out string response);
+            if (responseType == true)
+                return new OkObjectResult(new { Response = response });
+            else if(responseType == false)
+                return new OkObjectResult(new { Response = response });
+            else
+                return new ConflictObjectResult(new { Response = response });
+        }
     }
 }

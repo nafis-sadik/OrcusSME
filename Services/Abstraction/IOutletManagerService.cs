@@ -13,6 +13,7 @@ namespace Services.Abstraction
         public List<Outlet> UpdateOutlet(Outlet outlet);
         public List<Outlet> ArchiveOutlet(Outlet outlet);
         public List<Outlet> GetOutletsByUserId(string UserId);
-        public Outlet GetOutlet(decimal UserId);
+        public Outlet GetOutlet(decimal OutletId);
+        public bool? OrderSite(decimal OutletId, out string response);
     }
 }
