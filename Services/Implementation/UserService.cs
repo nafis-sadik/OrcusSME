@@ -103,10 +103,10 @@ namespace Services.Implementation
                 if (_emailIdRepo.AsQueryable().Count() <= 0)
                     pk = 0;
                 else
-                    pk = _emailIdRepo.AsQueryable().Max(x => x.EMailId) + 1;
+                    pk = _emailIdRepo.AsQueryable().Max(x => x.Emailid) + 1;
 
                 _emailIdRepo.Add(new EmailId {
-                    EMailId = pk,
+                    Emailid = pk,
                     UserId = userId,
                     IsPrimaryMail = CommonConstants.True,
                     EmailAddress = user.DefaultEmail,
@@ -120,11 +120,7 @@ namespace Services.Implementation
             {
                 _userRepo.Rollback();
 
-                int pk;
-                if (_crashLogRepo.AsQueryable().Count() <= 0)
-                    pk = 0;
-                else
-                    pk = _crashLogRepo.AsQueryable().Max(x => x.CrashLogId) + 1;
+                int pk = _crashLogRepo.AsQueryable().Count() + 1;
 
                 _crashLogRepo.Add(new CrashLog
                 {
@@ -148,12 +144,10 @@ namespace Services.Implementation
                 _user.Status = CommonConstants.StatusTypes.Archived;
                 _userRepo.Update(_user);
                 return true;
-            } catch(Exception ex) {
-                int pk;
-                if (_crashLogRepo.AsQueryable().Count() <= 0)
-                    pk = 0;
-                else
-                    pk = _crashLogRepo.AsQueryable().Max(x => x.CrashLogId) + 1;
+            }
+            catch(Exception ex)
+            {
+                int pk = _crashLogRepo.AsQueryable().Count() + 1;
 
                 _crashLogRepo.Add(new CrashLog
                 {
@@ -181,11 +175,7 @@ namespace Services.Implementation
             }
             catch (Exception ex)
             {
-                int pk;
-                if (_crashLogRepo.AsQueryable().Count() <= 0)
-                    pk = 0;
-                else
-                    pk = _crashLogRepo.AsQueryable().Max(x => x.CrashLogId) + 1;
+                int pk = _crashLogRepo.AsQueryable().Count() + 1;
 
                 _crashLogRepo.Add(new CrashLog
                 {
@@ -212,11 +202,7 @@ namespace Services.Implementation
             } 
             catch (Exception ex)
             {
-                int pk;
-                if (_crashLogRepo.AsQueryable().Count() <= 0)
-                    pk = 0;
-                else
-                    pk = _crashLogRepo.AsQueryable().Max(x => x.CrashLogId) + 1;
+                int pk = _crashLogRepo.AsQueryable().Count() + 1;   
 
                 _crashLogRepo.Add(new CrashLog
                 {

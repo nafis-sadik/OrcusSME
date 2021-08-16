@@ -30,7 +30,7 @@ namespace Services.Implementation
             {
                 subscriptions.Add(new SubscribedService {
                     SubscriptionId = (int)subscriptionHistory.SubscriptionId,
-                    ServiceName = subscriptionHistory.Subscription.SubscriptionName,
+                    //ServiceName = subscriptionHistory.Subscription.SubscriptionName,
                     SubscriptionName = "Dana Shop"
                 });
             }
@@ -46,11 +46,11 @@ namespace Services.Implementation
                 subscriptions.Add(new SubscribedService
                 {
                     SubscriptionId = (int)subscriptionHistory.SubscriptionId,
-                    ServiceName = subscriptionHistory.Subscription.SubscriptionName,
+                    //ServiceName = subscriptionHistory.Subscription.SubscriptionName,
                     SubscriptionName = "Dana Shop",
                     ExpirationDate = subscriptionHistory.ExpirationDate,
                     SubscriptionDate = subscriptionHistory.SubscriptionDate,
-                    SubscriptionPrice = (int)subscriptionHistory.Subscription.SubscriptionPrice
+                    //SubscriptionPrice = (int)subscriptionHistory.Subscription.SubscriptionPrice
                 });
             }
             return subscriptions;

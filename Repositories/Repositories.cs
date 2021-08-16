@@ -20,4 +20,6 @@ namespace Repositories
     public class UserActivityLogRepo : RepositoryBase<UserActivityLog>, IUserActivityLogRepo { public UserActivityLogRepo() : base() { } }
     public interface ICrashLogRepo : IRepositoryBase<CrashLog> { }
     public class CrashLogRepo : RepositoryBase<CrashLog>, ICrashLogRepo { public CrashLogRepo() : base() { } }
+    public interface ICategoryRepo : IRepositoryBase<Category> { }
+    public class CategoryRepo : RepositoryBase<Category>, ICategoryRepo { public CategoryRepo() : base() { } }
 }

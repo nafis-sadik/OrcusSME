@@ -8,7 +8,7 @@ namespace Entities
     public partial class EmailId
     {
         public string UserId { get; set; }
-        public int EMailId { get; set; }
+        public int Emailid { get; set; }
         public string IsPrimaryMail { get; set; }
         public string Status { get; set; }
         public string EmailAddress { get; set; }

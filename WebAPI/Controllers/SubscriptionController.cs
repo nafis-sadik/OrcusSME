@@ -13,7 +13,7 @@ namespace WebApplication.Controllers
 {
     [Route("api/Subscription")]
     [ApiController]
-    public class SubscriptionController : ControllerBase
+    public class SubscriptionController
     {
         private readonly ISubscriptionService _subscriptionService;
 
@@ -28,15 +28,15 @@ namespace WebApplication.Controllers
         public IActionResult Subscribe(string UserId, int SubscriptionId)
         {
             if (_subscriptionService.Subscribe(UserId, SubscriptionId))
-                return Ok();
+                return new OkObjectResult(new { Response = "" });
             else
-                return Conflict();
+                return new ConflictObjectResult(new { Response = CommonConstants.HttpResponseMessages.Exception });
         }
 
         [HttpGet]
         [Authorize]
         [Route("GetActiveSubscriptions/{userId}")]
-        public IActionResult GetActiveSubscriptions(string userId) => Ok(_subscriptionService.GetActiveSubscriptions(userId));
+        public IActionResult GetActiveSubscriptions(string userId) => new OkObjectResult(new { Response = _subscriptionService.GetActiveSubscriptions(userId) });
 
         [HttpGet]
         [Authorize]
@@ -52,12 +52,12 @@ namespace WebApplication.Controllers
                 PageSize = (int)pageSize
             }, userId);
 
-            return Ok(subHistory);
+            return new OkObjectResult(new { Response = subHistory });
         }
 
         [HttpGet]
         [Authorize]
         [Route("HasSubscription/{userId}/{subscriptionId}")]
-        public IActionResult HasSubscription(string userId, int subscriptionId) => Ok(_subscriptionService.HasSubscription(userId, subscriptionId));
+        public IActionResult HasSubscription(string userId, int subscriptionId) => new OkObjectResult(new { Response = _subscriptionService.HasSubscription(userId, subscriptionId) });
     }
 }

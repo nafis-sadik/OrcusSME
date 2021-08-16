@@ -12,10 +12,10 @@ namespace WebAPI.Controllers
 {
     [Route("api/Outlet")]
     [ApiController]
-    public class OutletManagerController
+    public class OutletController
     {
         private readonly IOutletManagerService _outletManagerService;
-        public OutletManagerController(IOutletManagerService outletManagerService)
+        public OutletController(IOutletManagerService outletManagerService)
         {
             _outletManagerService = outletManagerService;
         }

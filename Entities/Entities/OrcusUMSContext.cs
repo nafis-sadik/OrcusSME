@@ -19,6 +19,7 @@ namespace Entities
 
         public virtual DbSet<ActivityType> ActivityTypes { get; set; }
         public virtual DbSet<Address> Addresses { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<CrashLog> CrashLogs { get; set; }
         public virtual DbSet<EmailId> EmailIds { get; set; }
         public virtual DbSet<Number> Numbers { get; set; }
@@ -72,6 +73,20 @@ namespace Entities
                     .HasConstraintName("FK_Addresses_User");
             });
 
+            modelBuilder.Entity<Category>(entity =>
+            {
+                entity.Property(e => e.CategoryId).ValueGeneratedNever();
+
+                entity.Property(e => e.CategoryName).HasMaxLength(50);
+
+                entity.Property(e => e.OutletId).HasColumnType("numeric(18, 0)");
+
+                entity.HasOne(d => d.Outlet)
+                    .WithMany(p => p.Categories)
+                    .HasForeignKey(d => d.OutletId)
+                    .HasConstraintName("FK_Categories_Outlets");
+            });
+
             modelBuilder.Entity<CrashLog>(entity =>
             {
                 entity.ToTable("CrashLog");
@@ -91,11 +106,11 @@ namespace Entities
 
             modelBuilder.Entity<EmailId>(entity =>
             {
-                entity.HasKey(e => e.EMailId);
+                entity.HasKey(e => e.Emailid);
 
                 entity.ToTable("EmailId");
 
-                entity.Property(e => e.EMailId)
+                entity.Property(e => e.Emailid)
                     .ValueGeneratedNever()
                     .HasColumnName("EMailId");
 
@@ -199,21 +214,25 @@ namespace Entities
 
                 entity.Property(e => e.ExpirationDate).HasColumnType("datetime");
 
+                entity.Property(e => e.Subscription)
+                    .HasMaxLength(10)
+                    .IsFixedLength(true);
+
                 entity.Property(e => e.SubscriptionDate).HasColumnType("datetime");
 
                 entity.Property(e => e.SubscriptionId).HasColumnType("numeric(18, 0)");
 
                 entity.Property(e => e.UserId).HasMaxLength(50);
 
-                entity.HasOne(d => d.Subscription)
+                entity.HasOne(d => d.SubscriptionNavigation)
                     .WithMany()
                     .HasForeignKey(d => d.SubscriptionId)
-                    .HasConstraintName("FK_SubscriptionLog_Subscriptions");
+                    .HasConstraintName("FK_SubscriptionLog_Subscriptions1");
 
                 entity.HasOne(d => d.User)
                     .WithMany()
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_SubscriptionLog_User");
+                    .HasConstraintName("FK_SubscriptionLog_User1");
             });
 
             modelBuilder.Entity<User>(entity =>

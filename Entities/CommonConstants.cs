@@ -50,6 +50,7 @@ namespace DataLayer
             public const string PasswordMismatched = "Password Mismatched";
             public const string UserNameExists = "User Name Already Exists,Please Try a Different User Name";
             public const string MailExists = "Account with this Email Id already exists,Try resting password";
+            public const string Exception = "An error occurred while executing operation. Please contact support team.";
         }
 
         public const string MsgInInnerException = "An error occurred while updating the entries. See the inner exception for details.";
