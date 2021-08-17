@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Services.Abstraction
 {
-    interface ICategorService
+    public interface ICategoryService
     {
         public bool AddCategory(Category category);
     }

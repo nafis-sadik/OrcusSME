@@ -1,6 +1,7 @@
 ﻿using DataLayer;
 using DataLayer.Models;
 using Entities;
+using Microsoft.EntityFrameworkCore;
 using Repositories;
 using Services.Abstraction;
 using System;
@@ -11,14 +12,15 @@ using System.Threading.Tasks;
 
 namespace Services.Implementation
 {
-    public class CategorService : ICategorService
+    public class CategorService : ICategoryService
     {
         private readonly ICategoryRepo _categoryRepo;
         private readonly ICrashLogRepo _crashLogRepo;
-        public CategorService(ICategoryRepo categoryRepo, ICrashLogRepo crashLogRepo)
+        public CategorService()
         {
-            _categoryRepo = categoryRepo;
-            _crashLogRepo = crashLogRepo;
+            OrcusUMSContext context = new OrcusUMSContext(new DbContextOptions<OrcusUMSContext>());
+            _categoryRepo = new CategoryRepo(context);
+            _crashLogRepo = new CrashLogRepo(context);
         }
 
         public bool AddCategory(DataLayer.Models.Category category)

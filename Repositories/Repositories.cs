@@ -18,8 +18,14 @@ namespace Repositories
     public class SubscriptionLogRepo : RepositoryBase<SubscriptionLog>, ISubscriptionLogRepo { public SubscriptionLogRepo() : base() { } }
     public interface IUserActivityLogRepo : IRepositoryBase<UserActivityLog> { }
     public class UserActivityLogRepo : RepositoryBase<UserActivityLog>, IUserActivityLogRepo { public UserActivityLogRepo() : base() { } }
-    public interface ICrashLogRepo : IRepositoryBase<CrashLog> { }
-    public class CrashLogRepo : RepositoryBase<CrashLog>, ICrashLogRepo { public CrashLogRepo() : base() { } }
     public interface ICategoryRepo : IRepositoryBase<Category> { }
-    public class CategoryRepo : RepositoryBase<Category>, ICategoryRepo { public CategoryRepo() : base() { } }
+    public class CategoryRepo : RepositoryBase<Category>, ICategoryRepo { 
+        public CategoryRepo(OrcusUMSContext context) : base(context) { }
+    }
+    public interface ICrashLogRepo : IRepositoryBase<CrashLog> { }
+    public class CrashLogRepo : RepositoryBase<CrashLog>, ICrashLogRepo
+    {
+        public CrashLogRepo() : base() { }
+        public CrashLogRepo(OrcusUMSContext context) : base(context) { }
+    }
 }

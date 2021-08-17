@@ -1,6 +1,7 @@
 ﻿using DataLayer.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Services.Abstraction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,11 +13,19 @@ namespace WebAPI.Controllers
     [ApiController]
     public class CategoriesController
     {
+        private readonly ICategoryService _categoryService;
+        public CategoriesController(ICategoryService categoryService)
+        {
+            _categoryService = categoryService;
+        }
         [HttpPost]
         [Route("Add")]
         public IActionResult Add(Category category)
         {
-            return new OkObjectResult(new { Response = "" });
+            if (_categoryService.AddCategory(category))
+                return new OkObjectResult(new { Response = "Success" });
+            else
+                return new ConflictObjectResult(new { Response = "Error" });
         }
     }
 }

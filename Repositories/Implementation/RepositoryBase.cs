@@ -23,6 +23,13 @@ namespace Repositories.Implementation
             _dbSet = db.Set<T>();
             //transaction = db.Database.BeginTransaction();
         }
+
+        internal RepositoryBase(OrcusUMSContext context)
+        {
+            db = context;
+            _dbSet = db.Set<T>();
+        }
+        
         public virtual void Add(T entity)
         {
             _dbSet.Add(entity);
