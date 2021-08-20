@@ -58,5 +58,42 @@ namespace Services.Implementation
                 return false;
             }
         }
+
+        public List<DataLayer.Models.Category> GetCategoriesByOutlets(int OutletId)
+        {
+            try
+            {
+                List<DataLayer.Models.Category> response = new List<DataLayer.Models.Category>();
+                response = _categoryRepo.AsQueryable().Where(x => x.OutletId == OutletId)
+                    .Select(x => new DataLayer.Models.Category {
+                        CategoryId = x.CategoryId,
+                        CategoryName = x.CategoryName,
+                        OutletId = x.OutletId,
+                        ParentCategoryId = x.ParentCategoryId,
+                        UserId = x.Outlet.UserId
+                    }).ToList();
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _categoryRepo.Rollback();
+
+                int pk = _crashLogRepo.AsQueryable().Count() + 1;
+
+                _crashLogRepo.Add(new CrashLog
+                {
+                    CrashLogId = pk,
+                    ClassName = "CategorService",
+                    MethodName = "AddCategory",
+                    ErrorMessage = ex.Message.ToString(),
+                    ErrorInner = (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException ? ex.InnerException.Message : ex.Message).ToString(),
+                    Data = "",
+                    TimeStamp = DateTime.Now
+                });
+
+                return null;
+            }
+        }
     }
 }
