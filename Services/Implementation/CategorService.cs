@@ -23,11 +23,14 @@ namespace Services.Implementation
             _crashLogRepo = new CrashLogRepo(context);
         }
 
-        public bool AddCategory(DataLayer.Models.Category category)
+        public List<DataLayer.Models.Category> AddCategory(DataLayer.Models.Category category)
         {
             try
             {
                 int pk = _categoryRepo.AsQueryable().Count() + 1;
+                List<DataLayer.Models.Category> AlreadyExists = _categoryRepo.AsQueryable().Where(x => x.OutletId == category.OutletId && x.CategoryName == category.CategoryName) != null ? new List<DataLayer.Models.Category>() : null;
+                if (AlreadyExists != null)
+                    return AlreadyExists;
                 _categoryRepo.Add(new Entities.Category
                 {
                     CategoryId = pk,
@@ -36,7 +39,7 @@ namespace Services.Implementation
                     ParentCategoryId = category.ParentCategoryId
                 });
 
-                return true;
+                return GetCategoriesByOutlets((int)category.OutletId);
             }
             catch (Exception ex)
             {
@@ -55,7 +58,7 @@ namespace Services.Implementation
                     TimeStamp = DateTime.Now
                 });
 
-                return false;
+                return null;
             }
         }
 
@@ -85,7 +88,7 @@ namespace Services.Implementation
                 {
                     CrashLogId = pk,
                     ClassName = "CategorService",
-                    MethodName = "AddCategory",
+                    MethodName = "GetCategoriesByOutlets",
                     ErrorMessage = ex.Message.ToString(),
                     ErrorInner = (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException ? ex.InnerException.Message : ex.Message).ToString(),
                     Data = "",

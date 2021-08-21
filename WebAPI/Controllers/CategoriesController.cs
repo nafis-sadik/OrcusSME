@@ -21,17 +21,18 @@ namespace WebAPI.Controllers
         }
 
         [Authorize]
-        [HttpPost]
+        [HttpPut]
         [Route("Add")]
         public IActionResult Add(Category category)
         {
-            if (_categoryService.AddCategory(category))
-                return new OkObjectResult(new { Response = "Success" });
+            List<Category> response = _categoryService.AddCategory(category);
+            if (response != null)
+                return new OkObjectResult(new { Response = response });
             else
                 return new ConflictObjectResult(new { Response = "Error" });
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         [Route("GetCategoriesOfOutlets/{OutletId}")]
         public IActionResult GetCategoriesOfOutlets(int OutletId)
@@ -41,6 +42,14 @@ namespace WebAPI.Controllers
                 return new OkObjectResult(new { Response = response });
             else
                 return new ConflictObjectResult(new { Response = "Error" });
+        }
+
+        [Authorize]
+        [HttpDelete]
+        [Route("Delete/{CategoryId}")]
+        public IActionResult Delete(int CategoryId)
+        {
+            return new OkObjectResult(new { Response = "Under Development" });
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Services.Abstraction
 {
     public interface ICategoryService
     {
-        public bool AddCategory(Category category);
+        public List<Category> AddCategory(Category category);
         public List<Category> GetCategoriesByOutlets(int OutletId);
     }
 }
