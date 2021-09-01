@@ -49,7 +49,21 @@ namespace WebAPI.Controllers
         [Route("Delete/{CategoryId}")]
         public IActionResult Delete(int CategoryId)
         {
-            return new OkObjectResult(new { Response = "Under Development" });
+            if (_categoryService.DeleteCategory(CategoryId))
+                return new OkObjectResult(new { Response = "Success" });
+            else
+                return new ConflictObjectResult(new { Response = "Error" });
+        }
+
+        //[Authorize]
+        [HttpGet]
+        [Route("SaveHierarchy/{SaveHierarchy}")]
+        public IActionResult SaveHierarchy(string SaveHierarchy)
+        {
+            if (_categoryService.SaveHierarchy(SaveHierarchy))
+                return new OkObjectResult(new { Response = "Success" });
+            else
+                return new ConflictObjectResult(new { Response = "Error" });
         }
     }
 }

@@ -11,5 +11,7 @@ namespace Services.Abstraction
     {
         public List<Category> AddCategory(Category category);
         public List<Category> GetCategoriesByOutlets(int OutletId);
+        public bool DeleteCategory(int OutletId);
+        public bool SaveHierarchy(string Hierarchy);
     }
 }

@@ -15,12 +15,14 @@ namespace Services.Implementation
     public class CategorService : ICategoryService
     {
         private readonly ICategoryRepo _categoryRepo;
+        //private readonly IProductRepo _productRepo;
         private readonly ICrashLogRepo _crashLogRepo;
         public CategorService()
         {
             OrcusUMSContext context = new OrcusUMSContext(new DbContextOptions<OrcusUMSContext>());
             _categoryRepo = new CategoryRepo(context);
             _crashLogRepo = new CrashLogRepo(context);
+            //_productRepo = new IProductRepo(context);
         }
 
         public List<DataLayer.Models.Category> AddCategory(DataLayer.Models.Category category)
@@ -62,6 +64,37 @@ namespace Services.Implementation
             }
         }
 
+        public bool DeleteCategory(int OutletId)
+        {
+            try
+            {
+                Entities.Category category = _categoryRepo.Get(OutletId);
+                // Must handle products under this category
+                _categoryRepo.Delete(category);
+
+                return true;
+            } 
+            catch (Exception ex)
+            {
+                _categoryRepo.Rollback();
+
+                int pk = _crashLogRepo.AsQueryable().Count() + 1;
+
+                _crashLogRepo.Add(new CrashLog
+                {
+                    CrashLogId = pk,
+                    ClassName = "CategorService",
+                    MethodName = "DeleteCategory",
+                    ErrorMessage = ex.Message.ToString(),
+                    ErrorInner = (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException ? ex.InnerException.Message : ex.Message).ToString(),
+                    Data = OutletId.ToString(),
+                    TimeStamp = DateTime.Now
+                });
+
+                return false;
+            }
+        }
+
         public List<DataLayer.Models.Category> GetCategoriesByOutlets(int OutletId)
         {
             try
@@ -96,6 +129,35 @@ namespace Services.Implementation
                 });
 
                 return null;
+            }
+        }
+
+        public bool SaveHierarchy(string Hierarchy)
+        {
+            try
+            {
+                string trimmed = Hierarchy.Replace('"', ' ');
+                //_categoryRepo.AsQueryable().Where(x => x.)
+                return true;
+            }
+            catch(Exception ex)
+            {
+                _categoryRepo.Rollback();
+
+                int pk = _crashLogRepo.AsQueryable().Count() + 1;
+
+                _crashLogRepo.Add(new CrashLog
+                {
+                    CrashLogId = pk,
+                    ClassName = "CategorService",
+                    MethodName = "GetCategoriesByOutlets",
+                    ErrorMessage = ex.Message.ToString(),
+                    ErrorInner = (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException ? ex.InnerException.Message : ex.Message).ToString(),
+                    Data = "",
+                    TimeStamp = DateTime.Now
+                });
+
+                return false;
             }
         }
     }
