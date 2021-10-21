@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using Repositories;
 using System.Linq;
+using DataLayer.Entities;
 
 namespace Services.Implementation
 {
@@ -24,9 +25,9 @@ namespace Services.Implementation
 
         public IEnumerable<SubscribedService> GetActiveSubscriptions(string userId)
         {
-            IQueryable<SubscriptionLog> SubscriptionLogs = _subscriptionLogRepo.AsQueryable().Where(x => x.SubscriptionDate > DateTime.Now);
+            IQueryable<SubscriptionLog> subscriptionLogs = _subscriptionLogRepo.AsQueryable().Where(x => x.SubscriptionDate > DateTime.Now);
             List<SubscribedService> subscriptions = new List<SubscribedService>();
-            foreach(SubscriptionLog subscriptionHistory in SubscriptionLogs)
+            foreach(SubscriptionLog subscriptionHistory in subscriptionLogs)
             {
                 subscriptions.Add(new SubscribedService {
                     SubscriptionId = (int)subscriptionHistory.SubscriptionId,

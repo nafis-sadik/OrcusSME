@@ -1,30 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Projects\\Team Projects\\OrcusSME\\Repositories\\Repositories.csproj": {}
+    "/home/oem/Projects/Nafis Sadik/OrcusSME_BackEnd/Repositories/Repositories.csproj": {}
   },
   "projects": {
-    "D:\\Projects\\Team Projects\\OrcusSME\\Entities\\DataLayer.csproj": {
+    "/home/oem/Projects/Nafis Sadik/OrcusSME_BackEnd/Entities/DataLayer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Projects\\Team Projects\\OrcusSME\\Entities\\DataLayer.csproj",
+        "projectUniqueName": "/home/oem/Projects/Nafis Sadik/OrcusSME_BackEnd/Entities/DataLayer.csproj",
         "projectName": "DataLayer",
-        "projectPath": "D:\\Projects\\Team Projects\\OrcusSME\\Entities\\DataLayer.csproj",
-        "packagesPath": "C:\\Users\\nafis\\.nuget\\packages\\",
-        "outputPath": "D:\\Projects\\Team Projects\\OrcusSME\\Entities\\obj\\",
+        "projectPath": "/home/oem/Projects/Nafis Sadik/OrcusSME_BackEnd/Entities/DataLayer.csproj",
+        "packagesPath": "/home/oem/.nuget/packages/",
+        "outputPath": "/home/oem/Projects/Nafis Sadik/OrcusSME_BackEnd/Entities/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\nafis\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/home/oem/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -83,39 +78,34 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.302\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/snap/dotnet-sdk/current/sdk/5.0.402/RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\Projects\\Team Projects\\OrcusSME\\Repositories\\Repositories.csproj": {
+    "/home/oem/Projects/Nafis Sadik/OrcusSME_BackEnd/Repositories/Repositories.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Projects\\Team Projects\\OrcusSME\\Repositories\\Repositories.csproj",
+        "projectUniqueName": "/home/oem/Projects/Nafis Sadik/OrcusSME_BackEnd/Repositories/Repositories.csproj",
         "projectName": "Repositories",
-        "projectPath": "D:\\Projects\\Team Projects\\OrcusSME\\Repositories\\Repositories.csproj",
-        "packagesPath": "C:\\Users\\nafis\\.nuget\\packages\\",
-        "outputPath": "D:\\Projects\\Team Projects\\OrcusSME\\Repositories\\obj\\",
+        "projectPath": "/home/oem/Projects/Nafis Sadik/OrcusSME_BackEnd/Repositories/Repositories.csproj",
+        "packagesPath": "/home/oem/.nuget/packages/",
+        "outputPath": "/home/oem/Projects/Nafis Sadik/OrcusSME_BackEnd/Repositories/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\nafis\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/home/oem/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "D:\\Projects\\Team Projects\\OrcusSME\\Entities\\DataLayer.csproj": {
-                "projectPath": "D:\\Projects\\Team Projects\\OrcusSME\\Entities\\DataLayer.csproj"
+              "/home/oem/Projects/Nafis Sadik/OrcusSME_BackEnd/Entities/DataLayer.csproj": {
+                "projectPath": "/home/oem/Projects/Nafis Sadik/OrcusSME_BackEnd/Entities/DataLayer.csproj"
               }
             }
           }
@@ -144,7 +134,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.302\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/snap/dotnet-sdk/current/sdk/5.0.402/RuntimeIdentifierGraph.json"
         }
       }
     }

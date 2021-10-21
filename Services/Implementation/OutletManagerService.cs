@@ -1,13 +1,14 @@
 ﻿using DataLayer;
-using Entities;
 using Repositories;
 using Repositories.Abstraction;
 using Services.Abstraction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DataLayer.Entities;
+using DataLayer.MySql;
+using Microsoft.EntityFrameworkCore;
+using Repositories.Implementation;
 
 namespace Services.Implementation
 {
@@ -18,8 +19,9 @@ namespace Services.Implementation
 
         public OutletManagerService(IOutletManagerRepo outletManagerRepo, ICrashLogRepo crashLogRepo)
         {
-            _outletManagerRepo = outletManagerRepo;
-            _crashLogRepo = crashLogRepo;
+            OrcusUMSContext context = new OrcusUMSContext(new DbContextOptions<OrcusUMSContext>());
+            _outletManagerRepo = new OutletManagerRepo(context);
+            _crashLogRepo = new CrashLogRepo(context);
         }
 
         public List<Models.Outlet> AddOutlet(Models.Outlet outlet)

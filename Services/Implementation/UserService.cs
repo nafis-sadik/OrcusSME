@@ -3,12 +3,12 @@ using Models;
 using Services.Abstraction;
 using System;
 using System.Linq;
-using Entities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using DataLayer;
+using DataLayer.Entities;
 using Repositories.Abstraction;
 
 namespace Services.Implementation
@@ -51,18 +51,14 @@ namespace Services.Implementation
             token = "";
             userId = "";
             User user = _userRepo.FindUser(userName, pass);
-            userId = user.UserId;
-            if (user == null)
-                return null;
-            else
+            if (user != null && BCrypt.Net.BCrypt.EnhancedVerify(pass, user.Password))
             {
-                if (BCrypt.Net.BCrypt.EnhancedVerify(pass, user.Password))
-                {
-                    token = GenerateJwtToken(user.UserId);
-                    return true;
-                }
-                else return false;
+                userId = user.UserId;
+                token = GenerateJwtToken(user.UserId);
+                return true;
             }
+
+            return false;
         }
 
         public bool? SignUp(UserModel user, out string token, out string userId)
@@ -140,10 +136,15 @@ namespace Services.Implementation
         {
             try
             {
-                User _user = _userRepo.AsQueryable().FirstOrDefault(x => x.UserId == userId);
-                _user.Status = CommonConstants.StatusTypes.Archived;
-                _userRepo.Update(_user);
-                return true;
+                User user = _userRepo.AsQueryable().FirstOrDefault(x => x.UserId == userId);
+                if (user != null)
+                {
+                    user.Status = CommonConstants.StatusTypes.Archived;
+                    _userRepo.Update(user);
+                    return true;
+                }
+
+                return false;
             }
             catch(Exception ex)
             {
@@ -168,10 +169,15 @@ namespace Services.Implementation
 
             try
             {
-                User _user = _userRepo.AsQueryable().FirstOrDefault(x => x.UserId == userId);
-                _user.Status = CommonConstants.StatusTypes.Archived;
-                _userRepo.Delete(_user);
-                return true;
+                User user = _userRepo.AsQueryable().FirstOrDefault(x => x.UserId == userId);
+                if (user != null)
+                {
+                    user.Status = CommonConstants.StatusTypes.Archived;
+                    _userRepo.Delete(user);
+                    return true;
+                }
+
+                return false;
             }
             catch (Exception ex)
             {
@@ -196,9 +202,14 @@ namespace Services.Implementation
             try
             {
                 User userData = _userRepo.AsQueryable().FirstOrDefault(x => x.UserId == userId);
-                userData.Password = BCrypt.Net.BCrypt.EnhancedHashPassword("ADIBA<3nafis");
-                _userRepo.Update(userData);
-                return true;
+                if (userData != null)
+                {
+                    userData.Password = BCrypt.Net.BCrypt.EnhancedHashPassword("ADIBA<3nafis");
+                    _userRepo.Update(userData);
+                    return true;
+                }
+
+                return false;
             } 
             catch (Exception ex)
             {

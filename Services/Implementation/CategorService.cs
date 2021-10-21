@@ -1,14 +1,11 @@
 ﻿using DataLayer;
-using DataLayer.Models;
-using Entities;
 using Microsoft.EntityFrameworkCore;
 using Repositories;
 using Services.Abstraction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DataLayer.MySql;
 
 namespace Services.Implementation
 {
@@ -30,18 +27,21 @@ namespace Services.Implementation
             try
             {
                 int pk = _categoryRepo.AsQueryable().Count() + 1;
-                List<DataLayer.Models.Category> AlreadyExists = _categoryRepo.AsQueryable().Where(x => x.OutletId == category.OutletId && x.CategoryName == category.CategoryName) != null ? new List<DataLayer.Models.Category>() : null;
-                if (AlreadyExists != null)
-                    return AlreadyExists;
-                _categoryRepo.Add(new Entities.Category
+                List<DataLayer.Entities.Category> alreadyExists = _categoryRepo.AsQueryable().Where(x => x.OutletId == category.OutletId && x.CategoryName == category.CategoryName).ToList();
+                if (alreadyExists != null || alreadyExists.Count() > 0)
+                    return new List<DataLayer.Models.Category>();
+                else
                 {
-                    CategoryId = pk,
-                    CategoryName = category.CategoryName,
-                    OutletId = category.OutletId,
-                    ParentCategoryId = category.ParentCategoryId
-                });
+                    _categoryRepo.Add(new DataLayer.Entities.Category
+                    {
+                        CategoryId = pk,
+                        CategoryName = category.CategoryName,
+                        OutletId = category.OutletId,
+                        ParentCategoryId = category.ParentCategoryId
+                    });
 
-                return GetCategoriesByOutlets((int)category.OutletId);
+                    return GetCategoriesByOutlets((int)category.OutletId);
+                }
             }
             catch (Exception ex)
             {
@@ -49,14 +49,14 @@ namespace Services.Implementation
 
                 int pk = _crashLogRepo.AsQueryable().Count() + 1;
 
-                _crashLogRepo.Add(new CrashLog
+                _crashLogRepo.Add(new DataLayer.Entities.CrashLog
                 {
                     CrashLogId = pk,
-                    ClassName = "CategorService",
+                    ClassName = "CategoryService",
                     MethodName = "AddCategory",
                     ErrorMessage = ex.Message.ToString(),
                     ErrorInner = (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException ? ex.InnerException.Message : ex.Message).ToString(),
-                    Data = category.UserId.ToString(),
+                    Data = category.UserId,
                     TimeStamp = DateTime.Now
                 });
 
@@ -68,7 +68,7 @@ namespace Services.Implementation
         {
             try
             {
-                Entities.Category category = _categoryRepo.Get(OutletId);
+                DataLayer.Entities.Category category = _categoryRepo.Get(OutletId);
                 // Must handle products under this category
                 _categoryRepo.Delete(category);
 
@@ -80,10 +80,10 @@ namespace Services.Implementation
 
                 int pk = _crashLogRepo.AsQueryable().Count() + 1;
 
-                _crashLogRepo.Add(new CrashLog
+                _crashLogRepo.Add(new DataLayer.Entities.CrashLog
                 {
                     CrashLogId = pk,
-                    ClassName = "CategorService",
+                    ClassName = "CategoryService",
                     MethodName = "DeleteCategory",
                     ErrorMessage = ex.Message.ToString(),
                     ErrorInner = (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException ? ex.InnerException.Message : ex.Message).ToString(),
@@ -95,12 +95,12 @@ namespace Services.Implementation
             }
         }
 
-        public List<DataLayer.Models.Category> GetCategoriesByOutlets(int OutletId)
+        public List<DataLayer.Models.Category> GetCategoriesByOutlets(int outletId)
         {
             try
             {
                 List<DataLayer.Models.Category> response = new List<DataLayer.Models.Category>();
-                response = _categoryRepo.AsQueryable().Where(x => x.OutletId == OutletId)
+                response = _categoryRepo.AsQueryable().Where(x => x.OutletId == outletId)
                     .Select(x => new DataLayer.Models.Category {
                         CategoryId = x.CategoryId,
                         CategoryName = x.CategoryName,
@@ -117,10 +117,10 @@ namespace Services.Implementation
 
                 int pk = _crashLogRepo.AsQueryable().Count() + 1;
 
-                _crashLogRepo.Add(new CrashLog
+                _crashLogRepo.Add(new DataLayer.Entities.CrashLog
                 {
                     CrashLogId = pk,
-                    ClassName = "CategorService",
+                    ClassName = "CategoryService",
                     MethodName = "GetCategoriesByOutlets",
                     ErrorMessage = ex.Message.ToString(),
                     ErrorInner = (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException ? ex.InnerException.Message : ex.Message).ToString(),
@@ -132,11 +132,11 @@ namespace Services.Implementation
             }
         }
 
-        public bool SaveHierarchy(string Hierarchy)
+        public bool SaveHierarchy(string hierarchy)
         {
             try
             {
-                string trimmed = Hierarchy.Replace('"', ' ');
+                string trimmed = hierarchy.Replace('"', ' ');
                 //_categoryRepo.AsQueryable().Where(x => x.)
                 return true;
             }
@@ -146,12 +146,12 @@ namespace Services.Implementation
 
                 int pk = _crashLogRepo.AsQueryable().Count() + 1;
 
-                _crashLogRepo.Add(new CrashLog
+                _crashLogRepo.Add(new DataLayer.Entities.CrashLog
                 {
                     CrashLogId = pk,
-                    ClassName = "CategorService",
+                    ClassName = "CategoryService",
                     MethodName = "GetCategoriesByOutlets",
-                    ErrorMessage = ex.Message.ToString(),
+                    ErrorMessage = ex.Message,
                     ErrorInner = (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException ? ex.InnerException.Message : ex.Message).ToString(),
                     Data = "",
                     TimeStamp = DateTime.Now

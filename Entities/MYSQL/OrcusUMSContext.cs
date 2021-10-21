@@ -3,7 +3,7 @@ using DataLayer.Entities;
 
 #nullable disable
 
-namespace Entities.Catch
+namespace DataLayer.MySql
 {
     public partial class OrcusUMSContext : DbContext
     {

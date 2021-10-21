@@ -1,4 +1,5 @@
-﻿using Entities;
+﻿using DataLayer.Entities;
+using DataLayer.MySql;
 using Repositories.Abstraction;
 using Repositories.Implementation;
 
@@ -25,7 +26,6 @@ namespace Repositories
     public interface ICrashLogRepo : IRepositoryBase<CrashLog> { }
     public class CrashLogRepo : RepositoryBase<CrashLog>, ICrashLogRepo
     {
-        public CrashLogRepo() : base() { }
         public CrashLogRepo(OrcusUMSContext context) : base(context) { }
     }
 }
