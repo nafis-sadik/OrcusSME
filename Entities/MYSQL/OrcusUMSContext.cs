@@ -32,7 +32,7 @@ namespace DataLayer.MySql
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("User Id=DESKTOP-BHB3CJL;Database=OrcusUMS;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Database=OrcusUMS;Trusted_Connection=True;");
             }
         }
 

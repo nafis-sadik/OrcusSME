@@ -28,4 +28,9 @@ namespace Repositories
     {
         public CrashLogRepo(OrcusUMSContext context) : base(context) { }
     }
+
+    public interface IOutletManagerRepo : IRepositoryBase<Outlet>
+    {
+        public new bool Add(Outlet entity);
+    }
 }

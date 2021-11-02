@@ -29,15 +29,15 @@ namespace WebAPI
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        readonly string AdibasCORSPolicy = "AdibasCORSPolicy";
+        private const string OrcusCorsPolicy = "OrcusCORSPolicy";
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors(options =>
             {
-                options.AddPolicy(name: AdibasCORSPolicy,
+                options.AddPolicy(name: OrcusCorsPolicy,
                     builder =>
                     {
                         builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
@@ -67,24 +67,15 @@ namespace WebAPI
             services.AddScoped<IOutletManagerService, OutletManagerService>();
             services.AddScoped(typeof(IOutletManagerService), typeof(OutletManagerService));
 
-            services.AddScoped<ICategoryService, CategorService>();
-            services.AddScoped(typeof(ICategoryService), typeof(CategorService));
-
             // Repos
             services.AddScoped<IUserRepo, UserRepo>();
             services.AddScoped(typeof(IUserRepo), typeof(UserRepo));
-
-            services.AddScoped<ICrashLogRepo, CrashLogRepo>();
-            services.AddScoped(typeof(ICrashLogRepo), typeof(CrashLogRepo));
             
             services.AddScoped<IUserActivityLogRepo, UserActivityLogRepo>();
             services.AddScoped(typeof(IUserActivityLogRepo), typeof(UserActivityLogRepo));
 
             services.AddScoped<IEmailIdRepo, EmailIdRepo>();
             services.AddScoped(typeof(IEmailIdRepo), typeof(EmailIdRepo));
-
-            services.AddScoped<IOutletManagerRepo, OutletManagerRepo>();
-            services.AddScoped(typeof(IOutletManagerRepo), typeof(OutletManagerRepo));
 
             services.AddControllers();
 
@@ -108,7 +99,7 @@ namespace WebAPI
 
             app.UseRouting();
 
-            app.UseCors(AdibasCORSPolicy);
+            app.UseCors(OrcusCorsPolicy);
 
             app.UseAuthentication();
 

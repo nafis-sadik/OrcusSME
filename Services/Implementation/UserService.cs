@@ -9,6 +9,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using DataLayer;
 using DataLayer.Entities;
+using DataLayer.MySql;
+using Microsoft.EntityFrameworkCore;
 using Repositories.Abstraction;
 
 namespace Services.Implementation
@@ -20,10 +22,11 @@ namespace Services.Implementation
         private readonly IUserActivityLogRepo _userActivityLogRepo;
         private readonly IEmailIdRepo _emailIdRepo;
 
-        public UserService(IUserRepo userRepo, ICrashLogRepo crashLogRepo, IUserActivityLogRepo userActivityLogRepo, IEmailIdRepo emailIdRepo)
+        public UserService(IUserRepo userRepo, IUserActivityLogRepo userActivityLogRepo, IEmailIdRepo emailIdRepo)
         {
+            OrcusUMSContext context = new OrcusUMSContext(new DbContextOptions<OrcusUMSContext>());
             _userRepo = userRepo;
-            _crashLogRepo = crashLogRepo;
+            _crashLogRepo = new CrashLogRepo(context);
             _userActivityLogRepo = userActivityLogRepo;
             _emailIdRepo = emailIdRepo;
         }
@@ -166,7 +169,6 @@ namespace Services.Implementation
 
         public bool DeleteAccount(string userId)
         {
-
             try
             {
                 User user = _userRepo.AsQueryable().FirstOrDefault(x => x.UserId == userId);

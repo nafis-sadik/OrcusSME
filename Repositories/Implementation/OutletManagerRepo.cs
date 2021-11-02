@@ -7,7 +7,7 @@ namespace Repositories.Implementation
 {
     public class OutletManagerRepo : RepositoryBase<Outlet>, IOutletManagerRepo {
         public OutletManagerRepo(OrcusUMSContext context) : base(context) { }
-        public bool RegisterNewOutlet(Outlet outlet)
+        public new bool Add(Outlet outlet)
         {
             if (Db.Outlets.Count(x => x.UserId == outlet.UserId && x.OutletName == outlet.OutletName) > 0)
                 return false;

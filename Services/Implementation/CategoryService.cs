@@ -9,12 +9,12 @@ using DataLayer.MySql;
 
 namespace Services.Implementation
 {
-    public class CategorService : ICategoryService
+    public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepo _categoryRepo;
         //private readonly IProductRepo _productRepo;
         private readonly ICrashLogRepo _crashLogRepo;
-        public CategorService()
+        public CategoryService()
         {
             OrcusUMSContext context = new OrcusUMSContext(new DbContextOptions<OrcusUMSContext>());
             _categoryRepo = new CategoryRepo(context);
