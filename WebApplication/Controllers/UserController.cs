@@ -19,7 +19,7 @@ namespace WebApplication.Controllers
         [Route("LogIn")]
         public IActionResult LogIn(UserModel user)
         {
-            bool? logInResponse = _userServices.LogIn(user.UserName, user.Password, out string token, out string userId);
+            bool? logInResponse = _userServices.LogIn(user, out string token, out string userId);
 
             if (logInResponse == true)
                 return new OkObjectResult(new { Response = token, UserId = userId });

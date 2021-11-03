@@ -34,10 +34,10 @@ namespace WebAPI.Controllers
 
         [Authorize]
         [HttpGet]
-        [Route("GetCategoriesOfOutlets/{OutletId}")]
-        public IActionResult GetCategoriesOfOutlets(int OutletId)
+        [Route("GetCategoriesOfOutlets/{outletId}")]
+        public IActionResult GetCategoriesOfOutlets(int outletId)
         {
-            List<Category> response = _categoryService.GetCategoriesByOutlets(OutletId);
+            List<Category> response = _categoryService.GetCategoriesByOutlets(outletId);
             if (response != null)
                 return new OkObjectResult(new { Response = response });
             else
@@ -46,10 +46,10 @@ namespace WebAPI.Controllers
 
         [Authorize]
         [HttpDelete]
-        [Route("Delete/{CategoryId}")]
-        public IActionResult Delete(int CategoryId)
+        [Route("Delete/{categoryId}")]
+        public IActionResult Delete(int categoryId)
         {
-            if (_categoryService.DeleteCategory(CategoryId))
+            if (_categoryService.DeleteCategory(categoryId))
                 return new OkObjectResult(new { Response = "Success" });
             else
                 return new ConflictObjectResult(new { Response = "Error" });
@@ -57,10 +57,10 @@ namespace WebAPI.Controllers
 
         //[Authorize]
         [HttpGet]
-        [Route("SaveHierarchy/{SaveHierarchy}")]
-        public IActionResult SaveHierarchy(string SaveHierarchy)
+        [Route("SaveHierarchy/{saveHierarchy}")]
+        public IActionResult SaveHierarchy(string saveHierarchy)
         {
-            if (_categoryService.SaveHierarchy(SaveHierarchy))
+            if (_categoryService.SaveHierarchy(saveHierarchy))
                 return new OkObjectResult(new { Response = "Success" });
             else
                 return new ConflictObjectResult(new { Response = "Error" });

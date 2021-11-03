@@ -1,14 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
 using Services.Abstraction;
 using Models;
 using DataLayer;
 
-namespace Application.Controllers
+namespace WebAPI.Controllers
 {
     [Route("api/User")]
     [ApiController]
@@ -24,7 +19,7 @@ namespace Application.Controllers
         [Route("LogIn")]
         public IActionResult LogIn(UserModel user)
         {
-            bool? logInResponse = _userServices.LogIn(user.UserName, user.Password, out string token, out string userId);
+            bool? logInResponse = _userServices.LogIn(user, out string token, out string userId);
 
             if (logInResponse == true)
                 return new OkObjectResult(new { Response = token, UserId = userId });
