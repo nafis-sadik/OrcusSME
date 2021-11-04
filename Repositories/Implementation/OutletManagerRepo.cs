@@ -1,28 +1,19 @@
-﻿using Entities;
+﻿using System.Linq;
 using Repositories.Abstraction;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DataLayer.Entities;
+using DataLayer.MySql;
 
 namespace Repositories.Implementation
 {
     public class OutletManagerRepo : RepositoryBase<Outlet>, IOutletManagerRepo {
-        public OutletManagerRepo() : base() { }
-
-        public bool RegisterNewOutlet(Outlet outlet)
+        public OutletManagerRepo(OrcusUMSContext context) : base(context) { }
+        public new bool Add(Outlet outlet)
         {
-            if (db.Outlets.Where(x => x.UserId == outlet.UserId && x.OutletName == outlet.OutletName).Count() > 0)
+            if (Db.Outlets.Count(x => x.UserId == outlet.UserId && x.OutletName == outlet.OutletName) > 0)
                 return false;
-            else
-            {
-                db.Outlets.Add(outlet);
-                db.SaveChanges();
-            }
+            Db.Outlets.Add(outlet);
+            Db.SaveChanges();
             return true;
         }
-
-        void Add(Outlet entity) { return; }
     }
 }

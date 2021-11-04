@@ -1,23 +1,20 @@
 ﻿using DataLayer;
-using DataLayer.Models;
-using Entities;
 using Microsoft.EntityFrameworkCore;
 using Repositories;
 using Services.Abstraction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DataLayer.MySql;
 
 namespace Services.Implementation
 {
-    public class CategorService : ICategoryService
+    public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepo _categoryRepo;
         //private readonly IProductRepo _productRepo;
         private readonly ICrashLogRepo _crashLogRepo;
-        public CategorService()
+        public CategoryService()
         {
             OrcusUMSContext context = new OrcusUMSContext(new DbContextOptions<OrcusUMSContext>());
             _categoryRepo = new CategoryRepo(context);
@@ -49,14 +46,14 @@ namespace Services.Implementation
 
                 int pk = _crashLogRepo.AsQueryable().Count() + 1;
 
-                _crashLogRepo.Add(new CrashLog
+                _crashLogRepo.Add(new DataLayer.Entities.CrashLog
                 {
                     CrashLogId = pk,
-                    ClassName = "CategorService",
+                    ClassName = "CategoryService",
                     MethodName = "AddCategory",
                     ErrorMessage = ex.Message.ToString(),
                     ErrorInner = (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException ? ex.InnerException.Message : ex.Message).ToString(),
-                    Data = category.UserId.ToString(),
+                    Data = category.UserId,
                     TimeStamp = DateTime.Now
                 });
 
@@ -68,7 +65,7 @@ namespace Services.Implementation
         {
             try
             {
-                Entities.Category category = _categoryRepo.Get(OutletId);
+                DataLayer.Entities.Category category = _categoryRepo.Get(OutletId);
                 // Must handle products under this category
                 _categoryRepo.Delete(category);
 
@@ -80,10 +77,10 @@ namespace Services.Implementation
 
                 int pk = _crashLogRepo.AsQueryable().Count() + 1;
 
-                _crashLogRepo.Add(new CrashLog
+                _crashLogRepo.Add(new DataLayer.Entities.CrashLog
                 {
                     CrashLogId = pk,
-                    ClassName = "CategorService",
+                    ClassName = "CategoryService",
                     MethodName = "DeleteCategory",
                     ErrorMessage = ex.Message.ToString(),
                     ErrorInner = (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException ? ex.InnerException.Message : ex.Message).ToString(),
@@ -118,10 +115,10 @@ namespace Services.Implementation
 
                 int pk = _crashLogRepo.AsQueryable().Count() + 1;
 
-                _crashLogRepo.Add(new CrashLog
+                _crashLogRepo.Add(new DataLayer.Entities.CrashLog
                 {
                     CrashLogId = pk,
-                    ClassName = "CategorService",
+                    ClassName = "CategoryService",
                     MethodName = "GetCategoriesByOutlets",
                     ErrorMessage = ex.Message.ToString(),
                     ErrorInner = (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException ? ex.InnerException.Message : ex.Message).ToString(),
@@ -226,12 +223,12 @@ namespace Services.Implementation
 
                 int pk = _crashLogRepo.AsQueryable().Count() + 1;
 
-                _crashLogRepo.Add(new CrashLog
+                _crashLogRepo.Add(new DataLayer.Entities.CrashLog
                 {
                     CrashLogId = pk,
-                    ClassName = "CategorService",
+                    ClassName = "CategoryService",
                     MethodName = "GetCategoriesByOutlets",
-                    ErrorMessage = ex.Message.ToString(),
+                    ErrorMessage = ex.Message,
                     ErrorInner = (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException ? ex.InnerException.Message : ex.Message).ToString(),
                     Data = "",
                     TimeStamp = DateTime.Now

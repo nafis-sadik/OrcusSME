@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace Entities
+namespace DataLayer.Entities
 {
     public partial class UserActivityLog
     {

@@ -3,7 +3,7 @@ using Services.Abstraction;
 using Models;
 using DataLayer;
 
-namespace WebAPI.Controllers
+namespace WebApplication.Controllers
 {
     [Route("api/User")]
     [ApiController]

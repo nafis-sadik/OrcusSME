@@ -1,13 +1,14 @@
 ﻿using DataLayer;
-using Entities;
 using Repositories;
-using Repositories.Abstraction;
 using Services.Abstraction;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DataLayer.Entities;
+using DataLayer.MySql;
+using Microsoft.EntityFrameworkCore;
+using Repositories.Implementation;
 
 namespace Services.Implementation
 {
@@ -16,10 +17,11 @@ namespace Services.Implementation
         private readonly IOutletManagerRepo _outletManagerRepo;
         private readonly ICrashLogRepo _crashLogRepo;
 
-        public OutletManagerService(IOutletManagerRepo outletManagerRepo, ICrashLogRepo crashLogRepo)
+        public OutletManagerService()
         {
-            _outletManagerRepo = outletManagerRepo;
-            _crashLogRepo = crashLogRepo;
+            OrcusUMSContext context = new OrcusUMSContext(new DbContextOptions<OrcusUMSContext>());
+            _outletManagerRepo = new OutletManagerRepo(context);
+            _crashLogRepo = new CrashLogRepo(context);
         }
 
         public List<Models.Outlet> AddOutlet(Models.Outlet outlet)
@@ -28,10 +30,10 @@ namespace Services.Implementation
             try
             {
                 int pk = 0;
-                if (_outletManagerRepo.AsQueryable().Count() > 0)
+                if (_outletManagerRepo.AsQueryable().Any())
                     pk = (int)_outletManagerRepo.AsQueryable().Max(x => x.OutletId) + 1;
 
-                bool status = _outletManagerRepo.RegisterNewOutlet(new Outlet
+                bool status = _outletManagerRepo.Add(new Outlet
                 {
                     OutletAddresss = outlet.OutletAddresss,
                     OutletName = outlet.OutletName,
@@ -50,21 +52,25 @@ namespace Services.Implementation
                 _outletManagerRepo.Rollback();
 
                 int pk;
-                if (_crashLogRepo.AsQueryable().Count() <= 0)
+                if (_crashLogRepo.AsQueryable().Any())
                     pk = 0;
                 else
                     pk = _crashLogRepo.AsQueryable().Max(x => x.CrashLogId) + 1;
 
-                _crashLogRepo.Add(new CrashLog
-                {
-                    CrashLogId = pk,
-                    ClassName = "OutletManagerService",
-                    MethodName = "AddOutlet",
-                    ErrorMessage = ex.Message.ToString(),
-                    ErrorInner = (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException ? ex.InnerException.Message : ex.Message).ToString(),
-                    Data = outlet.UserId.ToString(),
-                    TimeStamp = DateTime.Now
-                });
+                if (ex.InnerException != null)
+                    _crashLogRepo.Add(new CrashLog
+                    {
+                        CrashLogId = pk,
+                        ClassName = "OutletManagerService",
+                        MethodName = "AddOutlet",
+                        ErrorMessage = ex.Message,
+                        ErrorInner =
+                            (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException
+                                ? ex.InnerException.Message
+                                : ex.Message),
+                        Data = outlet.UserId,
+                        TimeStamp = DateTime.Now
+                    });
             }
 
             return response;
@@ -76,8 +82,11 @@ namespace Services.Implementation
             Outlet oldData = _outletManagerRepo.AsQueryable().FirstOrDefault(x => x.OutletId == outlet.OutletId);
             try
             {
-                oldData.Status = CommonConstants.StatusTypes.Archived;
-                _outletManagerRepo.Update(oldData);
+                if (oldData != null)
+                {
+                    oldData.Status = CommonConstants.StatusTypes.Archived;
+                    _outletManagerRepo.Update(oldData);
+                }
 
                 response = _outletManagerRepo.AsQueryable().Where(x => x.UserId == outlet.UserId && x.Status == CommonConstants.StatusTypes.Active).Select(x => new Models.Outlet { OutletId = x.OutletId, OutletName = x.OutletName }).ToList();
             }
@@ -86,32 +95,37 @@ namespace Services.Implementation
                 _outletManagerRepo.Rollback();
 
                 int pk;
-                if (_crashLogRepo.AsQueryable().Count() <= 0)
+                if (!_crashLogRepo.AsQueryable().Any())
                     pk = 0;
                 else
                     pk = _crashLogRepo.AsQueryable().Max(x => x.CrashLogId) + 1;
 
-                _crashLogRepo.Add(new CrashLog
-                {
-                    CrashLogId = pk,
-                    ClassName = "OutletManagerService",
-                    MethodName = "ArchiveOutlet",
-                    ErrorMessage = ex.Message,
-                    ErrorInner = (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException ? ex.InnerException.Message : ex.Message),
-                    Data = oldData.UserId,
-                    TimeStamp = DateTime.Now
-                });
+                if (ex.InnerException != null)
+                    if (oldData != null)
+                        _crashLogRepo.Add(new CrashLog
+                        {
+                            CrashLogId = pk,
+                            ClassName = "OutletManagerService",
+                            MethodName = "ArchiveOutlet",
+                            ErrorMessage = ex.Message,
+                            ErrorInner =
+                                (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException
+                                    ? ex.InnerException.Message
+                                    : ex.Message),
+                            Data = oldData.UserId,
+                            TimeStamp = DateTime.Now
+                        });
             }
 
             return response;
         }
 
-        public Models.Outlet GetOutlet(decimal OutletId)
+        public Models.Outlet GetOutlet(decimal outletId)
         {
             Models.Outlet response;
             try
             {
-                Outlet outlet = _outletManagerRepo.Get(OutletId);
+                Outlet outlet = _outletManagerRepo.Get(outletId);
                 response = new Models.Outlet
                 {
                     OutletId = outlet.OutletId,
@@ -125,72 +139,80 @@ namespace Services.Implementation
                 _outletManagerRepo.Rollback();
 
                 int pk;
-                if (_crashLogRepo.AsQueryable().Count() <= 0)
+                if (_crashLogRepo.AsQueryable().Any())
                     pk = 0;
                 else
                     pk = _crashLogRepo.AsQueryable().Max(x => x.CrashLogId) + 1;
 
-                _crashLogRepo.Add(new CrashLog
-                {
-                    CrashLogId = pk,
-                    ClassName = "OutletManagerService",
-                    MethodName = "GetOutlet",
-                    ErrorMessage = ex.Message,
-                    ErrorInner = (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException ? ex.InnerException.Message : ex.Message),
-                    Data = OutletId.ToString(),
-                    TimeStamp = DateTime.Now
-                });
+                if (ex.InnerException != null)
+                    _crashLogRepo.Add(new CrashLog
+                    {
+                        CrashLogId = pk,
+                        ClassName = "OutletManagerService",
+                        MethodName = "GetOutlet",
+                        ErrorMessage = ex.Message,
+                        ErrorInner =
+                            (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException
+                                ? ex.InnerException.Message
+                                : ex.Message),
+                        Data = outletId.ToString(NumberFormatInfo.CurrentInfo),
+                        TimeStamp = DateTime.Now
+                    });
                 response = null;
             }
 
             return response;
         }
 
-        public List<Models.Outlet> GetOutletsByUserId(string UserId)
+        public List<Models.Outlet> GetOutletsByUserId(string userId)
         {
             List<Models.Outlet> response = new List<Models.Outlet>();
             try
             {
-                response = _outletManagerRepo.AsQueryable().Where(x => x.UserId == UserId && x.Status == CommonConstants.StatusTypes.Active).Select(x => new Models.Outlet { OutletId = x.OutletId, OutletName = x.OutletName }).ToList();
+                response = _outletManagerRepo.AsQueryable().Where(x => x.UserId == userId && x.Status == CommonConstants.StatusTypes.Active).Select(x => new Models.Outlet { OutletId = x.OutletId, OutletName = x.OutletName }).ToList();
             }
             catch (Exception ex)
             {
                 _outletManagerRepo.Rollback();
 
                 int pk;
-                if (_crashLogRepo.AsQueryable().Count() <= 0)
+                if (_crashLogRepo.AsQueryable().Any())
                     pk = 0;
                 else
                     pk = _crashLogRepo.AsQueryable().Max(x => x.CrashLogId) + 1;
 
-                _crashLogRepo.Add(new CrashLog
-                {
-                    CrashLogId = pk,
-                    ClassName = "OutletManagerService",
-                    MethodName = "GetOutletsByUserId",
-                    ErrorMessage = ex.Message,
-                    ErrorInner = (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException ? ex.InnerException.Message : ex.Message),
-                    Data = UserId,
-                    TimeStamp = DateTime.Now
-                });
+                if (ex.InnerException != null)
+                    _crashLogRepo.Add(new CrashLog
+                    {
+                        CrashLogId = pk,
+                        ClassName = "OutletManagerService",
+                        MethodName = "GetOutletsByUserId",
+                        ErrorMessage = ex.Message,
+                        ErrorInner =
+                            (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException
+                                ? ex.InnerException.Message
+                                : ex.Message),
+                        Data = userId,
+                        TimeStamp = DateTime.Now
+                    });
             }
             return response;
         }
 
-        public bool? OrderSite(decimal OutletId, out string response)
+        public bool? OrderSite(decimal outletId, out string response)
         {
             try
             {
-                Outlet OutletData = _outletManagerRepo.Get(OutletId);
+                Outlet outletData = _outletManagerRepo.Get(outletId);
 
-                if (!string.IsNullOrEmpty(OutletData.SiteUrl))
+                if (!string.IsNullOrEmpty(outletData.SiteUrl))
                 {
-                    response = "You already have a site for this outlet</br>Visit : " + OutletData.SiteUrl;
+                    response = "You already have a site for this outlet</br>Visit : " + outletData.SiteUrl;
                     return false;
                 }
 
-                OutletData.RequestSite = true;
-                _outletManagerRepo.Update(OutletData);
+                outletData.RequestSite = true;
+                _outletManagerRepo.Update(outletData);
                 response = "Site order placed successfully";
                 return true;
             }
@@ -199,21 +221,25 @@ namespace Services.Implementation
                 _outletManagerRepo.Rollback();
 
                 int pk;
-                if (_crashLogRepo.AsQueryable().Count() <= 0)
+                if (_crashLogRepo.AsQueryable().Any())
                     pk = 0;
                 else
                     pk = _crashLogRepo.AsQueryable().Max(x => x.CrashLogId) + 1;
 
-                _crashLogRepo.Add(new CrashLog
-                {
-                    CrashLogId = pk,
-                    ClassName = "OutletManagerService",
-                    MethodName = "OrderSite",
-                    ErrorMessage = ex.Message,
-                    ErrorInner = (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException ? ex.InnerException.Message : ex.Message),
-                    Data = null,
-                    TimeStamp = DateTime.Now
-                });
+                if (ex.InnerException != null)
+                    _crashLogRepo.Add(new CrashLog
+                    {
+                        CrashLogId = pk,
+                        ClassName = "OutletManagerService",
+                        MethodName = "OrderSite",
+                        ErrorMessage = ex.Message,
+                        ErrorInner = 
+                            (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException
+                                ? ex.InnerException.Message
+                                : ex.Message),
+                        Data = null,
+                        TimeStamp = DateTime.Now
+                    });
                 response = "An internal error has occured";
                 return null;
             }
@@ -226,11 +252,14 @@ namespace Services.Implementation
             {
                 Outlet oldData = _outletManagerRepo.AsQueryable().FirstOrDefault(x => x.OutletId == outlet.OutletId);
 
-                oldData.OutletAddresss = outlet.OutletAddresss;
-                oldData.OutletName = outlet.OutletName;
-                oldData.UserId = outlet.UserId;
+                if (oldData != null)
+                {
+                    oldData.OutletAddresss = outlet.OutletAddresss;
+                    oldData.OutletName = outlet.OutletName;
+                    oldData.UserId = outlet.UserId;
 
-                _outletManagerRepo.Update(oldData);
+                    _outletManagerRepo.Update(oldData);
+                }
 
                 response = _outletManagerRepo.AsQueryable().Where(x => x.UserId == outlet.UserId && x.Status == CommonConstants.StatusTypes.Active).Select(x => new Models.Outlet { OutletId = x.OutletId, OutletName = x.OutletName }).ToList();
             }
@@ -239,21 +268,25 @@ namespace Services.Implementation
                 _outletManagerRepo.Rollback();
 
                 int pk;
-                if (_crashLogRepo.AsQueryable().Count() <= 0)
+                if (_crashLogRepo.AsQueryable().Any())
                     pk = 0;
                 else
                     pk = _crashLogRepo.AsQueryable().Max(x => x.CrashLogId) + 1;
 
-                _crashLogRepo.Add(new CrashLog
-                {
-                    CrashLogId = pk,
-                    ClassName = "OutletManagerService",
-                    MethodName = "UpdateOutlet",
-                    ErrorMessage = ex.Message,
-                    ErrorInner = (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException ? ex.InnerException.Message : ex.Message),
-                    Data = outlet.UserId,
-                    TimeStamp = DateTime.Now
-                });
+                if (ex.InnerException != null)
+                    _crashLogRepo.Add(new CrashLog
+                    {
+                        CrashLogId = pk,
+                        ClassName = "OutletManagerService",
+                        MethodName = "UpdateOutlet",
+                        ErrorMessage = ex.Message,
+                        ErrorInner =
+                            (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException
+                                ? ex.InnerException.Message
+                                : ex.Message),
+                        Data = outlet.UserId,
+                        TimeStamp = DateTime.Now
+                    });
             }
 
             return response;

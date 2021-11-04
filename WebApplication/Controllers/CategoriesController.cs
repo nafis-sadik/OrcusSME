@@ -1,14 +1,10 @@
 ﻿using DataLayer.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstraction;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace WebAPI.Controllers
+namespace WebApplication.Controllers
 {
     [Route("api/Categories")]
     [ApiController]
@@ -23,21 +19,21 @@ namespace WebAPI.Controllers
         [Authorize]
         [HttpPut]
         [Route("Add")]
-        public IActionResult Add(CategoryModel category)
+        public IActionResult Add(Category category)
         {
-            List<CategoryModel> response = _categoryService.AddCategory(category);
+            List<Category> response = _categoryService.AddCategory(category);
             if (response != null)
                 return new OkObjectResult(new { Response = response });
             else
                 return new ConflictObjectResult(new { Response = "Error" });
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         [Route("GetCategoriesOfOutlets/{outletId}")]
         public IActionResult GetCategoriesOfOutlets(int outletId)
         {
-            List<CategoryModel> response = _categoryService.GetCategoriesByOutlets(OutletId);
+            List<Category> response = _categoryService.GetCategoriesByOutlets(outletId);
             if (response != null)
                 return new OkObjectResult(new { Response = response });
             else
@@ -56,11 +52,11 @@ namespace WebAPI.Controllers
         }
 
         //[Authorize]
-        [HttpPost]
-        [Route("SaveHierarchy")]
-        public IActionResult SaveHierarchy(CategoryModel categoryModel)
+        [HttpGet]
+        [Route("SaveHierarchy/{saveHierarchy}")]
+        public IActionResult SaveHierarchy(string saveHierarchy)
         {
-            if (_categoryService.SaveHierarchy(categoryModel))
+            if (_categoryService.SaveHierarchy(saveHierarchy))
                 return new OkObjectResult(new { Response = "Success" });
             else
                 return new ConflictObjectResult(new { Response = "Error" });

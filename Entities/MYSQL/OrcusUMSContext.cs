@@ -3,7 +3,7 @@ using DataLayer.Entities;
 
 #nullable disable
 
-namespace Entities.Catch
+namespace DataLayer.MySql
 {
     public partial class OrcusUMSContext : DbContext
     {
@@ -32,7 +32,7 @@ namespace Entities.Catch
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("User Id=DESKTOP-BHB3CJL;Database=OrcusUMS;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("server=localhost;User Id=root;Database=test;");
             }
         }
 

@@ -1,39 +1,38 @@
-﻿using Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Repositories.Abstraction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
+using DataLayer.MySql;
 
 namespace Repositories.Implementation
 {
     public class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
-        internal OrcusUMSContext db;
-        internal DbSet<T> _dbSet;
+        internal readonly OrcusUMSContext Db;
+        private readonly DbSet<T> _dbSet;
 
         //private readonly IDbContextTransaction transaction;
 
         internal RepositoryBase()
         {
-            db = new OrcusUMSContext(new DbContextOptions<OrcusUMSContext>());
-            _dbSet = db.Set<T>();
+            Db = new OrcusUMSContext(new DbContextOptions<OrcusUMSContext>());
+            _dbSet = Db.Set<T>();
             //transaction = db.Database.BeginTransaction();
         }
 
         internal RepositoryBase(OrcusUMSContext context)
         {
-            db = context;
-            _dbSet = db.Set<T>();
+            Db = context;
+            _dbSet = Db.Set<T>();
         }
         
         public virtual void Add(T entity)
         {
             _dbSet.Add(entity);
-            db.SaveChanges();
+            Db.SaveChanges();
         }
         public virtual T Get(Expression<Func<T, bool>> where)
         {
@@ -63,13 +62,13 @@ namespace Repositories.Implementation
         public virtual void Update(T entity)
         {
             _dbSet.Update(entity);
-            db.Entry(entity).State = EntityState.Modified;
-            db.SaveChanges();
+            Db.Entry(entity).State = EntityState.Modified;
+            Db.SaveChanges();
         }
         public virtual void Delete(T entity)
         {
             _dbSet.Remove(entity); 
-            db.SaveChanges();
+            Db.SaveChanges();
         }
         public virtual void Delete(Expression<Func<T, bool>> where)
         {
@@ -85,18 +84,18 @@ namespace Repositories.Implementation
         {
             DetachAllEntities();
         }
-        public virtual void Save() => db.SaveChanges();
+        public virtual void Save() => Db.SaveChanges();
         public virtual void Rollback()
         {
             DetachAllEntities();
         }
         public virtual void Dispose()
         {
-            db.Dispose();
+            Db.Dispose();
         }
         public void DetachAllEntities()
         {
-            IEnumerable<EntityEntry> changedEntriesCopy = db.ChangeTracker.Entries()
+            IEnumerable<EntityEntry> changedEntriesCopy = Db.ChangeTracker.Entries()
                 .Where(x => x.State == EntityState.Modified
                         || x.State == EntityState.Added
                         || x.State == EntityState.Deleted);

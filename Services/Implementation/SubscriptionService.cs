@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.Text;
 using Repositories;
 using System.Linq;
+using DataLayer.Entities;
+using DataLayer.MySql;
+using Microsoft.EntityFrameworkCore;
 
 namespace Services.Implementation
 {
@@ -15,18 +18,19 @@ namespace Services.Implementation
         private readonly ISubscriptionRepo _subscriptionRepo;
         private readonly ICrashLogRepo _crashLogRepo;
 
-        public SubscriptionService(ISubscriptionLogRepo subscriptionLogRepo, ISubscriptionRepo subscriptionRepo, ICrashLogRepo crashLogRepo)
+        public SubscriptionService(ISubscriptionLogRepo subscriptionLogRepo, ISubscriptionRepo subscriptionRepo)
         {
+            OrcusUMSContext context = new OrcusUMSContext(new DbContextOptions<OrcusUMSContext>());
             _subscriptionLogRepo = subscriptionLogRepo;
             _subscriptionRepo = subscriptionRepo;
-            _crashLogRepo = crashLogRepo;
+            _crashLogRepo = new CrashLogRepo(context);
         }
 
         public IEnumerable<SubscribedService> GetActiveSubscriptions(string userId)
         {
-            IQueryable<SubscriptionLog> SubscriptionLogs = _subscriptionLogRepo.AsQueryable().Where(x => x.SubscriptionDate > DateTime.Now);
+            IQueryable<SubscriptionLog> subscriptionLogs = _subscriptionLogRepo.AsQueryable().Where(x => x.SubscriptionDate > DateTime.Now);
             List<SubscribedService> subscriptions = new List<SubscribedService>();
-            foreach(SubscriptionLog subscriptionHistory in SubscriptionLogs)
+            foreach(SubscriptionLog subscriptionHistory in subscriptionLogs)
             {
                 subscriptions.Add(new SubscribedService {
                     SubscriptionId = (int)subscriptionHistory.SubscriptionId,
