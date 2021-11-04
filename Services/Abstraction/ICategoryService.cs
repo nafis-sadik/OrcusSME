@@ -9,9 +9,9 @@ namespace Services.Abstraction
 {
     public interface ICategoryService
     {
-        public List<Category> AddCategory(Category category);
-        public List<Category> GetCategoriesByOutlets(int OutletId);
+        public List<CategoryModel> AddCategory(CategoryModel category);
+        public List<CategoryModel> GetCategoriesByOutlets(int OutletId);
         public bool DeleteCategory(int OutletId);
-        public bool SaveHierarchy(string Hierarchy);
+        public bool SaveHierarchy(CategoryModel categoryModel);
     }
 }

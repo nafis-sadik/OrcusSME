@@ -10,38 +10,46 @@ namespace Test
     {
         static void Breakdown(string RawData, int? parentNode = null)
         {
-            int CollectionB2 = 0;
+            int bracesCounter = 0;
             List<int> CollectionId = new List<int>();
 
             int startIndex = 0, endIndex = 0;
-            List<string> ObjData = new List<string>();
+            List<string> objectList = new List<string>();
             for (int i = 0; i < RawData.Length; i++)
             {
                 if (RawData[i] == '{')
                 {
-                    CollectionB2++;
-                    if(CollectionB2 == 1)
+                    // Incrementing brace cout
+                    bracesCounter++;
+                    // Caching start index for getting substring
+                    if(bracesCounter == 1)
                         startIndex = i;
                 }
                 else if(RawData[i] == '}')
                 {
-                    CollectionB2--;
-                    if (CollectionB2 == 0)
+                    // Decrementing brace cout
+                    bracesCounter--;
+                    // When brace count is 0, we have found an unit from same level
+                    if (bracesCounter == 0)
                     {
+                        // Caching end index for getting substring
                         endIndex = i;
-                        ObjData.Add(RawData.Substring(startIndex, (endIndex-startIndex)+1));
+                        // Cutting substring from start index to end index
+                        objectList.Add(RawData.Substring(startIndex, (endIndex-startIndex) + 1));
                     }
                 }
             }
-            ObjData = ObjData.OrderBy(x => x.Length).ToList<string>();
-            foreach (string sentence in ObjData)
+            // Order by length so that we deal with recursion at the end of the road when we have already dealt with the rest of  the ids 
+            objectList = objectList.OrderBy(x => x.Length).ToList();
+            foreach (string sentence in objectList)
             {
                 string output = "";
                 if (sentence.Contains("children"))
                 {
                     // Find the first occurance of c
                     int elementBreakIndex = 0;
-                    for (int i = 0; i < sentence.Length; i++) {
+                    for (int i = 0; i < sentence.Length; i++)
+                    {
                         if(sentence[i] == 'c')
                         {
                             elementBreakIndex = i;
@@ -72,17 +80,19 @@ namespace Test
         }
         static void Main(string[] args)
         {
-            Console.WriteLine("Challange # 1");
-            Breakdown("[{ id :1},{ id :2, children :[{ id :3},{ id :4},{ id :5, children :[{ id :6},{ id :7}]},{ id :9},{ id :10}]},{ id :11},{ id :12}]");
-            Console.WriteLine();
-            Console.WriteLine("Challange # 2");
-            Breakdown("[{ id :13},{ id :14},{ id :15, children :[{ id :17},{ id :16},{ id :18}]}]");
-            Console.WriteLine();
-            Console.WriteLine("Challange # 3");
-            Breakdown("[{ id :1},{ id :2, children :[{ id :3},{ id :4},{ id :5, children :[{ id :6},{ id :7},{ id :8}]},{ id :9},{ id :10}]},{ id :11},{ id :12}]");
-            Console.WriteLine();
-            Console.WriteLine("Challange # 4");
-            Breakdown("[{id:1},{id:2,children:[{id:3},{id:4},{id:5,children:[{id:6},{id:7}]},{id:9},{id:10}]},{id:11},{id:12}]");
+            //Console.WriteLine("Challange # 1");
+            //Breakdown("[{ id :1},{ id :2, children :[{ id :3},{ id :4},{ id :5, children :[{ id :6},{ id :7}]},{ id :9},{ id :10}]},{ id :11},{ id :12}]");
+            //Console.WriteLine();
+            //Console.WriteLine("Challange # 2");
+            //Breakdown("[{ id :13},{ id :14},{ id :15, children :[{ id :17},{ id :16},{ id :18}]}]");
+            //Console.WriteLine();
+            //Console.WriteLine("Challange # 3");
+            //Breakdown("[{ id :1},{ id :2, children :[{ id :3},{ id :4},{ id :5, children :[{ id :6},{ id :7},{ id :8}]},{ id :9},{ id :10}]},{ id :11},{ id :12}]");
+            //Console.WriteLine();
+            //Console.WriteLine("Challange # 4");
+            //Breakdown("[{id:1},{id:2,children:[{id:3},{id:4},{id:5,children:[{id:6},{id:7}]},{id:9},{id:10}]},{id:11},{id:12}]");
+            //Console.WriteLine("Challange # 5");
+            Breakdown("[{id:1,children:[{id:3}]}]");
             Console.ReadLine();
         }
     }

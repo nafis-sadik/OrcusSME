@@ -23,21 +23,21 @@ namespace WebAPI.Controllers
         [Authorize]
         [HttpPut]
         [Route("Add")]
-        public IActionResult Add(Category category)
+        public IActionResult Add(CategoryModel category)
         {
-            List<Category> response = _categoryService.AddCategory(category);
+            List<CategoryModel> response = _categoryService.AddCategory(category);
             if (response != null)
                 return new OkObjectResult(new { Response = response });
             else
                 return new ConflictObjectResult(new { Response = "Error" });
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet]
         [Route("GetCategoriesOfOutlets/{OutletId}")]
         public IActionResult GetCategoriesOfOutlets(int OutletId)
         {
-            List<Category> response = _categoryService.GetCategoriesByOutlets(OutletId);
+            List<CategoryModel> response = _categoryService.GetCategoriesByOutlets(OutletId);
             if (response != null)
                 return new OkObjectResult(new { Response = response });
             else
@@ -56,11 +56,11 @@ namespace WebAPI.Controllers
         }
 
         //[Authorize]
-        [HttpGet]
-        [Route("SaveHierarchy/{SaveHierarchy}")]
-        public IActionResult SaveHierarchy(string SaveHierarchy)
+        [HttpPost]
+        [Route("SaveHierarchy")]
+        public IActionResult SaveHierarchy(CategoryModel categoryModel)
         {
-            if (_categoryService.SaveHierarchy(SaveHierarchy))
+            if (_categoryService.SaveHierarchy(categoryModel))
                 return new OkObjectResult(new { Response = "Success" });
             else
                 return new ConflictObjectResult(new { Response = "Error" });
