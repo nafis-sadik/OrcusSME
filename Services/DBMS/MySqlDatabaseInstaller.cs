@@ -1,12 +1,13 @@
 using DBMS.Services.Abstraction;
+using Repositories;
 
 namespace DBMS.Services.Implementation
 {
     public class MySqlDatabaseInstaller:IDatabaseInstallerService
     {
-        public bool InstallDatabase()
+        public bool? InstallDatabase(int DBSelector)
         {
-            throw new System.NotImplementedException();
+            return DBInstallerRepo.InstallDB(DBSelector);
         }
     }
 }

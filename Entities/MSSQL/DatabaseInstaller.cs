@@ -1,6 +1,6 @@
 using System;
 
-namespace DataLayer.MySql
+namespace DataLayer.MSSQL
 {
     public class DatabaseInstaller
     {

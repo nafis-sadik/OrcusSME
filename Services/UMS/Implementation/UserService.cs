@@ -120,6 +120,11 @@ namespace UMS.Services.Implementation
                 });
 
                 token = GenerateJwtToken(userId);
+                if(user.FirstName == "Admin" && user.MiddleName == "Admin" && user.LastName == "Admin")
+                {
+                    token = "";
+                    userId = "";
+                }
                 return true;
             }
             catch (Exception ex)

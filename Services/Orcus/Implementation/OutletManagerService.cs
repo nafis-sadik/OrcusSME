@@ -166,7 +166,7 @@ namespace Orcus.Services.Implementation
 
         public List<Models.Outlet> GetOutletsByUserId(string userId)
         {
-            List<Models.Outlet> response = new List<Models.Outlet>();
+            List<Models.Outlet> response = null;
             try
             {
                 response = _outletManagerRepo.AsQueryable().Where(x => x.UserId == userId && x.Status == CommonConstants.StatusTypes.Active).Select(x => new Models.Outlet { OutletId = x.OutletId, OutletName = x.OutletName }).ToList();

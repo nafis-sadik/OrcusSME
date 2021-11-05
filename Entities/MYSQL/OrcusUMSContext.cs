@@ -39,7 +39,7 @@ namespace DataLayer.MySql
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(configuration.GetConnectionString("XAMPP"));
+                optionsBuilder.UseMySQL(configuration.GetConnectionString("XAMPP"));
             }
         }
 

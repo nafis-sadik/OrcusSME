@@ -64,7 +64,7 @@ namespace WebAPI.Controllers
         public IActionResult GetOutletsByUserId(string userId)
         {
             List<Outlet> data = _outletManagerService.GetOutletsByUserId(userId);
-            if (data.Count > 0)
+            if (data != null)
                 return new OkObjectResult( new { Response = data } );
             else
                 return new ConflictObjectResult(new { Response = "Error" });

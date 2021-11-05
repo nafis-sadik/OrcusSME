@@ -1,28 +1,23 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using DBMS.Services.Abstraction;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Repositories;
 using Repositories.Abstraction;
 using Repositories.Implementation;
-using UMS.Services.Abstraction;
-using Orcus.Services.Implementation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Orcus.Services.Abstraction;
+using UMS.Services.Abstraction;
 using UMS.Services.Implementation;
 
-namespace WebAPI
+namespace WebInstaller
 {
     public class Startup
     {
@@ -31,7 +26,7 @@ namespace WebAPI
             Configuration = configuration;
         }
 
-        private IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         private const string Dev = "DevCors";
@@ -47,35 +42,14 @@ namespace WebAPI
                         //builder.WithOrigins("http://localhost:5608/", "http://127.0.0.1:5608/");
                     });
             });
-
-            services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(DataLayer.CommonConstants.PasswordConfig.Salt)),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-            });
-
             // Services
             services.AddScoped<IUserService, UserService>();
             services.AddScoped(typeof(IUserService), typeof(UserService));
 
-            services.AddScoped<IOutletManagerService, OutletManagerService>();
-            services.AddScoped(typeof(IOutletManagerService), typeof(OutletManagerService));
-
             // Repos
             services.AddScoped<IUserRepo, UserRepo>();
             services.AddScoped(typeof(IUserRepo), typeof(UserRepo));
-            
+
             services.AddScoped<IUserActivityLogRepo, UserActivityLogRepo>();
             services.AddScoped(typeof(IUserActivityLogRepo), typeof(UserActivityLogRepo));
 
@@ -83,10 +57,9 @@ namespace WebAPI
             services.AddScoped(typeof(IEmailIdRepo), typeof(EmailIdRepo));
 
             services.AddControllers();
-
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPI", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebInstaller", Version = "v1" });
             });
         }
 
@@ -97,7 +70,7 @@ namespace WebAPI
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPI v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebInstaller v1"));
                 app.UseCors(Dev);
             }
             else
@@ -105,11 +78,7 @@ namespace WebAPI
                 app.UseCors(Prod);
             }
 
-            //app.UseHttpsRedirection();
-
             app.UseRouting();
-
-            app.UseAuthentication();
 
             app.UseAuthorization();
 
