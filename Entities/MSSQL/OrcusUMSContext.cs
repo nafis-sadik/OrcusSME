@@ -1,19 +1,26 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.IO;
 using DataLayer.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Configuration;
 
 #nullable disable
 
-namespace Entities.Catch
+namespace DataLayer.MSSQL
 {
     public partial class OrcusUMSContext : DbContext
     {
+        private readonly IConfigurationRoot configuration;
         public OrcusUMSContext()
         {
+            configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: true, reloadOnChange: true).Build();
         }
 
         public OrcusUMSContext(DbContextOptions<OrcusUMSContext> options)
             : base(options)
         {
+            configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: true, reloadOnChange: true).Build();
         }
 
         public virtual DbSet<ActivityType> ActivityTypes { get; set; }
@@ -32,7 +39,7 @@ namespace Entities.Catch
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("User Id=DESKTOP-BHB3CJL;Database=OrcusUMS;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer(configuration.GetConnectionString("MSSQL"));
             }
         }
 

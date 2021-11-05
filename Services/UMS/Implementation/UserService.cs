@@ -1,6 +1,6 @@
 ﻿using Repositories;
 using Models;
-using Services.Abstraction;
+using UMS.Services.Abstraction;
 using System;
 using System.Linq;
 using System.IdentityModel.Tokens.Jwt;
@@ -13,7 +13,7 @@ using DataLayer.MySql;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Abstraction;
 
-namespace Services.Implementation
+namespace UMS.Services.Implementation
 {
     public class UserService : IUserService
     {

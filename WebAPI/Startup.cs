@@ -12,13 +12,15 @@ using Microsoft.OpenApi.Models;
 using Repositories;
 using Repositories.Abstraction;
 using Repositories.Implementation;
-using Services.Abstraction;
-using Services.Implementation;
+using UMS.Services.Abstraction;
+using Orcus.Services.Implementation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Orcus.Services.Abstraction;
+using UMS.Services.Implementation;
 
 namespace WebAPI
 {
@@ -40,15 +42,17 @@ namespace WebAPI
                 options.AddPolicy(name: OrcusCorsPolicy,
                     builder =>
                     {
-                        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-                        //builder.WithOrigins("http://localhost/", "http://127.0.0.1/");
+                        //builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                        builder.WithOrigins("http://localhost/", "http://127.0.0.1/");
                     });
             });
 
-            services.AddAuthentication(x => {
+            services.AddAuthentication(x =>
+            {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(x => {
+            }).AddJwtBearer(x =>
+            {
                 x.RequireHttpsMetadata = false;
                 x.SaveToken = true;
                 x.TokenValidationParameters = new TokenValidationParameters

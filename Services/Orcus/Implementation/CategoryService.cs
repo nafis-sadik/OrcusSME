@@ -1,13 +1,14 @@
 ﻿using DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Repositories;
-using Services.Abstraction;
+using Orcus.Services.Abstraction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using DataLayer.MySql;
+using DataLayer.Models;
 
-namespace Services.Implementation
+namespace Orcus.Services.Implementation
 {
     public class CategoryService : ICategoryService
     {
@@ -30,7 +31,7 @@ namespace Services.Implementation
                 List<DataLayer.Models.CategoryModel> AlreadyExists = _categoryRepo.AsQueryable().Where(x => x.OutletId == category.outletId && x.CategoryName == category.CategoryName) != null ? new List<DataLayer.Models.CategoryModel>() : null;
                 if (AlreadyExists != null && AlreadyExists.Count > 0)
                     return AlreadyExists;
-                _categoryRepo.Add(new Entities.Category
+                _categoryRepo.Add(new DataLayer.Entities.Category
                 {
                     CategoryId = pk,
                     CategoryName = category.CategoryName,
@@ -92,7 +93,7 @@ namespace Services.Implementation
             }
         }
 
-        public List<DataLayer.Models.CategoryModel> GetCategoriesByOutlets(int OutletId)
+        public List<CategoryModel> GetCategoriesByOutlets(int OutletId)
         {
             try
             {
@@ -210,6 +211,7 @@ namespace Services.Implementation
                 }
             }
         }
+
         public bool SaveHierarchy(CategoryModel categoryModel)
         {
             try

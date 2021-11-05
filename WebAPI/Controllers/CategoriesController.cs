@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Services.Abstraction;
+using Orcus.Services.Abstraction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +37,7 @@ namespace WebAPI.Controllers
         [Route("GetCategoriesOfOutlets/{outletId}")]
         public IActionResult GetCategoriesOfOutlets(int outletId)
         {
-            List<CategoryModel> response = _categoryService.GetCategoriesByOutlets(OutletId);
+            List<CategoryModel> response = _categoryService.GetCategoriesByOutlets(outletId);
             if (response != null)
                 return new OkObjectResult(new { Response = response });
             else

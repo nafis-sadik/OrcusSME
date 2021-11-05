@@ -1,6 +1,6 @@
-using Services.Abstraction;
+using DBMS.Services.Abstraction;
 
-namespace Services.Implementation
+namespace DBMS.Services.Implementation
 {
     public class MySqlDatabaseInstaller:IDatabaseInstallerService
     {

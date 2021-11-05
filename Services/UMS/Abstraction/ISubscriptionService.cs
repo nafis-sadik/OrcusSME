@@ -1,8 +1,7 @@
 ﻿using Models;
 using System.Collections.Generic;
-using System.Text;
 
-namespace Services.Abstraction
+namespace UMS.Services.Abstraction
 {
     public interface ISubscriptionService
     {

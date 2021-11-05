@@ -1,4 +1,4 @@
-namespace Services.Abstraction
+namespace DBMS.Services.Abstraction
 {
     public interface IDatabaseInstallerService
     {

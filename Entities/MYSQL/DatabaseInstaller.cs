@@ -8,7 +8,7 @@ namespace DataLayer.MySql
         {
             try
             {
-                new OrcusUMSContext().Database.EnsureCreated();
+                //new OrcusUMSContext().Database.EnsureCreated();
                 return true;
             }
             catch (Exception e)

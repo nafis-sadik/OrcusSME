@@ -1,6 +1,5 @@
-﻿using Entities;
-using Models;
-using Services.Abstraction;
+﻿using Models;
+using UMS.Services.Abstraction;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,7 +9,7 @@ using DataLayer.Entities;
 using DataLayer.MySql;
 using Microsoft.EntityFrameworkCore;
 
-namespace Services.Implementation
+namespace UMS.Services.Implementation
 {
     public class SubscriptionService : ISubscriptionService
     {

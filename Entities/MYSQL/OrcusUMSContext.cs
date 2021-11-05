@@ -1,5 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DataLayer.Entities;
+using System.IO;
+using Newtonsoft.Json;
+using System.Configuration;
+using Microsoft.Extensions.Configuration;
 
 #nullable disable
 
@@ -7,13 +11,16 @@ namespace DataLayer.MySql
 {
     public partial class OrcusUMSContext : DbContext
     {
+        private readonly IConfigurationRoot configuration;
         public OrcusUMSContext()
         {
+            configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: true, reloadOnChange: true).Build();
         }
 
         public OrcusUMSContext(DbContextOptions<OrcusUMSContext> options)
             : base(options)
         {
+            configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: true, reloadOnChange: true).Build();
         }
 
         public virtual DbSet<ActivityType> ActivityTypes { get; set; }
@@ -32,7 +39,7 @@ namespace DataLayer.MySql
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("server=localhost;User Id=root;Database=test;");
+                optionsBuilder.UseSqlServer(configuration.GetConnectionString("XAMPP"));
             }
         }
 
