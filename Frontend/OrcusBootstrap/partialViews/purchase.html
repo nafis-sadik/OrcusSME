@@ -1,0 +1,189 @@
+<link href="assets/plugins/dropzone/dropzone.css" rel="stylesheet" >
+<link href="assets/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+<div class="container-fluid">
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div id="PurchaseForm" class="card">
+                <div class="header">
+                    <h2><strong>Purchase</strong></h2>                        
+                </div>
+                <div class="body">
+                    <h2 class="card-inside-title">Classification</h2>
+                    <div class="row clearfix">
+                        <div class="col-sm-4">
+                            <span>Category</span>
+                            <select class="form-control show-tick">
+                                <option value="">-- Please select --</option>
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                                <option value="40">40</option>
+                                <option value="50">50</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <span>Sub Category</span>
+                            <select class="form-control show-tick">
+                                <option value="">-- Please select --</option>
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                                <option value="40">40</option>
+                                <option value="50">50</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <span>Branch</span>
+                            <select class="form-control show-tick">
+                                <option value="">-- Please select --</option>
+                                <option value="10">Dana</option>
+                                <option value="20">Gul Nurah</option>
+                                <option value="30">Saradian Jewels</option>
+                                <option value="40">Uttara Outlet</option>
+                                <option value="50">Banani Outlet</option>
+                            </select>
+                        </div>
+                    </div>
+                    <h2 class="card-inside-title">Product Details</h2>
+                    <div class="row clearfix">
+                        <div class="form-group col-sm-4">
+                            <span>Product name</span>
+                            <input type="text" class="form-control" placeholder="Product name" />
+                        </div>
+                        <div class="col-sm-4">
+                            <span>Unit</span>
+                            <select class="form-control show-tick">
+                                <option value="">-- Please select --</option>
+                                <option value="10">Kilogram</option>
+                                <option value="20">Piece</option>
+                                <option value="30">Liter</option>
+                                <option value="40">Gram</option>
+                                <option value="50">Ton</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <span>Quantity</span>
+                            <input id="Quantity" type="number" class="form-control" placeholder="Quantity" />
+                        </div>
+                    </div>
+                    <h2 class="card-inside-title">Product Pricing</h2>
+                    <div class="row clearfix">
+                        <div class="form-group col-sm-4">
+                            <span>Purchasing Price</span>
+                            <input id="PurchasingPrice" type="number" class="form-control" placeholder="Purchasing Price" />
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <span>Retail Price</span>
+                            <input id="RetailPrice" type="number" class="form-control" placeholder="Retail Price" />
+                        </div>
+                        <div class="form-group col-sm-2">
+                            <span>Profit Amount</span>
+                            <input id="ProfitAmount" type="text" class="form-control" placeholder="Profit Amount" disabled />
+                        </div>
+                        <div class="form-group col-sm-2">
+                            <span>Profit Rate</span>
+                            <input id="ProfitRate" type="text" class="form-control" placeholder="Profit Rate" disabled />
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <span>Total Amount</span>
+                            <input id="TotalAmount" type="number" class="form-control" placeholder="Total Amount" disabled />
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <span>Due Amount</span>
+                            <input id="DueAmount" type="number" class="form-control" placeholder="Due Amount" />
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <span>Net Amount</span>
+                            <input id="NetAmount" type="number" class="form-control" placeholder="Net Amount" disabled/>
+                        </div>
+                    </div>
+                    <h2 class="card-inside-title">Product Description</h2>
+                    <div class="row clearfix">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <textarea rows="4" class="form-control no-resize" placeholder="Please type your product description..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- File Upload | Drag & Drop OR With Click & Choose -->
+                    <div class="row clearfix">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <div class="card">
+                                <div class="header">
+                                    <h2><strong>Upload Product Images</strong> Drag & Drop OR With Click & Choose </h2>
+                                </div>
+                                <div class="body">
+                                    <form action="https://thememakker.com/" id="frmFileUpload" class="dropzone" method="post" enctype="multipart/form-data">
+                                        <div class="dz-message">
+                                            <div class="drag-icon-cph"> <i class="material-icons">touch_app</i> </div>
+                                            <h3>Drop files here or click to upload.</h3>
+                                        <div class="fallback">
+                                            <input name="file" type="file" multiple />
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-6">
+                            <button type="button" class="col-sm-12 col-lg-6 btn btn-raised btn-primary btn-round waves-effect m-lg-l-20 custom-btn">Purchase</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        onLoad = () => {
+            $('#PurchasingPrice').change(() => {
+                calculatePrice();
+            });
+            
+            $('#RetailPrice').change(() => {
+                calculateProfit();
+            });
+
+            new Dropzone('#frmFileUpload', {
+                url: "/file/post",
+                parallelUploads: 5,
+                uploadMultiple: true,
+                acceptedFiles: '.png, .jpg, .jpeg',
+                autoProcessQueue: false 
+            });
+            
+            $('#DueAmount').change(() => {
+                calculateNetAmount();
+            });
+            
+            $('select').selectpicker();
+        }
+
+        calculateProfit = () => {
+            let retailPrice = $('#RetailPrice').val();
+            let purchasePrice = $('#PurchasingPrice').val();
+            
+            let profitAmount = retailPrice - purchasePrice;
+            let profitRate = profitAmount / purchasePrice;
+            
+            profitRate = profitRate * 100;
+            
+            $('#ProfitAmount').val(profitAmount);
+            $('#ProfitRate').val(profitRate.toFixed(2).toString() + '%');
+        }
+
+        calculatePrice = () => {
+            $('#TotalAmount').val($('#Quantity').val() * $('#PurchasingPrice').val());
+        }
+
+        calculateNetAmount = () => {
+            $('#NetAmount').val($('#TotalAmount').val() - $('#DueAmount').val());
+        }
+    </script>
+</div>
+<style>
+    #PurchaseForm .form-group span{
+        margin-bottom: 10px;
+        display: block;
+    }
+</style>

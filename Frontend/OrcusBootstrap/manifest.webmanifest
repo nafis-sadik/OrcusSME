@@ -1,0 +1,17 @@
+{
+    "name": "Orcus SME",
+    "short_name": "Orcus",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#30373e",
+    "theme_color": "#30373e",
+    "description": "A B2B software for SME to manage their Inventory & Other relevant back office businesses",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "https://thememakker.com/templates/oreo/html/assets/images/logo.svg",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

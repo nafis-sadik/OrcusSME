@@ -1,0 +1,53 @@
+<div id="BulkSMS" class="contact">
+    <div class="row clearfix">
+        <div class="col-lg-12">
+            <div class="card action_bar">
+                <div class="header">
+                    <h2><strong>Choose to send Bulk SMS</strong></h2>                        
+                </div>
+                <div class="body">
+                    <div class="row clearfix">
+                        <div class="col-lg-12 text-right btn-group hidden-sm-down">
+                            <select class="form-control show-tick">
+                                <option value="">-- Please select --</option>
+                                <option value="1">Top 500 Purchasers by Purchase Count</option>
+                                <option value="2">Last 500 Purchasers</option>
+                                <option value="3">Top 500 Purchasers by Amount</option>
+                                <option value="4">Send to All Customers</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card action_bar">
+                <div class="header">
+                    <h2><strong>Build SMS</strong></h2>                        
+                </div>
+                <div class="body">
+                    <div class="row clearfix">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <h2 class="card-inside-title">SMS Text</h2>
+                                <div class="form-line">
+                                    <textarea rows="4" class="form-control no-resize" placeholder="Please type what you want..." spellcheck="false"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-6">
+                            <button type="button" class="col-sm-12 col-lg-6 btn btn-raised btn-primary btn-round waves-effect m-lg-l-20 custom-btn">Send <i class="zmdi zmdi-mail-send"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>           
+    </div>
+</div>
+<script>    
+    $('select').selectpicker();
+</script>
+<style>
+    #BulkSMS button i{
+        margin-left: 10px;
+        transform: rotate(-45deg);
+    }
+</style>

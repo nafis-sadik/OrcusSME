@@ -1,0 +1,238 @@
+<div id="ManageOutlets" class="container-fluid">    
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="card">
+                <div class="header">
+                    <h2><strong>Add Outlets</strong></h2>                        
+                </div>
+                <form id="AddOutlet" class="body">
+                    <div class="row clearfix">
+                        <div class="form-group col-sm-12">
+                            <span>Outlet Name</span>
+                            <input id="OutletName" type="text" class="form-control" placeholder="Outlet Name" required/>
+                        </div>
+                        <br>
+                        <div class="form-group col-sm-12">
+                            <span>Outlet Address</span>
+                            <textarea id="OutletAddress" rows="4" class="form-control no-resize" placeholder="Product Address" required></textarea>
+                        </div>
+                        <div class="col-sm-12 col-lg-6">
+                            <button class="col-sm-12 col-lg-6 btn btn-raised btn-primary btn-round waves-effect m-lg-l-20 custom-btn">Register</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="card">
+                <div class="header">
+                    <h2><strong>Update Outlets</strong></h2>                        
+                </div>
+                <form id="UpdateOutlets" class="body">
+                    <div class="row clearfix">
+                        <div class="col-sm-12">
+                            <span>Select Name</span>
+                            <select id="UpdateOutlets_Select" class="form-control show-tick Outlets">
+                                <option value="">-- Please select --</option>
+                                <option value="10">Dana</option>
+                                <option value="20">Gul Nurah</option>
+                                <option value="30">Saradian Jewels</option>
+                                <option value="40">Uttara Outlet</option>
+                                <option value="50">Banani Outlet</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <span>Outlet Id</span>
+                            <input id="UpdateOutlets_OutletId" type="number" class="form-control" placeholder="Outlet Id" disabled/>
+                        </div>
+                        <br>
+                        <div class="form-group col-sm-12">
+                            <span>Outlet Name</span>
+                            <input id="UpdateOutlets_OutletName" type="text" class="form-control" placeholder="Outlet Name" required/>
+                        </div>
+                        <br>
+                        <div class="form-group col-sm-12">
+                            <span>Outlet Address</span>
+                            <textarea id="UpdateOutlets_OutletAddress" rows="4" class="form-control no-resize" placeholder="Product Address"></textarea>
+                        </div>
+                        <div class="col-sm-12 col-lg-6">
+                            <button type="submit" class="col-sm-12 btn btn-raised btn-primary btn-round waves-effect m-lg-l-20 custom-btn">Update</button>
+                        </div>
+                        <div class="col-sm-12 col-lg-6">
+                            <button type="button" class="col-sm-12 btn btn-raised btn-danger btn-round waves-effect m-lg-l-20 custom-btn" onclick="resetForm('#UpdateOutlets'); ">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row clearfix">
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="card">
+                <div class="header">
+                    <h2><strong>Archive Outlets</strong></h2>                        
+                </div>
+                <form id="ArchiveOutlets" class="body">
+                    <div class="row clearfix">
+                        <div class="col-sm-12">
+                            <span>Outlet Name</span>
+                            <select id="ArchiveOutlets_Select" class="form-control show-tick Outlets">
+                                <option value="">-- Please select --</option>
+                                <option value="10">Dana</option>
+                                <option value="20">Gul Nurah</option>
+                                <option value="30">Saradian Jewels</option>
+                                <option value="40">Uttara Outlet</option>
+                                <option value="50">Banani Outlet</option>
+                            </select>
+                        </div>
+                        <br>
+                        <div class="col-sm-12 col-lg-12">
+                            <button type="submit" class="col-sm-12 col-lg-12 btn btn-raised btn-primary btn-round waves-effect m-lg-l-20 custom-btn">Archive</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="card">
+                <div class="header">
+                    <h2><strong>Order E-Commerce Site</strong></h2>                        
+                </div>
+                <form id="SiteOrder" class="body">
+                    <div class="row clearfix">
+                        <div class="col-sm-12">
+                            <span>Outlet Name</span>
+                            <select id="SiteOrder_Select" class="form-control show-tick Outlets">
+                                <option value="">-- Please select --</option>
+                                <option value="10">Dana</option>
+                                <option value="20">Gul Nurah</option>
+                                <option value="30">Saradian Jewels</option>
+                                <option value="40">Uttara Outlet</option>
+                                <option value="50">Banani Outlet</option>
+                            </select>
+                        </div>
+                        <br>
+                        <div class="col-sm-12 col-lg-12">
+                            <button type="submit" class="col-sm-12 col-lg-12 btn btn-raised btn-primary btn-round waves-effect m-lg-l-20 custom-btn">Order</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    onLoad = () => {
+        Service.RefreshOutletListOnDropdown(['UpdateOutlets_Select', 'SiteOrder_Select', 'ArchiveOutlets_Select']);
+        $('.Outlets').selectpicker();
+    };
+
+    $('#AddOutlet').on("submit", (element) => {
+        element.preventDefault();
+
+        let param = {
+            URL: Route.Base + Route.Outlet.Add,
+            Method: 'PUT',
+            Data: {
+                outletName: $('#OutletName').val(),
+                outletAddresss: $('#OutletAddress').val(),
+                userId: localStorage.getItem('userId')
+            },
+            Success: (res) => {
+                swal.fire('Successfully Saved!', '', "success");
+                Service.RefreshOutletListOnDropdown(['UpdateOutlets_Select', 'SiteOrder_Select', 'ArchiveOutlets_Select']);
+                Service.RefreshOutletListOnLeftSideBar('UpdateList');
+            },
+        };
+
+        APIConsumptionAuth(param);
+    });
+
+    $('#UpdateOutlets').on("submit", (element) => {
+        element.preventDefault();
+
+        let param = {
+            URL: Route.Base + Route.Outlet.Update,
+            Method: 'POST',
+            Data: {
+                outletName: $('#UpdateOutlets_OutletName').val(),
+                outletAddresss: $('#UpdateOutlets_OutletAddress').val(),
+                userId: localStorage.getItem('userId')
+            },
+            Success: (res) => {
+                swal.fire('Successfully Saved!', '', "success");
+                Service.RefreshOutletListOnDropdown(['UpdateOutlets_Select', 'SiteOrder_Select', 'ArchiveOutlets_Select']);
+                Service.RefreshOutletListOnLeftSideBar('UpdateList');
+                $('#UpdateOutlets')[0].reset();
+            }
+        };
+
+        APIConsumptionAuth(param);
+    });
+
+    $('#ArchiveOutlets').on("submit", (element) => {
+        element.preventDefault();
+
+        let param = {
+            URL: Route.Base + Route.Outlet.Archive,
+            Method: 'POST',
+            Data: {
+                OutletId: $('#ArchiveOutlets_Select').val(),
+                userId: localStorage.getItem('userId')
+            },
+            Success: (res) => {
+                swal.fire('Successfully Saved!', '', "success");
+                Service.RefreshOutletListOnDropdown(['UpdateOutlets_Select', 'SiteOrder_Select', 'ArchiveOutlets_Select']);
+                Service.RefreshOutletListOnLeftSideBar('UpdateList');
+            }
+        };
+
+        APIConsumptionAuth(param);
+    })
+
+    $('#SiteOrder').on("submit", (element) => {
+        element.preventDefault();
+
+        let param = {
+            URL: Route.Base + Route.Outlet.OrderSite + '/' + $('#SiteOrder_Select').val(),
+            Method: 'GET',
+            Success: (res) => {
+                let messages = res.response.split('</br>');
+                let textMsg = messages[1] == undefined? '' : messages[1];
+                swal.fire({
+                    title: messages[0],
+                    html: '<p>' +   textMsg   + '</p>',
+                    icon: 'success',
+                    text: 'Our support team will contact you soon'
+                });
+            }
+        };
+
+        APIConsumptionAuth(param);
+    });
+
+    $('#UpdateOutlets_Select').on('change', (element) => {
+        let param = {
+            URL: Route.Base + Route.Outlet.GetOutlet + '/' + $(element.target).val(),
+            Method: 'GET',
+            Data: null,
+            Success: (res) => {
+                $('#UpdateOutlets_OutletId').val(res.response.outletId);
+                $('#UpdateOutlets_OutletName').val(res.response.outletName);
+                $('#UpdateOutlets_OutletAddress').val(res.response.outletAddresss);
+            }
+        };
+        
+        APIConsumptionAuth(param);
+    });
+</script>
+</div>
+<style>
+#ManageOutlets .form-group span{
+    margin-bottom: 10px;
+    display: block;
+}
+</style>

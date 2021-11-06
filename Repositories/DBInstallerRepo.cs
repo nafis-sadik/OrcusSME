@@ -15,11 +15,9 @@ namespace Repositories
                 switch (DBSelector)
                 {
                     case 1:
-                        new DataLayer.MySql.DatabaseInstaller().InstallDatabase();
-                        return true;
-                        break;
+                        return new DataLayer.MySql.DatabaseInstaller().InstallDatabase();
                     case 2:
-                        break;
+                        return new DataLayer.MSSQL.DatabaseInstaller().InstallDatabase();
                     default:
                         break;
                 }

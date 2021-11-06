@@ -1,6 +1,7 @@
 ﻿using DBMS.Services.Abstraction;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PasswordGenerator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,8 @@ namespace WebInstaller.Controllers
             bool? response = _databaseInstallerService.InstallDatabase(config.SelectedDatabase);
             if (response == true)
             {
+                IPassword PasswordGenerator = new Password().IncludeLowercase().IncludeUppercase().IncludeSpecial().LengthRequired(8);
+                string pwd = PasswordGenerator.Next();
                 _userService.SignUp(new Models.UserModel
                 {
                     DefaultEmail = config.EmailAddress,
@@ -37,7 +40,7 @@ namespace WebInstaller.Controllers
                     FirstName = "Admin",
                     MiddleName = "Admin",
                     LastName = "Admin",
-                    Password = "Orcus@1234",
+                    Password = pwd,
                     UserName = "admin",
                     Status = "A"
                 }, out string token, out string userId);
