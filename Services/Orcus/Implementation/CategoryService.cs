@@ -23,12 +23,12 @@ namespace Orcus.Services.Implementation
             //_productRepo = new IProductRepo(context);
         }
 
-        public List<DataLayer.Models.CategoryModel> AddCategory(DataLayer.Models.CategoryModel category)
+        public List<CategoryModel> AddCategory(CategoryModel category)
         {
             try
             {
                 int pk = _categoryRepo.AsQueryable().Count() + 1;
-                List<DataLayer.Models.CategoryModel> AlreadyExists = _categoryRepo.AsQueryable().Where(x => x.OutletId == category.outletId && x.CategoryName == category.CategoryName) != null ? new List<DataLayer.Models.CategoryModel>() : null;
+                List<CategoryModel> AlreadyExists = _categoryRepo.AsQueryable().Where(x => x.OutletId == category.outletId && x.CategoryName == category.CategoryName) != null ? new List<CategoryModel>() : null;
                 if (AlreadyExists != null && AlreadyExists.Count > 0)
                     return AlreadyExists;
                 _categoryRepo.Add(new DataLayer.Entities.Category
@@ -36,7 +36,8 @@ namespace Orcus.Services.Implementation
                     CategoryId = pk,
                     CategoryName = category.CategoryName,
                     OutletId = category.outletId,
-                    ParentCategoryId = category.ParentCategoryId
+                    ParentCategoryId = category.ParentCategoryId,
+                    Status = CommonConstants.StatusTypes.Active
                 });
 
                 return GetCategoriesByOutlets((int)category.outletId);
@@ -67,8 +68,8 @@ namespace Orcus.Services.Implementation
             try
             {
                 DataLayer.Entities.Category category = _categoryRepo.Get(OutletId);
-                // Must handle products under this category
-                _categoryRepo.Delete(category);
+                category.Status = CommonConstants.StatusTypes.Archived;
+                _categoryRepo.Update(category);
 
                 return true;
             }
@@ -98,7 +99,7 @@ namespace Orcus.Services.Implementation
             try
             {
                 List<DataLayer.Models.CategoryModel> response = new List<DataLayer.Models.CategoryModel>();
-                response = _categoryRepo.AsQueryable().Where(x => x.OutletId == OutletId)
+                response = _categoryRepo.AsQueryable().Where(x => x.OutletId == OutletId && x.Status == CommonConstants.StatusTypes.Active)
                     .Select(x => new DataLayer.Models.CategoryModel
                     {
                         CategoryId = x.CategoryId,

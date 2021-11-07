@@ -134,20 +134,22 @@ const Service = {
         
         APIConsumptionAuth(param);
     },
-    RefreshOutletListOnDropdown : (elemId) => {
+    RefreshOutletListOnDropdown : (elems) => {
         let param = {
             URL: Route.Base + Route.Outlet.GetUserOutlets + '/' + localStorage.getItem('userId'),
             Method: 'GET',
             Success: (res) => {
-                if(elemId[0] != '#') { elemId = '#' + elemId; }
-                $(elemId).empty();
-                $(elemId).append('<option value="">-- Please select --</option>');
-                $.each(res.response, (index, outlet) => {
-                    $(elemId).append(
-                        '<option value="'+ outlet.outletId +'">' + outlet.outletName + '</option>'
-                    );
+                $.each(elems, (i, elemId) => {
+                    if(elemId[0] != '#') { elemId = '#' + elemId; }
+                    $(elemId).empty();
+                    $(elemId).append('<option value="">-- Please select --</option>');
+                    $.each(res.response, (index, outlet) => {
+                        $(elemId).append(
+                            '<option value="'+ outlet.outletId +'">' + outlet.outletName + '</option>'
+                        );
+                        $(elemId).selectpicker('refresh');
+                    })
                 })
-                $(elemId).selectpicker('refresh');
             }
         };
         

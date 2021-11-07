@@ -36,11 +36,6 @@
                             <span>Select Name</span>
                             <select id="UpdateOutlets_Select" class="form-control show-tick Outlets">
                                 <option value="">-- Please select --</option>
-                                <option value="10">Dana</option>
-                                <option value="20">Gul Nurah</option>
-                                <option value="30">Saradian Jewels</option>
-                                <option value="40">Uttara Outlet</option>
-                                <option value="50">Banani Outlet</option>
                             </select>
                         </div>
                         <div class="form-group col-sm-12">
@@ -80,11 +75,6 @@
                             <span>Outlet Name</span>
                             <select id="ArchiveOutlets_Select" class="form-control show-tick Outlets">
                                 <option value="">-- Please select --</option>
-                                <option value="10">Dana</option>
-                                <option value="20">Gul Nurah</option>
-                                <option value="30">Saradian Jewels</option>
-                                <option value="40">Uttara Outlet</option>
-                                <option value="50">Banani Outlet</option>
                             </select>
                         </div>
                         <br>
@@ -106,11 +96,6 @@
                             <span>Outlet Name</span>
                             <select id="SiteOrder_Select" class="form-control show-tick Outlets">
                                 <option value="">-- Please select --</option>
-                                <option value="10">Dana</option>
-                                <option value="20">Gul Nurah</option>
-                                <option value="30">Saradian Jewels</option>
-                                <option value="40">Uttara Outlet</option>
-                                <option value="50">Banani Outlet</option>
                             </select>
                         </div>
                         <br>
@@ -145,6 +130,7 @@
                 swal.fire('Successfully Saved!', '', "success");
                 Service.RefreshOutletListOnDropdown(['UpdateOutlets_Select', 'SiteOrder_Select', 'ArchiveOutlets_Select']);
                 Service.RefreshOutletListOnLeftSideBar('UpdateList');
+                $('#AddOutlet')[0].reset();
             },
         };
 
@@ -158,8 +144,9 @@
             URL: Route.Base + Route.Outlet.Update,
             Method: 'POST',
             Data: {
-                outletName: $('#UpdateOutlets_OutletName').val(),
-                outletAddresss: $('#UpdateOutlets_OutletAddress').val(),
+                OutletId: $('#UpdateOutlets_OutletId').val(),
+                OutletName: $('#UpdateOutlets_OutletName').val(),
+                OutletAddresss: $('#UpdateOutlets_OutletAddress').val(),
                 userId: localStorage.getItem('userId')
             },
             Success: (res) => {

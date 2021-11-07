@@ -74,7 +74,7 @@
                     <div class="clearfix m-b-20">
                         <div class="dd">
                             <ol id="CategoryHierarchy" class="dd-list">
-                                <li class="dd-item" data-id="1">
+                                <!-- <li class="dd-item" data-id="1">
                                     <div class="dd-handle dd3-handle"></div>
                                     <div class="dd3-content">Clothing</div>
                                 </li>
@@ -121,7 +121,7 @@
                                 <li class="dd-item" data-id="12">
                                     <div class="dd-handle dd3-handle"></div>
                                     <div class="dd3-content">Home Appliances</div>  
-                                </li>
+                                </li> -->
                             </ol>
                         </div>
                     </div>
@@ -223,6 +223,8 @@
                 swal.fire('Successfully Saved!', '', "success");
                 RemoveCategoryDropdownRefresh(res); 
                 CategoryHirarchyRefresh(res);
+                $('#CategoryName').val('');
+                $('.dd-empty').remove();
             },
         };
 
@@ -246,10 +248,12 @@
             URL: Route.Base + Route.Categories.Delete + $("#RemoveCategorySelect").val(),
             Method: 'DELETE',
             Success: (res) => {
+                debugger
+                console.log(res);
                 swal.fire('Success!', '', "success");
-                // return;
                 RemoveCategoryDropdownRefresh(res); 
                 CategoryHirarchyRefresh(res);
+                $('.dd-empty').remove();
             },
         };
 
@@ -263,7 +267,7 @@
             swal.fire('You must choose an outlet', '', 'error');
             return;
         }
-        
+
         // Load Categories
         let param = {
             URL: Route.Base + Route.Categories.Get + outletId,
@@ -289,7 +293,7 @@
                 outletId: outletId
             },
             Success: (res) => {
-                console.log(res);
+                swal.fire('Successfully Saved!', '', "success");
             }
         };
 
@@ -297,12 +301,13 @@
     });
 
     onLoad = () => {
-        Service.RefreshOutletListOnDropdown('OutletSelection');
+        Service.RefreshOutletListOnDropdown(['OutletSelection']);
     }
 
     $(document).ready(() => {
         $('select').selectpicker();
         NestableInit('CategoryHierarchyJson');
+        $('.dd-empty').remove();
     });
 </script>
 <style>

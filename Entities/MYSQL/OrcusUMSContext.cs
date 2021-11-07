@@ -39,7 +39,7 @@ namespace DataLayer.MySql
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySQL(configuration.GetConnectionString("GCP_MYSQL"));
+                optionsBuilder.UseMySQL(configuration.GetConnectionString("XAMPP"));
             }
         }
 
@@ -85,6 +85,11 @@ namespace DataLayer.MySql
                 entity.Property(e => e.CategoryName).HasMaxLength(50);
 
                 entity.Property(e => e.OutletId).HasColumnType("numeric(18, 0)");
+
+                entity.Property(e => e.Status)
+                    .IsRequired()
+                    .HasMaxLength(1)
+                    .IsFixedLength(true);
 
                 entity.HasOne(d => d.Outlet)
                     .WithMany(p => p.Categories)

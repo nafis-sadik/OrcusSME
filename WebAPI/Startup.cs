@@ -72,6 +72,9 @@ namespace WebAPI
             services.AddScoped<IOutletManagerService, OutletManagerService>();
             services.AddScoped(typeof(IOutletManagerService), typeof(OutletManagerService));
 
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped(typeof(ICategoryService), typeof(CategoryService));
+
             // Repos
             services.AddScoped<IUserRepo, UserRepo>();
             services.AddScoped(typeof(IUserRepo), typeof(UserRepo));
