@@ -11,36 +11,21 @@
                     <h2 class="card-inside-title">Classification</h2>
                     <div class="row clearfix">
                         <div class="col-sm-4">
-                            <span>Category</span>
-                            <select class="form-control show-tick">
+                            <span>Outlet</span>
+                            <select id="Outlets" class="form-control show-tick">
                                 <option value="">-- Please select --</option>
-                                <option value="10">10</option>
-                                <option value="20">20</option>
-                                <option value="30">30</option>
-                                <option value="40">40</option>
-                                <option value="50">50</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <span>Category</span>
+                            <select id="Category" class="form-control show-tick">
+                                <option value="">-- Please select --</option>
                             </select>
                         </div>
                         <div class="col-sm-4">
                             <span>Sub Category</span>
-                            <select class="form-control show-tick">
+                            <select id="SubCategory" class="form-control show-tick">
                                 <option value="">-- Please select --</option>
-                                <option value="10">10</option>
-                                <option value="20">20</option>
-                                <option value="30">30</option>
-                                <option value="40">40</option>
-                                <option value="50">50</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-4">
-                            <span>Branch</span>
-                            <select class="form-control show-tick">
-                                <option value="">-- Please select --</option>
-                                <option value="10">Dana</option>
-                                <option value="20">Gul Nurah</option>
-                                <option value="30">Saradian Jewels</option>
-                                <option value="40">Uttara Outlet</option>
-                                <option value="50">Banani Outlet</option>
                             </select>
                         </div>
                     </div>
@@ -149,7 +134,7 @@
                 parallelUploads: 5,
                 uploadMultiple: true,
                 acceptedFiles: '.png, .jpg, .jpeg',
-                autoProcessQueue: false 
+                autoProcessQueue: false
             });
             
             $('#DueAmount').change(() => {
@@ -157,7 +142,51 @@
             });
             
             $('select').selectpicker();
+
+            Service.RefreshOutletListOnDropdown(['Outlets']);
+            Service.RefreshOutletListOnLeftSideBar('purchase');
         }
+
+        $(document).ready(() => {
+            var subCategories = [];
+
+            $('#Outlets').change(() => {
+                let param = {
+                    URL: Route.Base + Route.Categories.Get + $("#Outlets").val(),
+                    Method: 'GET',
+                    Success: (res) => {
+                        if (res.response.length > 1){
+                            console.log(res.response);
+                            $.each(res.response, (key, category) => {
+                                if(category.parentCategoryId == null){
+                                    $('#Category').append(
+                                        '<option value="'+ category.categoryId +'">' + category.categoryName + '</option>'
+                                    );
+                                }
+                                else{
+                                    subCategories.push(category);
+                                }
+                            });
+                        }
+                        $('select').selectpicker('refresh');
+                    },
+                };
+                
+                APIConsumptionAuth(param);
+            });
+
+            $('#Category').change(() => {
+                $.each(subCategories, (key, subCategory) => {
+                    if(subCategory.parentCategoryId != null){
+                        $('#SubCategory').append(
+                            '<option value="'+ subCategory.categoryId +'">' + subCategory.categoryName + '</option>'
+                        );
+                    }
+                });
+
+                $('select').selectpicker('refresh');
+            });
+        });
 
         calculateProfit = () => {
             let retailPrice = $('#RetailPrice').val();

@@ -248,8 +248,6 @@
             URL: Route.Base + Route.Categories.Delete + $("#RemoveCategorySelect").val(),
             Method: 'DELETE',
             Success: (res) => {
-                debugger
-                console.log(res);
                 swal.fire('Success!', '', "success");
                 RemoveCategoryDropdownRefresh(res); 
                 CategoryHirarchyRefresh(res);

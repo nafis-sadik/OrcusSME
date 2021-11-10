@@ -45,19 +45,12 @@
                                     <h5>Outlets</h5>
                                     <select id="OutletSelection" class="form-control show-tick Outlets">
                                         <option value="">-- Please select --</option>
-                                        <option value="10">Dana</option>
-                                        <option value="20">Gul Nurah</option>
-                                        <option value="30">Saradian Jewels</option>
-                                        <option value="40">Uttara Outlet</option>
-                                        <option value="50">Banani Outlet</option>
                                     </select>
                                 </div>
                                 <div class="col-md-12 col-xl-6">
                                     <h5>Products</h5>
                                     <select id="ProductSelection" class="form-control z-index show-tick" data-live-search="true">
-                                        <option>Hot Dog, Fries and a Soda</option>
-                                        <option>Burger, Shake and a Smile</option>
-                                        <option>Sugar, Spice and all things nice</option>
+                                        <option value="">-- Please select --</option>
                                     </select>
                                 </div>
                             </div>
@@ -131,7 +124,7 @@
 
 <script>
     onLoad = () => {
-        Service.RefreshOutletListOnDropdown('OutletSelection');
+        Service.RefreshOutletListOnDropdown(['OutletSelection']);
     }
 
     $(document).ready(() => {
