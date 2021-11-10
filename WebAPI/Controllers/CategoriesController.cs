@@ -32,7 +32,7 @@ namespace WebAPI.Controllers
                 return new ConflictObjectResult(new { Response = "Error" });
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         [Route("GetCategoriesOfOutlets/{outletId}")]
         public IActionResult GetCategoriesOfOutlets(int outletId)
@@ -55,7 +55,7 @@ namespace WebAPI.Controllers
                 return new ConflictObjectResult(new { Response = "Error" });
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost]
         [Route("SaveHierarchy")]
         public IActionResult SaveHierarchy(CategoryModel categoryModel)

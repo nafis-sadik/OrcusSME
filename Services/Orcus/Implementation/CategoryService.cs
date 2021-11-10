@@ -13,7 +13,7 @@ namespace Orcus.Services.Implementation
     public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepo _categoryRepo;
-        //private readonly IProductRepo _productRepo;
+        // private readonly IProductRepo _productRepo;
         private readonly ICrashLogRepo _crashLogRepo;
         public CategoryService()
         {

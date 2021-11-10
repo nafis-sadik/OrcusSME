@@ -34,6 +34,7 @@ namespace DataLayer.MySql
         public virtual DbSet<SubscriptionLog> SubscriptionLogs { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserActivityLog> UserActivityLogs { get; set; }
+        public virtual DbSet<ProductUnitType> Productunittypes { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -52,6 +53,21 @@ namespace DataLayer.MySql
                 entity.Property(e => e.ActivityTypeId).HasColumnType("numeric(18, 0)");
 
                 entity.Property(e => e.ActivityName).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<ProductUnitType>(entity =>
+            {
+                entity.HasKey(e => e.UnitTypeIds)
+                    .HasName("PRIMARY");
+
+                entity.ToTable("productunittypes");
+
+                entity.Property(e => e.UnitTypeIds).HasColumnType("int(11)");
+
+                entity.Property(e => e.UnitTypeNames)
+                    .HasMaxLength(200)
+                    .HasDefaultValueSql("'NULL'")
+                    .IsFixedLength(true);
             });
 
             modelBuilder.Entity<Address>(entity =>
