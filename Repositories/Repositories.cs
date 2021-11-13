@@ -28,9 +28,13 @@ namespace Repositories
     {
         public CrashLogRepo(OrcusUMSContext context) : base(context) { }
     }
-
     public interface IOutletManagerRepo : IRepositoryBase<Outlet>
     {
         public new bool Add(Outlet entity);
+    }
+    public interface IProductUnitTypeRepo : IRepositoryBase<ProductUnitType> { }
+    public class ProductUnitTypeRepo : RepositoryBase<ProductUnitType>, IProductUnitTypeRepo
+    {
+        public ProductUnitTypeRepo(OrcusUMSContext context) : base(context) { }
     }
 }

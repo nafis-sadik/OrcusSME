@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DataLayer;
+using DataLayer.Models;
 
 namespace WebApplication.Controllers
 {
@@ -46,9 +47,9 @@ namespace WebApplication.Controllers
             if (pageSize == null || pageSize <= 0)
                 pageSize = CommonConstants.StandardPageSize;
 
-            IEnumerable<SubscribedService> subHistory = _subscriptionService.GetSubscriptionHistory(new Pagination
+            IEnumerable<SubscribedService> subHistory = _subscriptionService.GetSubscriptionHistory(new BaseModel
             {
-                PageNo = pageNo,
+                Page = pageNo,
                 PageSize = (int)pageSize
             }, userId);
 

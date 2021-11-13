@@ -39,7 +39,7 @@ namespace WebAPI.Controllers
             else if (signUpResponse == null)
                 return new ConflictObjectResult(new { Response = token });
             else
-                return new ConflictObjectResult(new { Response = "Internal Error" });
+                return new ConflictObjectResult(new { Response = CommonConstants.HttpResponseMessages.Exception });
         }
 
         [HttpGet]

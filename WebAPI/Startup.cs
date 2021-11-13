@@ -13,13 +13,13 @@ using Repositories;
 using Repositories.Abstraction;
 using Repositories.Implementation;
 using UMS.Services.Abstraction;
-using Orcus.Services.Implementation;
+using Services.Orcus.Implementation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Orcus.Services.Abstraction;
+using Services.Orcus.Abstraction;
 using UMS.Services.Implementation;
 
 namespace WebAPI
@@ -84,6 +84,9 @@ namespace WebAPI
 
             services.AddScoped<IEmailIdRepo, EmailIdRepo>();
             services.AddScoped(typeof(IEmailIdRepo), typeof(EmailIdRepo));
+
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped(typeof(IProductService), typeof(ProductService));
 
             services.AddControllers();
 

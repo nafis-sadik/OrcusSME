@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Orcus.Services.Abstraction
+namespace Services.Orcus.Abstraction
 {
     public interface ICategoryService
     {

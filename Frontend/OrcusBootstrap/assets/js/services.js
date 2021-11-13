@@ -14,6 +14,10 @@ const Route = {
         Get: '/Categories/GetCategoriesOfOutlets/',
         Delete: '/Categories/Delete/',
         SaveHierarchy: '/Categories/SaveHierarchy/'
+    },
+    Product: {
+        Add: '/Product/ProductUnitTypes/',
+        Get: '/Product/ProductUnitTypes/',
     }
 }
 

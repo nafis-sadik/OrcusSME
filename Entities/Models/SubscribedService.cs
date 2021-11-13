@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using DataLayer.Models;
+using System;
 
 namespace Models
 {
-    public class SubscribedService
+    public class SubscribedService : BaseModel
     {
         public int SubscriptionId { get; set; }
         public string SubscriptionName { get; set; }

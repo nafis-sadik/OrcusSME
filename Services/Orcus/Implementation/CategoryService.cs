@@ -1,19 +1,18 @@
 ﻿using DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Repositories;
-using Orcus.Services.Abstraction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using DataLayer.MySql;
 using DataLayer.Models;
+using Services.Orcus.Abstraction;
 
-namespace Orcus.Services.Implementation
+namespace Services.Orcus.Implementation
 {
     public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepo _categoryRepo;
-        // private readonly IProductRepo _productRepo;
         private readonly ICrashLogRepo _crashLogRepo;
         public CategoryService()
         {

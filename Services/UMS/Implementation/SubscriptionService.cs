@@ -8,6 +8,7 @@ using System.Linq;
 using DataLayer.Entities;
 using DataLayer.MySql;
 using Microsoft.EntityFrameworkCore;
+using DataLayer.Models;
 
 namespace UMS.Services.Implementation
 {
@@ -40,7 +41,7 @@ namespace UMS.Services.Implementation
             return subscriptions;
         }
 
-        public IEnumerable<SubscribedService> GetSubscriptionHistory(Pagination pagination, string userId)
+        public IEnumerable<SubscribedService> GetSubscriptionHistory(BaseModel pagination, string userId)
         {
             IQueryable<SubscriptionLog> SubscriptionLogs = _subscriptionLogRepo.AsQueryable().Where(x => x.UserId == userId).Skip(pagination.Skip).Take(pagination.PageSize);
             List<SubscribedService> subscriptions = new List<SubscribedService>();

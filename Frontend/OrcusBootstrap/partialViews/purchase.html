@@ -32,12 +32,12 @@
                     <h2 class="card-inside-title">Product Details</h2>
                     <div class="row clearfix">
                         <div class="form-group col-sm-4">
-                            <span>Product name</span>
+                            <span>Product Name</span>
                             <input type="text" class="form-control" placeholder="Product name" />
                         </div>
                         <div class="col-sm-4">
                             <span>Unit</span>
-                            <select class="form-control show-tick">
+                            <select id="Unit" class="form-control show-tick">
                                 <option value="">-- Please select --</option>
                                 <option value="10">Kilogram</option>
                                 <option value="20">Piece</option>
@@ -69,6 +69,9 @@
                             <span>Profit Rate</span>
                             <input id="ProfitRate" type="text" class="form-control" placeholder="Profit Rate" disabled />
                         </div>
+                    </div>
+                    <h2 class="card-inside-title">Costing</h2>
+                    <div class="row clearfix">
                         <div class="form-group col-sm-4">
                             <span>Total Amount</span>
                             <input id="TotalAmount" type="number" class="form-control" placeholder="Total Amount" disabled />
@@ -127,6 +130,12 @@
             
             $('#RetailPrice').change(() => {
                 calculateProfit();
+                calculateNetAmount();
+            });
+
+            $('#Quantity').change(() => {
+                calculatePrice();
+                calculateNetAmount();
             });
 
             new Dropzone('#frmFileUpload', {
@@ -140,6 +149,10 @@
             $('#DueAmount').change(() => {
                 calculateNetAmount();
             });
+
+            loadUnits();
+
+            $('#Unit').empty();
             
             $('select').selectpicker();
 
@@ -206,8 +219,33 @@
         }
 
         calculateNetAmount = () => {
+            let dueAmount = $('#DueAmount').val();
+            if (dueAmount == NaN || dueAmount == null || dueAmount == undefined || dueAmount == ""){
+                dueAmount = 0;
+                $('#DueAmount').val('0');
+            }
             $('#NetAmount').val($('#TotalAmount').val() - $('#DueAmount').val());
         }
+
+        loadUnits = () => {
+            let param = {
+                URL: Route.Base + Route.Product.Get,
+                Method: 'GET',
+                Success: (res) => {
+                    $('#Unit').empty();
+                    $('#Unit').append('<option value="">-- Please select --</option>');
+                    $.each(res.response, (key, unit) => {
+                        $('#Unit').append(
+                            '<option value="'+ unit.unitTypeId +'">' + unit.unitTypeName + '</option>'
+                        );  
+                    });
+                    
+                    $('select').selectpicker('refresh');
+                },
+            };
+            
+            APIConsumptionAuth(param);
+        };
     </script>
 </div>
 <style>

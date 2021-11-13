@@ -1,6 +1,5 @@
 ﻿using DataLayer;
 using Repositories;
-using Orcus.Services.Abstraction;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -9,8 +8,9 @@ using DataLayer.Entities;
 using DataLayer.MySql;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Implementation;
+using Services.Orcus.Abstraction;
 
-namespace Orcus.Services.Implementation
+namespace Services.Orcus.Implementation
 {
     public class OutletManagerService : IOutletManagerService
     {

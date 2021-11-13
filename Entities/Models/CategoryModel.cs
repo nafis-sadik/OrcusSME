@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace DataLayer.Models
 {
-    public class CategoryModel
+    public class CategoryModel : BaseModel
     {
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public int? ParentCategoryId { get; set; }
-        public string UserId { get; set; }
         public int outletId { get; set; }
         public string CategoryHiararchy { get; set; }
     }
