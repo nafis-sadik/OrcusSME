@@ -47,14 +47,14 @@ namespace WebInstaller
             services.AddScoped(typeof(IUserService), typeof(UserService));
 
             // Repos
-            services.AddScoped<IUserRepo, UserRepo>();
-            services.AddScoped(typeof(IUserRepo), typeof(UserRepo));
+            //services.AddScoped<IUserRepo, UserRepo>();
+            //services.AddScoped(typeof(IUserRepo), typeof(UserRepo));
 
             services.AddScoped<IUserActivityLogRepo, UserActivityLogRepo>();
             services.AddScoped(typeof(IUserActivityLogRepo), typeof(UserActivityLogRepo));
 
-            services.AddScoped<IEmailIdRepo, EmailIdRepo>();
-            services.AddScoped(typeof(IEmailIdRepo), typeof(EmailIdRepo));
+            //services.AddScoped<IEmailIdRepo, EmailIdRepo>();
+            //services.AddScoped(typeof(IEmailIdRepo), typeof(EmailIdRepo));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

@@ -11,7 +11,10 @@ namespace Repositories
     public interface IAddressRepo : IRepositoryBase<Address> { }
     public class AddressRepo : RepositoryBase<Address>, IAddressRepo { public AddressRepo() : base() { } }
     public interface IEmailIdRepo : IRepositoryBase<EmailAddress> { }
-    public class EmailIdRepo : RepositoryBase<EmailAddress>, IEmailIdRepo { public EmailIdRepo() : base() { } }
+    public class EmailIdRepo : RepositoryBase<EmailAddress>, IEmailIdRepo
+    {
+        public EmailIdRepo(OrcusSMEContext context) : base(context) { }
+    }
     public interface INumberRepo : IRepositoryBase<ContactNumber> { }
     public class NumberRepo : RepositoryBase<ContactNumber>, INumberRepo { public NumberRepo() : base() { } }
     public interface IServiceRepo : IRepositoryBase<Service> { }

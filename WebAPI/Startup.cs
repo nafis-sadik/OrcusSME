@@ -1,12 +1,9 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Repositories;
@@ -14,11 +11,7 @@ using Repositories.Abstraction;
 using Repositories.Implementation;
 using UMS.Services.Abstraction;
 using Services.Orcus.Implementation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Services.Orcus.Abstraction;
 using UMS.Services.Implementation;
 
@@ -75,18 +68,18 @@ namespace WebAPI
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped(typeof(ICategoryService), typeof(CategoryService));
 
-            // Repos
-            services.AddScoped<IUserRepo, UserRepo>();
-            services.AddScoped(typeof(IUserRepo), typeof(UserRepo));
-            
-            services.AddScoped<IUserActivityLogRepo, UserActivityLogRepo>();
-            services.AddScoped(typeof(IUserActivityLogRepo), typeof(UserActivityLogRepo));
-
-            services.AddScoped<IEmailIdRepo, EmailIdRepo>();
-            services.AddScoped(typeof(IEmailIdRepo), typeof(EmailIdRepo));
-
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped(typeof(IProductService), typeof(ProductService));
+
+            // Repos
+            //services.AddScoped<IUserRepo, UserRepo>();
+            //services.AddScoped(typeof(IUserRepo), typeof(UserRepo));
+
+            //services.AddScoped<IUserActivityLogRepo, UserActivityLogRepo>();
+            //services.AddScoped(typeof(IUserActivityLogRepo), typeof(UserActivityLogRepo));
+
+            //services.AddScoped<IEmailIdRepo, EmailIdRepo>();
+            //services.AddScoped(typeof(IEmailIdRepo), typeof(EmailIdRepo));
 
             services.AddControllers();
 

@@ -13,6 +13,7 @@ using DataLayer.MySql;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Abstraction;
 using DataLayer.MSSQL;
+using Repositories.Implementation;
 
 namespace UMS.Services.Implementation
 {
@@ -22,12 +23,12 @@ namespace UMS.Services.Implementation
         private readonly ICrashLogRepo _crashLogRepo;
         private readonly IEmailIdRepo _emailIdRepo;
 
-        public UserService(IUserRepo userRepo, IUserActivityLogRepo userActivityLogRepo, IEmailIdRepo emailIdRepo)
+        public UserService()
         {
             OrcusSMEContext context = new OrcusSMEContext(new DbContextOptions<OrcusSMEContext>());
-            _userRepo = userRepo;
+            _userRepo = new UserRepo(context);
             _crashLogRepo = new CrashLogRepo(context);
-            _emailIdRepo = emailIdRepo;
+            _emailIdRepo = new EmailIdRepo(context);
         }
 
         private string GenerateJwtToken(string userId)
