@@ -12,6 +12,7 @@ using DataLayer.Entities;
 using DataLayer.MySql;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Abstraction;
+using DataLayer.MSSQL;
 
 namespace UMS.Services.Implementation
 {
@@ -23,7 +24,7 @@ namespace UMS.Services.Implementation
 
         public UserService(IUserRepo userRepo, IUserActivityLogRepo userActivityLogRepo, IEmailIdRepo emailIdRepo)
         {
-            OrcusUMSContext context = new OrcusUMSContext(new DbContextOptions<OrcusUMSContext>());
+            OrcusSMEContext context = new OrcusSMEContext(new DbContextOptions<OrcusSMEContext>());
             _userRepo = userRepo;
             _crashLogRepo = new CrashLogRepo(context);
             _emailIdRepo = emailIdRepo;
@@ -82,7 +83,7 @@ namespace UMS.Services.Implementation
                 return null;
             }
 
-            EmailId email = _emailIdRepo.AsQueryable().FirstOrDefault(x => x.EmailAddress == user.DefaultEmail);
+            EmailAddress email = _emailIdRepo.AsQueryable().FirstOrDefault(x => x.EmailAddress1 == user.DefaultEmail);
             if (email != null)
             {
                 token = CommonConstants.HttpResponseMessages.MailExists;
@@ -109,13 +110,13 @@ namespace UMS.Services.Implementation
                 if (_emailIdRepo.AsQueryable().Count() <= 0)
                     pk = 0;
                 else
-                    pk = _emailIdRepo.AsQueryable().Max(x => x.Emailid) + 1;
+                    pk = _emailIdRepo.AsQueryable().Max(x => x.EmailPk) + 1;
 
-                _emailIdRepo.Add(new EmailId {
-                    Emailid = pk,
+                _emailIdRepo.Add(new EmailAddress {
+                    EmailPk = pk,
                     UserId = userId,
                     IsPrimaryMail = CommonConstants.True,
-                    EmailAddress = user.DefaultEmail,
+                    EmailAddress1 = user.DefaultEmail,
                     Status = CommonConstants.StatusTypes.Pending
                 });
 
@@ -133,7 +134,7 @@ namespace UMS.Services.Implementation
 
                 int pk = _crashLogRepo.AsQueryable().Count() + 1;
 
-                _crashLogRepo.Add(new CrashLog
+                _crashLogRepo.Add(new Crashlog
                 {
                     CrashLogId = pk,
                     ClassName = "UserService",
@@ -165,7 +166,7 @@ namespace UMS.Services.Implementation
             {
                 int pk = _crashLogRepo.AsQueryable().Count() + 1;
 
-                _crashLogRepo.Add(new CrashLog
+                _crashLogRepo.Add(new Crashlog
                 {
                     CrashLogId = pk,
                     ClassName = "UserService",
@@ -197,7 +198,7 @@ namespace UMS.Services.Implementation
             {
                 int pk = _crashLogRepo.AsQueryable().Count() + 1;
 
-                _crashLogRepo.Add(new CrashLog
+                _crashLogRepo.Add(new Crashlog
                 {
                     CrashLogId = pk,
                     ClassName = "UserService",
@@ -229,7 +230,7 @@ namespace UMS.Services.Implementation
             {
                 int pk = _crashLogRepo.AsQueryable().Count() + 1;   
 
-                _crashLogRepo.Add(new CrashLog
+                _crashLogRepo.Add(new Crashlog
                 {
                     CrashLogId = pk,
                     ClassName = "UserService",

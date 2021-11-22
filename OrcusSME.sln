@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Servic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI", "WebAPI\WebAPI.csproj", "{6E7DCAAB-F1B9-4E8D-A9B8-E011721D912C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebInstaller", "WebInstaller\WebInstaller.csproj", "{41A6AA2E-FAD6-48DE-B0AD-6BEE13B7001D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebInstaller", "WebInstaller\WebInstaller.csproj", "{41A6AA2E-FAD6-48DE-B0AD-6BEE13B7001D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

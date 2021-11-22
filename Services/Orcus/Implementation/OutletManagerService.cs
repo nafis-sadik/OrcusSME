@@ -9,6 +9,7 @@ using DataLayer.MySql;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Implementation;
 using Services.Orcus.Abstraction;
+using DataLayer.MSSQL;
 
 namespace Services.Orcus.Implementation
 {
@@ -19,7 +20,7 @@ namespace Services.Orcus.Implementation
 
         public OutletManagerService()
         {
-            OrcusUMSContext context = new OrcusUMSContext(new DbContextOptions<OrcusUMSContext>());
+            OrcusSMEContext context = new OrcusSMEContext(new DbContextOptions<OrcusSMEContext>());
             _outletManagerRepo = new OutletManagerRepo(context);
             _crashLogRepo = new CrashLogRepo(context);
         }
@@ -58,7 +59,7 @@ namespace Services.Orcus.Implementation
                     pk = _crashLogRepo.AsQueryable().Max(x => x.CrashLogId) + 1;
 
                 if (ex.InnerException != null)
-                    _crashLogRepo.Add(new CrashLog
+                    _crashLogRepo.Add(new Crashlog
                     {
                         CrashLogId = pk,
                         ClassName = "OutletManagerService",
@@ -102,7 +103,7 @@ namespace Services.Orcus.Implementation
 
                 if (ex.InnerException != null)
                     if (oldData != null)
-                        _crashLogRepo.Add(new CrashLog
+                        _crashLogRepo.Add(new Crashlog
                         {
                             CrashLogId = pk,
                             ClassName = "OutletManagerService",
@@ -145,7 +146,7 @@ namespace Services.Orcus.Implementation
                     pk = _crashLogRepo.AsQueryable().Max(x => x.CrashLogId) + 1;
 
                 if (ex.InnerException != null)
-                    _crashLogRepo.Add(new CrashLog
+                    _crashLogRepo.Add(new Crashlog
                     {
                         CrashLogId = pk,
                         ClassName = "OutletManagerService",
@@ -182,7 +183,7 @@ namespace Services.Orcus.Implementation
                     pk = _crashLogRepo.AsQueryable().Max(x => x.CrashLogId) + 1;
 
                 if (ex.InnerException != null)
-                    _crashLogRepo.Add(new CrashLog
+                    _crashLogRepo.Add(new Crashlog
                     {
                         CrashLogId = pk,
                         ClassName = "OutletManagerService",
@@ -211,7 +212,7 @@ namespace Services.Orcus.Implementation
                     return false;
                 }
 
-                outletData.RequestSite = true;
+                outletData.RequestSite = 1; // 1 in mssql means true in mysql and 0 means false
                 _outletManagerRepo.Update(outletData);
                 response = "Site order placed successfully";
                 return true;
@@ -227,7 +228,7 @@ namespace Services.Orcus.Implementation
                     pk = _crashLogRepo.AsQueryable().Max(x => x.CrashLogId) + 1;
 
                 if (ex.InnerException != null)
-                    _crashLogRepo.Add(new CrashLog
+                    _crashLogRepo.Add(new Crashlog
                     {
                         CrashLogId = pk,
                         ClassName = "OutletManagerService",
@@ -274,7 +275,7 @@ namespace Services.Orcus.Implementation
                     pk = _crashLogRepo.AsQueryable().Max(x => x.CrashLogId) + 1;
 
                 if (ex.InnerException != null)
-                    _crashLogRepo.Add(new CrashLog
+                    _crashLogRepo.Add(new Crashlog
                     {
                         CrashLogId = pk,
                         ClassName = "OutletManagerService",

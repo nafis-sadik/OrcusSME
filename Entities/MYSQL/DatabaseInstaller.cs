@@ -1,3 +1,4 @@
+using DataLayer.MSSQL;
 using System;
 
 namespace DataLayer.MySql
@@ -8,7 +9,7 @@ namespace DataLayer.MySql
         {
             try
             {
-                new OrcusUMSContext().Database.EnsureCreated();
+                new OrcusSMEContext().Database.EnsureCreated();
                 return true;
             }
             catch (Exception e)

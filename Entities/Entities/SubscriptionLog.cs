@@ -13,7 +13,7 @@ namespace DataLayer.Entities
         public DateTime? SubscriptionDate { get; set; }
         public DateTime? ExpirationDate { get; set; }
 
-        public virtual Subscription SubscriptionNavigation { get; set; }
+        public virtual Service SubscriptionNavigation { get; set; }
         public virtual User User { get; set; }
     }
 }

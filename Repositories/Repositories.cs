@@ -1,4 +1,5 @@
 ﻿using DataLayer.Entities;
+using DataLayer.MSSQL;
 using DataLayer.MySql;
 using Repositories.Abstraction;
 using Repositories.Implementation;
@@ -9,24 +10,24 @@ namespace Repositories
     public class ActivityTypeRepo : RepositoryBase<ActivityType>, IActivityTypeRepo { public ActivityTypeRepo(): base() { } }
     public interface IAddressRepo : IRepositoryBase<Address> { }
     public class AddressRepo : RepositoryBase<Address>, IAddressRepo { public AddressRepo() : base() { } }
-    public interface IEmailIdRepo : IRepositoryBase<EmailId> { }
-    public class EmailIdRepo : RepositoryBase<EmailId>, IEmailIdRepo { public EmailIdRepo() : base() { } }
-    public interface INumberRepo : IRepositoryBase<Number> { }
-    public class NumberRepo : RepositoryBase<Number>, INumberRepo { public NumberRepo() : base() { } }
-    public interface ISubscriptionRepo : IRepositoryBase<Subscription> { }
-    public class SubscriptionRepo : RepositoryBase<Subscription>, ISubscriptionRepo { public SubscriptionRepo() : base() { } }
+    public interface IEmailIdRepo : IRepositoryBase<EmailAddress> { }
+    public class EmailIdRepo : RepositoryBase<EmailAddress>, IEmailIdRepo { public EmailIdRepo() : base() { } }
+    public interface INumberRepo : IRepositoryBase<ContactNumber> { }
+    public class NumberRepo : RepositoryBase<ContactNumber>, INumberRepo { public NumberRepo() : base() { } }
+    public interface IServiceRepo : IRepositoryBase<Service> { }
+    public class SubscriptionRepo : RepositoryBase<Service>, IServiceRepo { public SubscriptionRepo() : base() { } }
     public interface ISubscriptionLogRepo : IRepositoryBase<SubscriptionLog> { }
     public class SubscriptionLogRepo : RepositoryBase<SubscriptionLog>, ISubscriptionLogRepo { public SubscriptionLogRepo() : base() { } }
     public interface IUserActivityLogRepo : IRepositoryBase<UserActivityLog> { }
     public class UserActivityLogRepo : RepositoryBase<UserActivityLog>, IUserActivityLogRepo { public UserActivityLogRepo() : base() { } }
     public interface ICategoryRepo : IRepositoryBase<Category> { }
     public class CategoryRepo : RepositoryBase<Category>, ICategoryRepo { 
-        public CategoryRepo(OrcusUMSContext context) : base(context) { }
+        public CategoryRepo(OrcusSMEContext context) : base(context) { }
     }
-    public interface ICrashLogRepo : IRepositoryBase<CrashLog> { }
-    public class CrashLogRepo : RepositoryBase<CrashLog>, ICrashLogRepo
+    public interface ICrashLogRepo : IRepositoryBase<Crashlog> { }
+    public class CrashLogRepo : RepositoryBase<Crashlog>, ICrashLogRepo
     {
-        public CrashLogRepo(OrcusUMSContext context) : base(context) { }
+        public CrashLogRepo(OrcusSMEContext context) : base(context) { }
     }
     public interface IOutletManagerRepo : IRepositoryBase<Outlet>
     {
@@ -35,6 +36,6 @@ namespace Repositories
     public interface IProductUnitTypeRepo : IRepositoryBase<ProductUnitType> { }
     public class ProductUnitTypeRepo : RepositoryBase<ProductUnitType>, IProductUnitTypeRepo
     {
-        public ProductUnitTypeRepo(OrcusUMSContext context) : base(context) { }
+        public ProductUnitTypeRepo(OrcusSMEContext context) : base(context) { }
     }
 }

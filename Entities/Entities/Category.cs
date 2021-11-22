@@ -12,7 +12,6 @@ namespace DataLayer.Entities
         public int? ParentCategoryId { get; set; }
         public decimal? OutletId { get; set; }
         public string Status { get; set; }
-
         public virtual Outlet Outlet { get; set; }
     }
 }

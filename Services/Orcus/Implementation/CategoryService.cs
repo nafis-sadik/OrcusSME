@@ -7,6 +7,7 @@ using System.Linq;
 using DataLayer.MySql;
 using DataLayer.Models;
 using Services.Orcus.Abstraction;
+using DataLayer.MSSQL;
 
 namespace Services.Orcus.Implementation
 {
@@ -16,7 +17,7 @@ namespace Services.Orcus.Implementation
         private readonly ICrashLogRepo _crashLogRepo;
         public CategoryService()
         {
-            OrcusUMSContext context = new OrcusUMSContext(new DbContextOptions<OrcusUMSContext>());
+            OrcusSMEContext context = new OrcusSMEContext(new DbContextOptions<OrcusSMEContext>());
             _categoryRepo = new CategoryRepo(context);
             _crashLogRepo = new CrashLogRepo(context);
             //_productRepo = new IProductRepo(context);
@@ -47,7 +48,7 @@ namespace Services.Orcus.Implementation
 
                 int pk = _crashLogRepo.AsQueryable().Count() + 1;
 
-                _crashLogRepo.Add(new DataLayer.Entities.CrashLog
+                _crashLogRepo.Add(new DataLayer.Entities.Crashlog
                 {
                     CrashLogId = pk,
                     ClassName = "CategoryService",
@@ -78,7 +79,7 @@ namespace Services.Orcus.Implementation
 
                 int pk = _crashLogRepo.AsQueryable().Count() + 1;
 
-                _crashLogRepo.Add(new DataLayer.Entities.CrashLog
+                _crashLogRepo.Add(new DataLayer.Entities.Crashlog
                 {
                     CrashLogId = pk,
                     ClassName = "CategoryService",
@@ -97,7 +98,7 @@ namespace Services.Orcus.Implementation
         {
             try
             {
-                List<DataLayer.Models.CategoryModel> response = new List<DataLayer.Models.CategoryModel>();
+                List<CategoryModel> response = new List<CategoryModel>();
                 response = _categoryRepo.AsQueryable().Where(x => x.OutletId == OutletId && x.Status == CommonConstants.StatusTypes.Active)
                     .Select(x => new DataLayer.Models.CategoryModel
                     {
@@ -116,7 +117,7 @@ namespace Services.Orcus.Implementation
 
                 int pk = _crashLogRepo.AsQueryable().Count() + 1;
 
-                _crashLogRepo.Add(new DataLayer.Entities.CrashLog
+                _crashLogRepo.Add(new DataLayer.Entities.Crashlog
                 {
                     CrashLogId = pk,
                     ClassName = "CategoryService",
@@ -225,7 +226,7 @@ namespace Services.Orcus.Implementation
 
                 int pk = _crashLogRepo.AsQueryable().Count() + 1;
 
-                _crashLogRepo.Add(new DataLayer.Entities.CrashLog
+                _crashLogRepo.Add(new DataLayer.Entities.Crashlog
                 {
                     CrashLogId = pk,
                     ClassName = "CategoryService",

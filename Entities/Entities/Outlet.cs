@@ -17,7 +17,7 @@ namespace DataLayer.Entities
         public string OutletAddresss { get; set; }
         public string EcomUrl { get; set; }
         public string UserId { get; set; }
-        public bool? RequestSite { get; set; }
+        public byte? RequestSite { get; set; }
         public string SiteUrl { get; set; }
         public string Status { get; set; }
 

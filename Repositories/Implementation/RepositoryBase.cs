@@ -5,25 +5,26 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using DataLayer.MySql;
+//using DataLayer.MySql;
+using DataLayer.MSSQL;
 
 namespace Repositories.Implementation
 {
     public class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
-        internal readonly OrcusUMSContext Db;
+        internal readonly OrcusSMEContext Db;
         private readonly DbSet<T> _dbSet;
 
         //private readonly IDbContextTransaction transaction;
 
         internal RepositoryBase()
         {
-            Db = new OrcusUMSContext(new DbContextOptions<OrcusUMSContext>());
+            Db = new OrcusSMEContext(new DbContextOptions<OrcusSMEContext>());
             _dbSet = Db.Set<T>();
             //transaction = db.Database.BeginTransaction();
         }
 
-        internal RepositoryBase(OrcusUMSContext context)
+        internal RepositoryBase(OrcusSMEContext context)
         {
             Db = context;
             _dbSet = Db.Set<T>();

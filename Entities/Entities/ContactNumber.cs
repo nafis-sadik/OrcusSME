@@ -5,10 +5,10 @@ using System.Collections.Generic;
 
 namespace DataLayer.Entities
 {
-    public partial class Number
+    public partial class ContactNumber
     {
         public string UserId { get; set; }
-        public string Number1 { get; set; }
+        public string Number { get; set; }
         public string IsBkash { get; set; }
         public string IsNagad { get; set; }
         public string IsRocket { get; set; }

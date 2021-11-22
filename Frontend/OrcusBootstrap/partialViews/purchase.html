@@ -3,7 +3,7 @@
 <div class="container-fluid">
     <div class="row clearfix">
         <div class="col-lg-12 col-md-12 col-sm-12">
-            <div id="PurchaseForm" class="card">
+            <form id="PurchaseForm" class="card">
                 <div class="header">
                     <h2><strong>Purchase</strong></h2>                        
                 </div>
@@ -33,7 +33,7 @@
                     <div class="row clearfix">
                         <div class="form-group col-sm-4">
                             <span>Product Name</span>
-                            <input type="text" class="form-control" placeholder="Product name" />
+                            <input id="ProductName" type="text" class="form-control" placeholder="Product name" />
                         </div>
                         <div class="col-sm-4">
                             <span>Unit</span>
@@ -90,7 +90,7 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <textarea rows="4" class="form-control no-resize" placeholder="Please type your product description..."></textarea>
+                                    <textarea id="ProductDescription" rows="4" class="form-control no-resize" placeholder="Please type your product description..."></textarea>
                                 </div>
                             </div>
                         </div>
@@ -103,26 +103,34 @@
                                     <h2><strong>Upload Product Images</strong> Drag & Drop OR With Click & Choose </h2>
                                 </div>
                                 <div class="body">
-                                    <form action="https://thememakker.com/" id="frmFileUpload" class="dropzone" method="post" enctype="multipart/form-data">
+                                    <div id="frmFileUpload" class="dropzone" enctype="multipart/form-data">
                                         <div class="dz-message">
                                             <div class="drag-icon-cph"> <i class="material-icons">touch_app</i> </div>
                                             <h3>Drop files here or click to upload.</h3>
+                                        </div>
                                         <div class="fallback">
                                             <input name="file" type="file" multiple />
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-12 col-lg-6">
-                            <button type="button" class="col-sm-12 col-lg-6 btn btn-raised btn-primary btn-round waves-effect m-lg-l-20 custom-btn">Purchase</button>
+                            <button type="submit" class="col-sm-12 col-lg-6 btn btn-raised btn-primary btn-round waves-effect m-lg-l-20 custom-btn">Purchase</button>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
     <script>
+        dropzone = new Dropzone('#frmFileUpload', {
+                url: "/file/post",
+                parallelUploads: 5,
+                uploadMultiple: true,
+                acceptedFiles: '.png, .jpg, .jpeg',
+                autoProcessQueue: false
+            });
         onLoad = () => {
             $('#PurchasingPrice').change(() => {
                 calculatePrice();
@@ -136,14 +144,6 @@
             $('#Quantity').change(() => {
                 calculatePrice();
                 calculateNetAmount();
-            });
-
-            new Dropzone('#frmFileUpload', {
-                url: "/file/post",
-                parallelUploads: 5,
-                uploadMultiple: true,
-                acceptedFiles: '.png, .jpg, .jpeg',
-                autoProcessQueue: false
             });
             
             $('#DueAmount').change(() => {
@@ -169,7 +169,6 @@
                     Method: 'GET',
                     Success: (res) => {
                         if (res.response.length > 1){
-                            console.log(res.response);
                             $.each(res.response, (key, category) => {
                                 if(category.parentCategoryId == null){
                                     $('#Category').append(
@@ -246,6 +245,23 @@
             
             APIConsumptionAuth(param);
         };
+
+        $('#PurchaseForm').on('submit', (element) => {
+            element.preventDefault();
+            console.log(JSON.stringify({
+                OutletId: $('#Outlets').val(),
+                CategoryId: $('#Category').val(),
+                SubCategoryId: $('#SubCategory').val(),
+                ProductName: $('#ProductName').val(),
+                UnitId: $('#Unit').val(),
+                Quantity: $('#Quantity').val(),
+                PurchasingPrice: $('#PurchasingPrice').val(),
+                RetailPrice: $('#RetailPrice').val(),
+                DueAmount: $('#DueAmount').val(),
+                ProductDescription: $('#ProductDescription').val(),
+            }));
+            // dropzone.processQueue();
+        })
     </script>
 </div>
 <style>

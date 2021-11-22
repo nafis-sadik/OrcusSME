@@ -1,5 +1,5 @@
+using Microsoft.EntityFrameworkCore;
 using System;
-
 namespace DataLayer.MSSQL
 {
     public class DatabaseInstaller
@@ -8,7 +8,7 @@ namespace DataLayer.MSSQL
         {
             try
             {
-                new OrcusUMSContext().Database.EnsureCreated();
+                new OrcusSMEContext(new DbContextOptions<OrcusSMEContext>()).Database.EnsureCreated();
                 return true;
             }
             catch (Exception e)

@@ -7,6 +7,7 @@ namespace DataLayer.Entities
 {
     public partial class Address
     {
+        public int AddressId { get; set; }
         public string UserId { get; set; }
         public string StreetAddress { get; set; }
         public string GoogleMapsLocation { get; set; }

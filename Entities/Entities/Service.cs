@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace DataLayer.Entities
 {
-    public partial class Subscription
+    public partial class Service
     {
         public decimal SubscriptionId { get; set; }
         public string SubscriptionName { get; set; }

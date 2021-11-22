@@ -9,18 +9,19 @@ using DataLayer.Entities;
 using DataLayer.MySql;
 using Microsoft.EntityFrameworkCore;
 using DataLayer.Models;
+using DataLayer.MSSQL;
 
 namespace UMS.Services.Implementation
 {
     public class SubscriptionService : ISubscriptionService
     {
         private readonly ISubscriptionLogRepo _subscriptionLogRepo;
-        private readonly ISubscriptionRepo _subscriptionRepo;
+        private readonly IServiceRepo _subscriptionRepo;
         private readonly ICrashLogRepo _crashLogRepo;
 
-        public SubscriptionService(ISubscriptionLogRepo subscriptionLogRepo, ISubscriptionRepo subscriptionRepo)
+        public SubscriptionService(ISubscriptionLogRepo subscriptionLogRepo, IServiceRepo subscriptionRepo)
         {
-            OrcusUMSContext context = new OrcusUMSContext(new DbContextOptions<OrcusUMSContext>());
+            OrcusSMEContext context = new OrcusSMEContext(new DbContextOptions<OrcusSMEContext>());
             _subscriptionLogRepo = subscriptionLogRepo;
             _subscriptionRepo = subscriptionRepo;
             _crashLogRepo = new CrashLogRepo(context);
@@ -65,7 +66,7 @@ namespace UMS.Services.Implementation
             try
             {
                 IQueryable<SubscriptionLog> subscriptionLogs = _subscriptionLogRepo.AsQueryable().Where(x => x.UserId == UserId && x.SubscriptionId == SubscriptionId && x.ExpirationDate > DateTime.Today);
-                Subscription subscriptions = _subscriptionRepo.Get(SubscriptionId);
+                Service subscriptions = _subscriptionRepo.Get(SubscriptionId);
                 if (subscriptionLogs == null)
                     _subscriptionLogRepo.Add(new SubscriptionLog
                     {
@@ -84,7 +85,7 @@ namespace UMS.Services.Implementation
                 }
                 return true;
             } catch (Exception ex) {
-                _crashLogRepo.Add(new CrashLog
+                _crashLogRepo.Add(new Crashlog
                 {
                     ClassName = "SubscriptionService",
                     Data = UserId.ToString() + " " + SubscriptionId.ToString(),

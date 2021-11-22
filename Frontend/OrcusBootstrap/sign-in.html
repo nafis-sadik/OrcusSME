@@ -139,10 +139,6 @@
     
     $('#LogInForm').on("submit",(element) => {
         element.preventDefault();
-        console.log(JSON.stringify({
-                UserName: $('#UserName').val(),
-                Password: $('#Password').val()
-            }));
         $.ajax({
             url: 'https://localhost:44375/api/User/LogIn',
             type: 'POST',

@@ -5,13 +5,13 @@ using System.Collections.Generic;
 
 namespace DataLayer.Entities
 {
-    public partial class EmailId
+    public partial class EmailAddress
     {
+        public int EmailPk { get; set; }
         public string UserId { get; set; }
-        public int Emailid { get; set; }
         public string IsPrimaryMail { get; set; }
         public string Status { get; set; }
-        public string EmailAddress { get; set; }
+        public string EmailAddress1 { get; set; }
 
         public virtual User User { get; set; }
     }

@@ -9,7 +9,8 @@ namespace DataLayer.Entities
     {
         public User()
         {
-            EmailIds = new HashSet<EmailId>();
+            Addresses = new HashSet<Address>();
+            EmailAddresses = new HashSet<EmailAddress>();
             Outlets = new HashSet<Outlet>();
             UserActivityLogs = new HashSet<UserActivityLog>();
         }
@@ -24,7 +25,8 @@ namespace DataLayer.Entities
         public string Password { get; set; }
         public decimal? AccountBalance { get; set; }
 
-        public virtual ICollection<EmailId> EmailIds { get; set; }
+        public virtual ICollection<Address> Addresses { get; set; }
+        public virtual ICollection<EmailAddress> EmailAddresses { get; set; }
         public virtual ICollection<Outlet> Outlets { get; set; }
         public virtual ICollection<UserActivityLog> UserActivityLogs { get; set; }
     }

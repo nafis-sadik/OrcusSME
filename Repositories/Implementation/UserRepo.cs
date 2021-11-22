@@ -9,6 +9,6 @@ namespace Repositories.Implementation
 
         public User FindUser(string userName, string pass) => Db.Users.FirstOrDefault(u => u.UserName == userName ||
                                                 u.UserId == userName ||
-                                                u.EmailIds.FirstOrDefault(m => m.EmailAddress == userName).UserId == u.UserId);
+                                                u.EmailAddresses.FirstOrDefault(m => m.EmailAddress1 == userName).UserId == u.UserId);
     }
 }

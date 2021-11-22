@@ -9,5 +9,6 @@ namespace DataLayer.Entities
     {
         public int UnitTypeIds { get; set; }
         public string UnitTypeNames { get; set; }
+        public string Status { get; set; }
     }
 }

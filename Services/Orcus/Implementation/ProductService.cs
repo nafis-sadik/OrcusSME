@@ -1,6 +1,7 @@
 ﻿using DataLayer;
 using DataLayer.Entities;
 using DataLayer.Models;
+using DataLayer.MSSQL;
 using DataLayer.MySql;
 using Microsoft.EntityFrameworkCore;
 using Repositories;
@@ -19,7 +20,7 @@ namespace Services.Orcus.Implementation
         private readonly ICrashLogRepo _crashLogRepo;
         public ProductService()
         {
-            OrcusUMSContext context = new OrcusUMSContext(new DbContextOptions<OrcusUMSContext>());
+            OrcusSMEContext context = new OrcusSMEContext(new DbContextOptions<OrcusSMEContext>());
             _productUnitTypeRepo = new ProductUnitTypeRepo(context);
             _crashLogRepo = new CrashLogRepo(context);
         }
@@ -55,7 +56,7 @@ namespace Services.Orcus.Implementation
                     pk = _crashLogRepo.AsQueryable().Max(x => x.CrashLogId) + 1;
 
                 if (ex.InnerException != null)
-                    _crashLogRepo.Add(new CrashLog
+                    _crashLogRepo.Add(new Crashlog
                     {
                         CrashLogId = pk,
                         ClassName = "ProductService",

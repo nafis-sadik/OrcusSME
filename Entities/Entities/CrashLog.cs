@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace DataLayer.Entities
 {
-    public partial class CrashLog
+    public partial class Crashlog
     {
         public int CrashLogId { get; set; }
         public string ClassName { get; set; }
