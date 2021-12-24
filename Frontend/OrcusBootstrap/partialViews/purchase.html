@@ -39,11 +39,6 @@
                             <span>Unit</span>
                             <select id="Unit" class="form-control show-tick">
                                 <option value="">-- Please select --</option>
-                                <option value="10">Kilogram</option>
-                                <option value="20">Piece</option>
-                                <option value="30">Liter</option>
-                                <option value="40">Gram</option>
-                                <option value="50">Ton</option>
                             </select>
                         </div>
                         <div class="form-group col-sm-4">
@@ -151,10 +146,6 @@
             });
 
             loadUnits();
-
-            $('#Unit').empty();
-            
-            $('select').selectpicker();
 
             Service.RefreshOutletListOnDropdown(['Outlets']);
             Service.RefreshOutletListOnLeftSideBar('purchase');

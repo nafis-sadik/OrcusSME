@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Services.Orcus.Abstraction;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -36,10 +35,10 @@ namespace WebAPI.Controllers
             }
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPut]
         [Route("ProductUnitTypes")]
-        public IActionResult GetProductUnitTypes(ProductUnitTypeModel purchaseModel)
+        public IActionResult AddProductUnitTypes(ProductUnitTypeModel purchaseModel)
         {
             if (_productService.AddProductUnitTypes(purchaseModel))
                 return Ok(new { Response = "Success" });
@@ -47,30 +46,37 @@ namespace WebAPI.Controllers
                 return Conflict(new { Response = CommonConstants.HttpResponseMessages.Exception });
         }
 
-        [Authorize]
-        [HttpPut]
-        [Route("ProductUnitTypes")]
-        public async Task<IActionResult> OnPostUploadAsync(List<IFormFile> files)
-        {
-            long size = files.Sum(f => f.Length);
+        //[Authorize]
+        //[HttpPut]
+        //[Route("ProductUnitTypes")]
+        //public async Task<IActionResult> OnPostUploadAsync(List<IFormFile> files)
+        //{
+        //    try
+        //    {
+        //        long size = files.Sum(f => f.Length);
 
-            foreach (var formFile in files)
-            {
-                if (formFile.Length > 0)
-                {
-                    var filePath = Path.GetTempFileName();
+        //        foreach (var formFile in files)
+        //        {
+        //            if (formFile.Length > 0)
+        //            {
+        //                var filePath = System.IO.Path.GetTempFileName();
 
-                    using (var stream = System.IO.File.Create(filePath))
-                    {
-                        await formFile.CopyToAsync(stream);
-                    }
-                }
-            }
+        //                using (var stream = System.IO.File.Create(filePath))
+        //                {
+        //                    await formFile.CopyToAsync(stream);
+        //                }
+        //            }
+        //        }
 
-            // Process uploaded files
-            // Don't rely on or trust the FileName property without validation.
+        //        // Process uploaded files
+        //        // Don't rely on or trust the FileName property without validation.
 
-            return Ok(new { count = files.Count, size });
-        }
+        //        return Ok(new { count = files.Count, size });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Conflict(ex.Message);
+        //    }
+        //}
     }
 }

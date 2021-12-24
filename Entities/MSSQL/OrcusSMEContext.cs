@@ -1,37 +1,37 @@
 ﻿using System;
-using System.IO;
 using DataLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Configuration;
 
 #nullable disable
 
 namespace DataLayer.MSSQL
 {
-    // Scafolding Command
-    // Scaffold-DbContext "User Id=DESKTOP-BHB3CJL;Database=OrcusSME;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer
     public partial class OrcusSMEContext : DbContext
     {
-        private readonly IConfigurationRoot configuration;
+        // Scafolding Command
+        // Scaffold-DbContext "User Id=DESKTOP-BHB3CJL;Database=OrcusSME;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer
         public OrcusSMEContext()
         {
-            configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: true, reloadOnChange: true).Build();
         }
 
         public OrcusSMEContext(DbContextOptions<OrcusSMEContext> options)
             : base(options)
         {
-            configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: true, reloadOnChange: true).Build();
         }
 
         public virtual DbSet<ActivityType> ActivityTypes { get; set; }
         public virtual DbSet<Address> Addresses { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<CommonCode> CommonCodes { get; set; }
         public virtual DbSet<ContactNumber> ContactNumbers { get; set; }
         public virtual DbSet<Crashlog> Crashlogs { get; set; }
         public virtual DbSet<EmailAddress> EmailAddresses { get; set; }
+        public virtual DbSet<Image> Images { get; set; }
         public virtual DbSet<Outlet> Outlets { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<ProductAttribute> ProductAttributes { get; set; }
+        public virtual DbSet<ProductUnitType> ProductUnitTypes { get; set; }
         public virtual DbSet<Service> Services { get; set; }
         public virtual DbSet<SubscriptionLog> SubscriptionLogs { get; set; }
         public virtual DbSet<User> Users { get; set; }
@@ -41,7 +41,8 @@ namespace DataLayer.MSSQL
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySQL(configuration.GetConnectionString("MSSQL"));
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("User Id=DESKTOP-BHB3CJL;Database=OrcusSME;Trusted_Connection=True;");
             }
         }
 
@@ -100,10 +101,24 @@ namespace DataLayer.MSSQL
 
                 entity.Property(e => e.OutletId).HasColumnType("decimal(18, 0)");
 
+                entity.Property(e => e.Status)
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
+
                 entity.HasOne(d => d.Outlet)
                     .WithMany(p => p.Categories)
                     .HasForeignKey(d => d.OutletId)
                     .HasConstraintName("FK_Categories_Outlets");
+            });
+
+            modelBuilder.Entity<CommonCode>(entity =>
+            {
+                entity.Property(e => e.CommonCodeId).ValueGeneratedNever();
+
+                entity.Property(e => e.CommonCodeName)
+                    .HasMaxLength(10)
+                    .IsFixedLength(true);
             });
 
             modelBuilder.Entity<ContactNumber>(entity =>
@@ -207,6 +222,17 @@ namespace DataLayer.MSSQL
                     .HasConstraintName("FK_EmailId_User");
             });
 
+            modelBuilder.Entity<Image>(entity =>
+            {
+                entity.Property(e => e.ImageId).ValueGeneratedNever();
+
+                entity.Property(e => e.FkId).HasColumnName("FK_Id");
+
+                entity.Property(e => e.StorageLocation).IsRequired();
+
+                entity.Property(e => e.TableName).IsRequired();
+            });
+
             modelBuilder.Entity<Outlet>(entity =>
             {
                 entity.Property(e => e.OutletId).HasColumnType("decimal(18, 0)");
@@ -239,6 +265,67 @@ namespace DataLayer.MSSQL
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Outlets_User");
+            });
+
+            modelBuilder.Entity<Product>(entity =>
+            {
+                entity.Property(e => e.ProductId).ValueGeneratedNever();
+
+                entity.Property(e => e.ProductName)
+                    .IsRequired()
+                    .HasMaxLength(120);
+
+                entity.Property(e => e.ShortDescription)
+                    .HasMaxLength(10)
+                    .IsFixedLength(true);
+
+                entity.HasOne(d => d.Category)
+                    .WithMany(p => p.Products)
+                    .HasForeignKey(d => d.CategoryId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Products_Categories");
+            });
+
+            modelBuilder.Entity<ProductAttribute>(entity =>
+            {
+                entity.HasKey(e => e.AttributeId);
+
+                entity.Property(e => e.AttributeId).ValueGeneratedNever();
+
+                entity.Property(e => e.AttributeValues)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .IsFixedLength(true);
+
+                entity.HasOne(d => d.AttributeTypesNavigation)
+                    .WithMany(p => p.ProductAttributes)
+                    .HasForeignKey(d => d.AttributeTypes)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProductAttributes_CommonCodes");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.ProductAttributes)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProductAttributes_Products");
+            });
+
+            modelBuilder.Entity<ProductUnitType>(entity =>
+            {
+                entity.HasKey(e => e.UnitTypeIds)
+                    .HasName("PK__ProductU__5085C454884EB7EB");
+
+                entity.Property(e => e.UnitTypeIds).ValueGeneratedNever();
+
+                entity.Property(e => e.Status)
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
+
+                entity.Property(e => e.UnitTypeNames)
+                    .HasMaxLength(200)
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
             });
 
             modelBuilder.Entity<Service>(entity =>

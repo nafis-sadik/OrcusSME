@@ -27,7 +27,7 @@ namespace Services.Orcus.Implementation
 
         public IEnumerable<ProductUnitTypeModel> GetProductUnitTypes()
         {
-            return _productUnitTypeRepo.GetAll().Select(x =>
+            return _productUnitTypeRepo.AsQueryable().Where(x => x.Status == CommonConstants.StatusTypes.Active).Select(x =>
                 new ProductUnitTypeModel {
                     UnitTypeId = x.UnitTypeIds,
                     UnitTypeName = x.UnitTypeNames
@@ -40,8 +40,9 @@ namespace Services.Orcus.Implementation
             {
                 _productUnitTypeRepo.Add(new ProductUnitType
                 {
-                    UnitTypeIds = productUnitType.UnitTypeId,
-                    UnitTypeNames = productUnitType.UnitTypeName
+                    UnitTypeIds = _productUnitTypeRepo.GetMaxPK("UnitTypeIds") + 1,
+                    UnitTypeNames = productUnitType.UnitTypeName,
+                    Status = CommonConstants.StatusTypes.Active
                 });
                 return true;
             }
