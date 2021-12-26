@@ -53,7 +53,7 @@ namespace Services.Orcus.Implementation
                 _outletManagerRepo.Rollback();
 
                 int pk;
-                if (_crashLogRepo.AsQueryable().Any())
+                if (!_crashLogRepo.AsQueryable().Any())
                     pk = 0;
                 else
                     pk = _crashLogRepo.AsQueryable().Max(x => x.CrashLogId) + 1;

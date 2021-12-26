@@ -2,12 +2,17 @@
 using UMS.Services.Abstraction;
 using Models;
 using DataLayer;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace WebAPI.Controllers
 {
     [Route("api/User")]
     [ApiController]
-    public class UserController
+    public class UserController: ControllerBase
     {
         private readonly IUserService _userServices;
         public UserController(IUserService userServices)
@@ -31,8 +36,15 @@ namespace WebAPI.Controllers
 
         [HttpPut]
         [Route("SignUp")]
-        public IActionResult SignUp(UserModel user)
+        public async Task<IActionResult> SignUp()
         {
+            UserModel user;
+            using (StreamReader reader = new StreamReader(Request.Body))
+            {
+                string body = await reader.ReadToEndAsync();
+                user = JsonSerializer.Deserialize<UserModel>(body);
+            }
+
             bool? signUpResponse = _userServices.SignUp(user, out string token, out string userId);
             if (signUpResponse == true)
                 return new OkObjectResult(new { Response = token, UserId = userId });

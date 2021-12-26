@@ -19,6 +19,7 @@ NestableInit = (SerializerId) => {
         if(SerializerId != '') {
             $(SerializerId).val(serializedData);
         }
+        
         // $this.parents('div.body').find('textarea').val(serializedData);
     });
 }

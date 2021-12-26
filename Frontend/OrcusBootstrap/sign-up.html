@@ -100,13 +100,13 @@
                         </div>                        
                     </div>
                     <div class="checkbox">
-                        <input id="terms" type="checkbox" required>
+                        <input id="terms" type="checkbox">
                         <label for="terms">
                                 I read and agree to the <a href="javascript:void(0);">terms of usage</a>
                         </label>
                     </div>
                     <div class="footer text-center">
-                        <button id="SignUp" class="btn btn-primary btn-round btn-lg btn-block waves-effect waves-light">SIGN UP</button>                        
+                        <button id="SignUp" type="submit" class="btn btn-primary btn-round btn-lg btn-block waves-effect waves-light">SIGN UP</button>                        
                     </div>
                 </form>
             </div>
@@ -144,43 +144,58 @@
     });
 
     $(document).ready(function(){
-        $('#SignUpForm').on("submit",(element) => {
-            element.preventDefault();
-            $.ajax({
-                url: 'https://localhost:44375/api/User/SignUp',
-                type: 'PUT',
-                data: {
-                    UserName: $('#UserName').val(),
-                    DefaultEmail: $('#DefaultEmail').val(),
-                    Password: $('#Password').val()
-                },
-                success: (res) => {
-                    localStorage.setItem('token', res);
-                    localStorage.setItem('userId', res.userId);
-                    window.location.href = "/";
-                },
-                error: (res) => {
-                    let msg = res.responseText.split(',');
-                    let msg1 = msg[0];
-                    let msg2 = '';
-                    if(msg.length > 1){
-                        msg2 = msg[1];
-                    }
-                    
-                    swal.fire({
-                        title: msg1,
-                        text: msg2,
-                        icon: "error"
-                    });
-                    console.log(res);
-                }
-            });
-        });
-        
         if (localStorage.getItem("token") !== null) {
             window.location.href = "/";
         }
+
+        $('#SignUpForm').on("submit",(element) => {
+            element.preventDefault();
+            SignUp();
+        });
     });
+
+    let SignUp = () => {
+        if(!$('#terms').is(':checked')){
+            swal.fire({
+                    title: 'You must agree to our terms and conditions to sign up',
+                    text: 'Check the box right above signup button if you agree with our terms and conditions',
+                    icon: "error"
+                });
+            console.log('boom')
+            return;
+        }
+        
+        $.ajax({
+            url: 'https://localhost:44375/api/User/SignUp',
+            headers: 'Access-Control-Allow-Origin: *',
+            type: 'PUT',
+            data: JSON.stringify({
+                UserName: $('#UserName').val(),
+                DefaultEmail: $('#DefaultEmail').val(),
+                Password: $('#Password').val()
+            }),
+            success: (res) => {
+                console.log(res)
+                localStorage.setItem('token', res.response);
+                localStorage.setItem('userId', res.userId);
+                window.location.href = "/";
+            },
+            error: (res) => {
+                let msg = res.responseJSON.response.split(',');
+                let msg1 = msg[0];
+                let msg2 = '';
+                if(msg.length > 1){
+                    msg2 = msg[1];
+                }
+                
+                swal.fire({
+                    title: msg1,
+                    text: msg2,
+                    icon: "error"
+                });
+            }
+        });
+    }
 </script>
 </body>
 </html>

@@ -5,9 +5,9 @@ const controller = (_url, _method = 'GET', _containerId = 'Container') => {
         url: _url,
         method: _method,
         success: (res) => {
+            setTimeout(() => { $('.page-loader-wrapper').fadeOut(); }, 300);
             $(_containerId).empty();
             $(_containerId).append(res);
-            setTimeout(() => { $('.page-loader-wrapper').fadeOut(); }, 50);
             if(typeof(onLoad) === 'function'){
                 onLoad();
                 onLoad = null;
@@ -77,7 +77,7 @@ async function serviceWorkerRegistration () {
 
 const resetForm = (id) => {
     if(id[0] != '#') { id = '#' + id; }
-    $(id)[0].reset();
+    $(id).trigger("reset");
     $(id + ' select').val('');
     $(id + ' select').selectpicker('refresh');
 }

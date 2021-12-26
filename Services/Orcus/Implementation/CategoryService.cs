@@ -40,7 +40,7 @@ namespace Services.Orcus.Implementation
                     Status = CommonConstants.StatusTypes.Active
                 });
 
-                return GetCategoriesByOutlets((int)category.outletId);
+                return GetCategoriesByOutlets(category.outletId);
             }
             catch (Exception ex)
             {
@@ -107,7 +107,7 @@ namespace Services.Orcus.Implementation
                         outletId = (int)x.OutletId,
                         ParentCategoryId = x.ParentCategoryId,
                         UserId = x.Outlet.UserId
-                    }).ToList();
+                    }).OrderBy(x => x.ParentCategoryId).ToList();
 
                 return response;
             }

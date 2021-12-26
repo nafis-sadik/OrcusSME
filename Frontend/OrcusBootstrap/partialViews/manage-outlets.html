@@ -140,11 +140,18 @@
     $('#UpdateOutlets').on("submit", (element) => {
         element.preventDefault();
 
+        outletId = $('#UpdateOutlets_OutletId').val();
+        if (outletId == null || outletId == undefined || outletId == '')
+        {
+            resetForm('UpdateOutlets');
+            return;
+        }
+
         let param = {
             URL: Route.Base + Route.Outlet.Update,
             Method: 'POST',
             Data: {
-                OutletId: $('#UpdateOutlets_OutletId').val(),
+                OutletId: outletId,
                 OutletName: $('#UpdateOutlets_OutletName').val(),
                 OutletAddresss: $('#UpdateOutlets_OutletAddress').val(),
                 userId: localStorage.getItem('userId')
@@ -162,12 +169,17 @@
 
     $('#ArchiveOutlets').on("submit", (element) => {
         element.preventDefault();
-
+        outletId = $('#ArchiveOutlets_Select').val();
+        if (outletId == null || outletId == undefined || outletId == '')
+        {
+            resetForm('ArchiveOutlets');
+            return;
+        }
         let param = {
             URL: Route.Base + Route.Outlet.Archive,
             Method: 'POST',
             Data: {
-                OutletId: $('#ArchiveOutlets_Select').val(),
+                OutletId: outletId,
                 userId: localStorage.getItem('userId')
             },
             Success: (res) => {
@@ -182,9 +194,14 @@
 
     $('#SiteOrder').on("submit", (element) => {
         element.preventDefault();
-
+        outletId = $('#ArchiveOutlets_Select').val();
+        if (outletId == null || outletId == undefined || outletId == '')
+        {
+            resetForm('SiteOrder');
+            return;
+        }
         let param = {
-            URL: Route.Base + Route.Outlet.OrderSite + '/' + $('#SiteOrder_Select').val(),
+            URL: Route.Base + Route.Outlet.OrderSite + '/' + outletId,
             Method: 'GET',
             Success: (res) => {
                 let messages = res.response.split('</br>');
@@ -202,8 +219,15 @@
     });
 
     $('#UpdateOutlets_Select').on('change', (element) => {
+        outletId = $(element.target).val();
+        if (outletId == null || outletId == undefined || outletId == '')
+        {
+            // console.log(String($(element.target).attr('id').toString()));
+            resetForm('#UpdateOutlets');
+            return;
+        }
         let param = {
-            URL: Route.Base + Route.Outlet.GetOutlet + '/' + $(element.target).val(),
+            URL: Route.Base + Route.Outlet.GetOutlet + '/' + outletId,
             Method: 'GET',
             Data: null,
             Success: (res) => {

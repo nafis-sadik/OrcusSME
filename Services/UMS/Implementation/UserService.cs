@@ -84,7 +84,7 @@ namespace UMS.Services.Implementation
                 return null;
             }
 
-            EmailAddress email = _emailIdRepo.AsQueryable().FirstOrDefault(x => x.EmailAddress1 == user.DefaultEmail);
+            EmailAddress email = _emailIdRepo.AsQueryable().FirstOrDefault(x => Convert.ToString(x.EmailAddress1) == user.DefaultEmail);
             if (email != null)
             {
                 token = CommonConstants.HttpResponseMessages.MailExists;
@@ -111,10 +111,10 @@ namespace UMS.Services.Implementation
                 if (_emailIdRepo.AsQueryable().Count() <= 0)
                     pk = 0;
                 else
-                    pk = _emailIdRepo.AsQueryable().Max(x => x.EmailPk) + 1;
+                    pk = _emailIdRepo.AsQueryable().Max(x => x.EmailPk);
 
                 _emailIdRepo.Add(new EmailAddress {
-                    EmailPk = pk,
+                    EmailPk = pk + 1,
                     UserId = userId,
                     IsPrimaryMail = CommonConstants.True,
                     EmailAddress1 = user.DefaultEmail,

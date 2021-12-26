@@ -144,7 +144,7 @@
         // Refresh Category Hierarchy
         $('#CategoryHierarchy').empty();
         $.each(res.response, (index, category) => {
-            if(category.parentCategoryId == 0 || category.parentCategoryId == null || category.parentCategoryId == NaN){
+            if(category.parentCategoryId == undefined || category.parentCategoryId == null || category.parentCategoryId == NaN){
                 $('#CategoryHierarchy').append(
                     '<li class="dd-item" data-id="'+ category.categoryId +'">'
                         + '<div class="dd-handle dd3-handle"></div>'
@@ -157,7 +157,7 @@
                 if($(targetElement).find('.dd-list').length <= 0){
                     $(targetElement).append(
                     '<ol class="dd-list">'+
-                        '<li class="dd-item" data-id="3">'+
+                        '<li class="dd-item" data-id="' + category.categoryId + '">'+
                             '<div class="dd-handle dd3-handle"></div>'+
                             '<div class="dd3-content">' + category.categoryName + '</div>'+
                         '</li>'+
@@ -165,7 +165,7 @@
                 }
                 else{
                     $(targetElement).find('.dd-list').append(
-                        '<li class="dd-item" data-id="3">'+
+                        '<li class="dd-item" data-id="' + category.categoryId + '">'+
                             '<div class="dd-handle dd3-handle"></div>'+
                             '<div class="dd3-content">' + category.categoryName + '</div>'+
                         '</li>'
@@ -272,6 +272,7 @@
             Method: 'GET',
             Data: null,
             Success: (res) => {
+                $('#CategoryHierarchyJson').val(res);
                 RemoveCategoryDropdownRefresh(res);
                 CategoryHirarchyRefresh(res);
             },
