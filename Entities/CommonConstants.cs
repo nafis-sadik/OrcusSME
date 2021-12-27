@@ -39,6 +39,8 @@ namespace DataLayer
         }
         public static class ActivityTypes
         {
+            public const string Purchase = "Purchase";
+            public const string Sell = "Sell";
             public const string LogIn = "Log In Attempt";
             public const string SignUp = "Sign Up Attempt";
             public const string GetData = "D";

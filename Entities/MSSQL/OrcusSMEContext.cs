@@ -9,8 +9,8 @@ namespace DataLayer.MSSQL
 {
     public partial class OrcusSMEContext : DbContext
     {
-        // Scafolding Command
-        // Scaffold-DbContext "User Id=DESKTOP-BHB3CJL;Database=OrcusSME;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer
+        // Scaffold-DbContext "User Id=DESKTOP-BHB3CJL;Database=OrcusSME;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer 
+
         public OrcusSMEContext()
         {
         }
@@ -61,6 +61,8 @@ namespace DataLayer.MSSQL
 
             modelBuilder.Entity<Address>(entity =>
             {
+                entity.HasIndex(e => e.UserId, "IX_Addresses_UserId");
+
                 entity.Property(e => e.AddressId).ValueGeneratedNever();
 
                 entity.Property(e => e.GoogleMapsLocation).HasColumnType("text");
@@ -93,6 +95,8 @@ namespace DataLayer.MSSQL
 
             modelBuilder.Entity<Category>(entity =>
             {
+                entity.HasIndex(e => e.OutletId, "IX_Categories_OutletId");
+
                 entity.Property(e => e.CategoryId).ValueGeneratedNever();
 
                 entity.Property(e => e.CategoryName)
@@ -124,6 +128,8 @@ namespace DataLayer.MSSQL
             modelBuilder.Entity<ContactNumber>(entity =>
             {
                 entity.HasNoKey();
+
+                entity.HasIndex(e => e.UserId, "IX_ContactNumbers_UserId");
 
                 entity.Property(e => e.IsBkash)
                     .HasMaxLength(1)
@@ -192,12 +198,14 @@ namespace DataLayer.MSSQL
                 entity.HasKey(e => e.EmailPk)
                     .HasName("PK__EmailAdd__41EF875392D05F62");
 
+                entity.HasIndex(e => e.UserId, "IX_EmailAddresses_UserId");
+
                 entity.Property(e => e.EmailPk)
                     .ValueGeneratedNever()
                     .HasColumnName("EMailPk");
 
                 entity.Property(e => e.EmailAddress1)
-                    .HasColumnType("text")
+                    .HasMaxLength(50)
                     .HasColumnName("EmailAddress");
 
                 entity.Property(e => e.IsPrimaryMail)
@@ -235,6 +243,8 @@ namespace DataLayer.MSSQL
 
             modelBuilder.Entity<Outlet>(entity =>
             {
+                entity.HasIndex(e => e.UserId, "IX_Outlets_UserId");
+
                 entity.Property(e => e.OutletId).HasColumnType("decimal(18, 0)");
 
                 entity.Property(e => e.EcomUrl)
@@ -269,6 +279,8 @@ namespace DataLayer.MSSQL
 
             modelBuilder.Entity<Product>(entity =>
             {
+                entity.HasIndex(e => e.CategoryId, "IX_Products_CategoryId");
+
                 entity.Property(e => e.ProductId).ValueGeneratedNever();
 
                 entity.Property(e => e.ProductName)
@@ -284,11 +296,21 @@ namespace DataLayer.MSSQL
                     .HasForeignKey(d => d.CategoryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Products_Categories");
+
+                entity.HasOne(d => d.ProductUnitType)
+                    .WithMany(p => p.Products)
+                    .HasForeignKey(d => d.ProductUnitTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Products_ProductUnitTypes");
             });
 
             modelBuilder.Entity<ProductAttribute>(entity =>
             {
                 entity.HasKey(e => e.AttributeId);
+
+                entity.HasIndex(e => e.AttributeTypes, "IX_ProductAttributes_AttributeTypes");
+
+                entity.HasIndex(e => e.ProductId, "IX_ProductAttributes_ProductId");
 
                 entity.Property(e => e.AttributeId).ValueGeneratedNever();
 
@@ -350,6 +372,10 @@ namespace DataLayer.MSSQL
                 entity.HasNoKey();
 
                 entity.ToTable("SubscriptionLog");
+
+                entity.HasIndex(e => e.SubscriptionId, "IX_SubscriptionLog_SubscriptionId");
+
+                entity.HasIndex(e => e.UserId, "IX_SubscriptionLog_UserId");
 
                 entity.Property(e => e.ExpirationDate).HasColumnType("datetime");
 
@@ -421,6 +447,10 @@ namespace DataLayer.MSSQL
                     .HasName("PK__UserActi__19A9B7B9B06B38FA");
 
                 entity.ToTable("UserActivityLog");
+
+                entity.HasIndex(e => e.ActivityTypeId, "IX_UserActivityLog_ActivityTypeId");
+
+                entity.HasIndex(e => e.UserId, "IX_UserActivityLog_UserId");
 
                 entity.Property(e => e.ActivityLogIn).ValueGeneratedNever();
 

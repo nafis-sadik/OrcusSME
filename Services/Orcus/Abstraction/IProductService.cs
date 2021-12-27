@@ -12,5 +12,7 @@ namespace Services.Orcus.Abstraction
     {
         public IEnumerable<ProductUnitTypeModel> GetProductUnitTypes();
         public bool AddProductUnitTypes(ProductUnitTypeModel productUnitType);
+        public bool PurchaseProduct(ProductModel product);
+        public bool SellProduct(ProductModel product);
     }
 }

@@ -155,6 +155,12 @@
             var subCategories = [];
 
             $('#Outlets').change(() => {
+                $('#Category').empty();
+                $('#Category').append('<option value=""> -- Please select -- </option>');
+                if ($('#Outlets').val() == ''){
+                    resetForm('PurchaseForm');
+                    return;
+                }
                 let param = {
                     URL: Route.Base + Route.Categories.Get + $("#Outlets").val(),
                     Method: 'GET',
@@ -179,7 +185,14 @@
             });
 
             $('#Category').change(() => {
+                $('#SubCategory').empty();
+                $('#SubCategory').append('<option value=""> -- Please select -- </option>');
+                if ($('#Category').val() == ''){
+                    resetForm('PurchaseForm');
+                    return;
+                }
                 $.each(subCategories, (key, subCategory) => {
+                    debugger
                     if(subCategory.parentCategoryId != null){
                         $('#SubCategory').append(
                             '<option value="'+ subCategory.categoryId +'">' + subCategory.categoryName + '</option>'

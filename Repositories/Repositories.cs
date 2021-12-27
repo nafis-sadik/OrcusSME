@@ -41,4 +41,14 @@ namespace Repositories
     {
         public ProductUnitTypeRepo(OrcusSMEContext context) : base(context) { }
     }
+    public interface IInventoryLogRepo : IRepositoryBase<InventoryLog> { }
+    public class InventoryLogRepo : RepositoryBase<InventoryLog>, IInventoryLogRepo
+    {
+        public InventoryLogRepo(OrcusSMEContext context) : base(context) { }
+    }
+    public interface IProductRepo : IRepositoryBase<Product> { }
+    public class ProductRepo : RepositoryBase<Product>, IProductRepo
+    {
+        public ProductRepo(OrcusSMEContext context) : base(context) { }
+    }
 }
