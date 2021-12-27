@@ -164,7 +164,56 @@ namespace Services.Orcus.Implementation
 
         public bool SellProduct(ProductModel product)
         {
-            throw new NotImplementedException();
+            int pk;
+            try{
+                Product productData = _productRepo.Get(product.ProductId);
+                productData.Quantity -= product.Quantity;
+                _productRepo.Update(productData);
+                
+
+                int count = _inventoryLogRepo.AsQueryable().Count();
+                if (count <= 0)
+                    pk = 1;
+                else
+                    pk = count + 1;
+
+                _inventoryLogRepo.Add(new InventoryLog
+                {
+                    InventoryLogId = pk,
+                    ActivityDate = DateTime.Now,
+                    InventoryUpdateType = CommonConstants.ActivityTypes.Sell,
+                    Price = product.SellingPrice,
+                    ProductId = productData.ProductId,
+                    Quantity = productData.Quantity,
+                });
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _productUnitTypeRepo.Rollback();
+
+                if (_crashLogRepo.AsQueryable().Any())
+                    pk = 0;
+                else
+                    pk = _crashLogRepo.AsQueryable().Max(x => x.CrashLogId) + 1;
+
+                if (ex.InnerException != null)
+                    _crashLogRepo.Add(new Crashlog
+                    {
+                        CrashLogId = pk,
+                        ClassName = "ProductService",
+                        MethodName = "SellProduct",
+                        ErrorMessage = ex.Message,
+                        ErrorInner =
+                            (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException
+                                ? ex.InnerException.Message
+                                : ex.Message),
+                        Data = JsonSerializer.Serialize(product),
+                        TimeStamp = DateTime.Now
+                    });
+                return false;
+            }
         }
     }
 }
