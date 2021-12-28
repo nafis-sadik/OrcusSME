@@ -46,6 +46,30 @@ namespace WebAPI.Controllers
                 return Conflict(new { Response = CommonConstants.HttpResponseMessages.Exception });
         }
 
+        [Authorize]
+        [HttpPost]
+        [Route("Purchase")]
+        public IActionResult Purchase(ProductModel purchaseModel)
+        {
+            if (_productService.PurchaseProduct(purchaseModel))
+                return Ok(new { Response = "Success" });
+            else
+                return Conflict(new { Response = CommonConstants.HttpResponseMessages.Exception });
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("Sell")]
+        public IActionResult Sell(ProductModel purchaseModel)
+        {
+            if (_productService.SellProduct(purchaseModel) == true)
+                return Ok(new { Response = "Success" });
+            else if (_productService.SellProduct(purchaseModel) == null)
+                return Conflict(new { Response = "Product not found" });
+            else
+                return Conflict(new { Response = CommonConstants.HttpResponseMessages.Exception });
+        }
+
         //[Authorize]
         //[HttpPut]
         //[Route("ProductUnitTypes")]

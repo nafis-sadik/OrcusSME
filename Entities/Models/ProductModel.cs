@@ -15,5 +15,6 @@
         public int Quantity { get; set; }
         public int PurchasingPrice { get; set; }
         public int SellingPrice { get; set; }
+        public float DueAmount { get; set; }
     }
 }

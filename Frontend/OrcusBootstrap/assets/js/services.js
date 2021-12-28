@@ -16,8 +16,7 @@ const Route = {
         SaveHierarchy: '/Categories/SaveHierarchy/'
     },
     Product: {
-        Add: '/Product/ProductUnitTypes/',
-        Get: '/Product/ProductUnitTypes/',
+        UnitType: '/Product/ProductUnitTypes/',
     }
 }
 

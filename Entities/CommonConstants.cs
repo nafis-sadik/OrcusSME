@@ -55,7 +55,7 @@ namespace DataLayer
             public const string Exception = "An error occurred while executing operation. Please contact support team.";
         }
 
-        public const string MsgInInnerException = "An error occurred while updating the entries. See the inner exception for details.";
+        public const string MsgInInnerException = "See the inner exception for details.";
 
         public const int DefaultCreditBalance = 1000;
     }

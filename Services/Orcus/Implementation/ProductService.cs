@@ -21,6 +21,7 @@ namespace Services.Orcus.Implementation
         private readonly ICrashLogRepo _crashLogRepo;
         private readonly IInventoryLogRepo _inventoryLogRepo;
         private readonly IProductRepo _productRepo;
+
         public ProductService()
         {
             OrcusSMEContext context = new OrcusSMEContext(new DbContextOptions<OrcusSMEContext>());
@@ -41,40 +42,46 @@ namespace Services.Orcus.Implementation
 
         public bool AddProductUnitTypes(ProductUnitTypeModel productUnitType)
         {
+            int pk;
             try
             {
+                if (!_productUnitTypeRepo.AsQueryable().Any())
+                    pk = 0;
+                else
+                    pk = _productUnitTypeRepo.GetMaxPK("UnitTypeIds");
+
                 _productUnitTypeRepo.Add(new ProductUnitType
                 {
-                    UnitTypeIds = _productUnitTypeRepo.GetMaxPK("UnitTypeIds") + 1,
+                    UnitTypeIds = pk + 1,
                     UnitTypeNames = productUnitType.UnitTypeName,
                     Status = CommonConstants.StatusTypes.Active
                 });
+
                 return true;
             }
             catch (Exception ex)
             {
                 _productUnitTypeRepo.Rollback();
 
-                int pk;
-                if (_crashLogRepo.AsQueryable().Any())
+                if (!_crashLogRepo.AsQueryable().Any())
                     pk = 0;
                 else
-                    pk = _crashLogRepo.AsQueryable().Max(x => x.CrashLogId) + 1;
+                    pk = _crashLogRepo.GetMaxPK("CrashLogId") + 1;
 
-                if (ex.InnerException != null)
-                    _crashLogRepo.Add(new Crashlog
-                    {
-                        CrashLogId = pk,
-                        ClassName = "ProductService",
-                        MethodName = "AddProductUnitTypes",
-                        ErrorMessage = ex.Message,
-                        ErrorInner =
-                            (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException
-                                ? ex.InnerException.Message
-                                : ex.Message),
-                        Data = productUnitType.UserId,
-                        TimeStamp = DateTime.Now
-                    });
+                string msg = (string.IsNullOrEmpty(ex.Message) || ex.Message.ToLower().Contains(CommonConstants.MsgInInnerException.ToLower()))
+                            ? ex.InnerException.Message
+                            : ex.Message;
+                _crashLogRepo.Add(new Crashlog
+                {
+                    CrashLogId = pk,
+                    ClassName = "ProductService",
+                    MethodName = "AddProductUnitTypes",
+                    ErrorMessage = ex.Message,
+                    ErrorInner = msg,
+                    Data = JsonSerializer.Serialize(productUnitType),
+                    TimeStamp = DateTime.Now
+                });
+
                 return false;
             }
         }
@@ -84,44 +91,34 @@ namespace Services.Orcus.Implementation
             int pk;
             try
             {
-                Product productData;
-                int count;
+                Product productData = new Product();
                 if (product.ProductId != 0)
-                {
                     productData = _productRepo.Get(product.ProductId);
-                    productData.ProductName = product.ProductName;
-                    productData.CategoryId = product.CategoryId;
-                    productData.Description = product.ProductDescription;
-                    productData.ProductUnitTypeId = product.UnitType;
-                    productData.Quantity += product.Quantity;
-                    productData.Price = product.SellingPrice;
-                    _productRepo.Update(productData);
-                }
                 else
                 {
-                    count = _productRepo.AsQueryable().Count();
-                    if (count <= 0)
-                        pk = 1;
+                    if (!_productRepo.AsQueryable().Any())
+                        productData.ProductId = 1;
                     else
-                        pk = count + 1;
-                    productData = new Product();
-                    productData.ProductId = pk;
-                    productData.ProductName = product.ProductName;
-                    productData.CategoryId = product.CategoryId;
-                    productData.Description = product.ProductDescription;
-                    productData.ShortDescription = product.ShortDescription;
-                    productData.Specifications = product.ProductSpecs;
-                    productData.Price = product.SellingPrice;
-                    productData.ProductUnitTypeId = product.UnitType;
-                    productData.Quantity = product.Quantity;
-                    _productRepo.Add(productData);
+                        productData.ProductId = _productRepo.AsQueryable().Count() + 1;
                 }
+                productData.ProductName = product.ProductName;
+                productData.CategoryId = product.CategoryId;
+                productData.Description = product.ProductDescription;
+                productData.ProductUnitTypeId = product.UnitType;
+                productData.Price = product.SellingPrice;
+                productData.Quantity = product.Quantity;
+                productData.ShortDescription = product.ShortDescription;
+                productData.Specifications = product.ProductSpecs;
 
-                count = _inventoryLogRepo.AsQueryable().Count();
-                if (count <= 0)
+                if (product.ProductId != 0)
+                    _productRepo.Update(productData);
+                else
+                    _productRepo.Add(productData);
+
+                if (!_inventoryLogRepo.AsQueryable().Any())
                     pk = 1;
                 else
-                    pk = count + 1;
+                    pk = _inventoryLogRepo.AsQueryable().Count() + 1;
 
                 _inventoryLogRepo.Add(new InventoryLog
                 {
@@ -139,43 +136,43 @@ namespace Services.Orcus.Implementation
             {
                 _productUnitTypeRepo.Rollback();
 
-                if (_crashLogRepo.AsQueryable().Any())
+                if (!_crashLogRepo.AsQueryable().Any())
                     pk = 0;
                 else
-                    pk = _crashLogRepo.AsQueryable().Max(x => x.CrashLogId) + 1;
+                    pk = _crashLogRepo.GetMaxPK("CrashLogId") + 1;
 
-                if (ex.InnerException != null)
-                    _crashLogRepo.Add(new Crashlog
-                    {
-                        CrashLogId = pk,
-                        ClassName = "ProductService",
-                        MethodName = "PurchaseProduct",
-                        ErrorMessage = ex.Message,
-                        ErrorInner =
-                            (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException
-                                ? ex.InnerException.Message
-                                : ex.Message),
-                        Data = JsonSerializer.Serialize(product),
-                        TimeStamp = DateTime.Now
-                    });
+                string msg = (string.IsNullOrEmpty(ex.Message) || ex.Message.ToLower().Contains(CommonConstants.MsgInInnerException.ToLower()))
+                            ? ex.InnerException.Message
+                            : ex.Message;
+                _crashLogRepo.Add(new Crashlog
+                {
+                    CrashLogId = pk,
+                    ClassName = "ProductService",
+                    MethodName = "PurchaseProduct",
+                    ErrorMessage = ex.Message,
+                    ErrorInner = msg,
+                    Data = JsonSerializer.Serialize(product),
+                    TimeStamp = DateTime.Now
+                });
+
                 return false;
             }
         }
 
-        public bool SellProduct(ProductModel product)
+        public bool? SellProduct(ProductModel product)
         {
             int pk;
             try{
                 Product productData = _productRepo.Get(product.ProductId);
+                if (productData == null) return null;
                 productData.Quantity -= product.Quantity;
                 _productRepo.Update(productData);
                 
 
-                int count = _inventoryLogRepo.AsQueryable().Count();
-                if (count <= 0)
+                if (!_inventoryLogRepo.AsQueryable().Any())
                     pk = 1;
                 else
-                    pk = count + 1;
+                    pk = _inventoryLogRepo.AsQueryable().Count() + 1;
 
                 _inventoryLogRepo.Add(new InventoryLog
                 {
@@ -193,25 +190,25 @@ namespace Services.Orcus.Implementation
             {
                 _productUnitTypeRepo.Rollback();
 
-                if (_crashLogRepo.AsQueryable().Any())
+                if (!_crashLogRepo.AsQueryable().Any())
                     pk = 0;
                 else
-                    pk = _crashLogRepo.AsQueryable().Max(x => x.CrashLogId) + 1;
+                    pk = _crashLogRepo.GetMaxPK("CrashLogId") + 1;
 
-                if (ex.InnerException != null)
-                    _crashLogRepo.Add(new Crashlog
-                    {
-                        CrashLogId = pk,
-                        ClassName = "ProductService",
-                        MethodName = "SellProduct",
-                        ErrorMessage = ex.Message,
-                        ErrorInner =
-                            (string.IsNullOrEmpty(ex.Message) || ex.Message == CommonConstants.MsgInInnerException
-                                ? ex.InnerException.Message
-                                : ex.Message),
-                        Data = JsonSerializer.Serialize(product),
-                        TimeStamp = DateTime.Now
-                    });
+                string msg = (string.IsNullOrEmpty(ex.Message) || ex.Message.ToLower().Contains(CommonConstants.MsgInInnerException.ToLower()))
+                            ? ex.InnerException.Message
+                            : ex.Message;
+                _crashLogRepo.Add(new Crashlog
+                {
+                    CrashLogId = pk,
+                    ClassName = "ProductService",
+                    MethodName = "SellProduct",
+                    ErrorMessage = ex.Message,
+                    ErrorInner = msg,
+                    Data = JsonSerializer.Serialize(product),
+                    TimeStamp = DateTime.Now
+                });
+
                 return false;
             }
         }
