@@ -105,7 +105,7 @@ namespace Services.Orcus.Implementation
                 productData.CategoryId = product.CategoryId;
                 productData.Description = product.ProductDescription;
                 productData.ProductUnitTypeId = product.UnitType;
-                productData.Price = product.SellingPrice;
+                productData.Price = product.RetailPrice;
                 productData.Quantity = product.Quantity;
                 productData.ShortDescription = product.ShortDescription;
                 productData.Specifications = product.ProductSpecs;
@@ -179,7 +179,7 @@ namespace Services.Orcus.Implementation
                     InventoryLogId = pk,
                     ActivityDate = DateTime.Now,
                     InventoryUpdateType = CommonConstants.ActivityTypes.Sell,
-                    Price = product.SellingPrice,
+                    Price = product.RetailPrice,
                     ProductId = productData.ProductId,
                     Quantity = productData.Quantity,
                 });

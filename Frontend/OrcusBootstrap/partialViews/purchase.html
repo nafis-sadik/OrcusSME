@@ -262,18 +262,26 @@
 
         $('#PurchaseForm').on('submit', (element) => {
             element.preventDefault();
-            console.log(JSON.stringify({
-                OutletId: $('#Outlets').val(),
-                CategoryId: $('#Category').val(),
-                SubCategoryId: $('#SubCategory').val(),
-                ProductName: $('#ProductName').val(),
-                UnitId: $('#Unit').val(),
-                Quantity: $('#Quantity').val(),
-                PurchasingPrice: $('#PurchasingPrice').val(),
-                RetailPrice: $('#RetailPrice').val(),
-                DueAmount: $('#DueAmount').val(),
-                ProductDescription: $('#ProductDescription').val(),
-            }));
+            let param = {
+                URL: Route.Base + Route.Categories.SaveHierarchy,
+                Method: 'POST',
+                Data: JSON.stringify({
+                    OutletId: $('#Outlets').val(),
+                    CategoryId: $('#Category').val(),
+                    SubCategoryId: $('#SubCategory').val(),
+                    ProductName: $('#ProductName').val(),
+                    UnitId: $('#Unit').val(),
+                    Quantity: $('#Quantity').val(),
+                    PurchasingPrice: $('#PurchasingPrice').val(),
+                    RetailPrice: $('#RetailPrice').val(),
+                    DueAmount: $('#DueAmount').val(),
+                    ProductDescription: $('#ProductDescription').val(),
+                }),
+                Success: (res) => {
+                    swal.fire('Successfully Saved!', '', "success");
+                }
+            };
+            APIConsumptionAuth(param);
             // dropzone.processQueue();
         })
     </script>
