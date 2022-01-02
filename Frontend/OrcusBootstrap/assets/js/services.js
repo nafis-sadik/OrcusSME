@@ -18,7 +18,8 @@ const Route = {
     Product: {
         UnitType: '/Product/ProductUnitTypes/',
         Purchase: '/Product/Purchase',
-        Sell: '/Product/Sell'
+        Sell: '/Product/Sell',
+        Inventory: '/Product/Inventory/'
     }
 }
 

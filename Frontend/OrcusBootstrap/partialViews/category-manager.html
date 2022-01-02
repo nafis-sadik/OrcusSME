@@ -5,7 +5,9 @@
                 <div class="header">
                     <h2><strong>Add or Remove Categories</strong></h2>
                     <ul class="header-dropdown">
-                        <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="zmdi zmdi-more"></i> </a>
+                        <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            aria-expanded="false">
+                                <i class="zmdi zmdi-more"></i> </a>
                             <ul class="dropdown-menu">
                                 <li><a href="javascript:void(0);">Action</a></li>
                                 <li><a href="javascript:void(0);">Another action</a></li>
@@ -18,7 +20,7 @@
                     </ul>
                 </div>
                 <div class="body">
-                    <div class="row clearfix">                        
+                    <div class="row clearfix">
                         <div class="col-sm-12">
                             <h1 class="card-inside-title">Select Outlet</h1>
                             <select id="OutletSelection" class="form-control show-tick">
@@ -34,31 +36,36 @@
                         <div class="form-group col-sm-12 col-lg-6">
                             <h1 class="card-inside-title">Add New Category</h1>
                             <input id="CategoryName" type="text" class="form-control btn" placeholder="Category Name">
-                            <button onclick="SaveCategories()" type="button" class="col-sm-12 btn btn-raised btn-primary btn-round waves-effect m-lg-l-20 custom-btn">Add</button>
+                            <button onclick="SaveCategories()" type="button"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            class="col-sm-12 btn btn-raised btn-primary btn-round waves-effect m-lg-l-20 custom-btn">Add</button>
                         </div>
                         <div class="col-sm-12 col-lg-6">
                             <h1 class="card-inside-title">Remove Category</h1>
                             <select id="RemoveCategorySelect" class="form-control show-tick">
                                 <option value="">-- Please select --</option>
                             </select>
-                            <button onclick="RemoveCategories()" type="button" class="col-sm-12 btn btn-raised btn-primary btn-round waves-effect m-lg-l-20 custom-btn">Remove</button>
+                            <button onclick="RemoveCategories()" type="button"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            class="col-sm-12 btn btn-raised btn-primary btn-round waves-effect m-lg-l-20 custom-btn">Remove</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>  
+</div>
 <div class="container-fluid">
-    <div class="row clearfix"> 
+    <div class="row clearfix">
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="header">
                     <h2>
-                        <strong>Manage Categories & Subcategories</strong><small>Drag & drop hierarchical list with mouse or touch</small>
+                        <strong>Manage Categories & Subcategories</strong><small>Drag & drop hierarchical list with
+                            mouse or touch</small>
                     </h2>
                     <ol class="header-dropdown">
-                        <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="zmdi zmdi-more"></i> </a>
+                        <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            aria-expanded="false">
+                                <i class="zmdi zmdi-more"></i> </a>
                             <ol class="dropdown-menu">
                                 <li><a href="javascript:void(0);">Action</a></li>
                                 <li><a href="javascript:void(0);">Another action</a></li>
@@ -126,16 +133,18 @@
                         </div>
                     </div>
                     <b>Output JSON</b>
-                    <textarea id="CategoryHierarchyJson" cols="30" rows="3" class="form-control no-resize" readonly></textarea>
+                    <textarea id="CategoryHierarchyJson" cols="30" rows="3" class="form-control no-resize"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    readonly></textarea>
                     <div class="row clearfix p-l-0 m-l-0 p-t-10">
                         <div class="col-sm-8"> </div>
-                        <button id="SaveCategoryHierarchy" role="menuitem" class="col-sm-4 btn btn-raised btn-primary waves-effect waves-light custom-btn p-l-0 m-l-0">Save</button>
+                        <button id="SaveCategoryHierarchy" role="menuitem"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        class="col-sm-4 btn btn-raised btn-primary waves-effect waves-light custom-btn p-l-0 m-l-0">Save</button>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- #END# Default Example --> 
-    </div>        
+        <!-- #END# Default Example -->
+    </div>
 </div>
 
 <script src="assets/js/pages/orcus/sortable-nestable.js"></script>
@@ -144,30 +153,30 @@
         // Refresh Category Hierarchy
         $('#CategoryHierarchy').empty();
         $.each(res.response, (index, category) => {
-            if(category.parentCategoryId == undefined || category.parentCategoryId == null || category.parentCategoryId == NaN){
+            if (category.parentCategoryId == undefined || category.parentCategoryId == null || category.parentCategoryId == NaN) {
                 $('#CategoryHierarchy').append(
-                    '<li class="dd-item" data-id="'+ category.categoryId +'">'
-                        + '<div class="dd-handle dd3-handle"></div>'
-                        + '<div class="dd3-content">'+ category.categoryName +'</div>'
-                    +'</li>'
+                    '<li class="dd-item" data-id="' + category.categoryId + '">'
+                    + '<div class="dd-handle dd3-handle"></div>'
+                    + '<div class="dd3-content">' + category.categoryName + '</div>'
+                    + '</li>'
                 );
             }
-            else{
+            else {
                 let targetElement = $('#CategoryHierarchy [data-id="' + category.parentCategoryId + '"]');
-                if($(targetElement).find('.dd-list').length <= 0){
+                if ($(targetElement).find('.dd-list').length <= 0) {
                     $(targetElement).append(
-                    '<ol class="dd-list">'+
-                        '<li class="dd-item" data-id="' + category.categoryId + '">'+
-                            '<div class="dd-handle dd3-handle"></div>'+
-                            '<div class="dd3-content">' + category.categoryName + '</div>'+
-                        '</li>'+
-                    '</ol>')
+                        '<ol class="dd-list">' +
+                        '<li class="dd-item" data-id="' + category.categoryId + '">' +
+                        '<div class="dd-handle dd3-handle"></div>' +
+                        '<div class="dd3-content">' + category.categoryName + '</div>' +
+                        '</li>' +
+                        '</ol>')
                 }
-                else{
+                else {
                     $(targetElement).find('.dd-list').append(
-                        '<li class="dd-item" data-id="' + category.categoryId + '">'+
-                            '<div class="dd-handle dd3-handle"></div>'+
-                            '<div class="dd3-content">' + category.categoryName + '</div>'+
+                        '<li class="dd-item" data-id="' + category.categoryId + '">' +
+                        '<div class="dd-handle dd3-handle"></div>' +
+                        '<div class="dd3-content">' + category.categoryName + '</div>' +
                         '</li>'
                     );
                 }
@@ -186,7 +195,7 @@
         $('#RemoveCategorySelect').append('<option value="">-- Please select --</option>');
         $.each(res.response, (index, category) => {
             $('#RemoveCategorySelect').append(
-                '<option value="'+ category.categoryId +'">'+ category.categoryName +'</option>'
+                '<option value="' + category.categoryId + '">' + category.categoryName + '</option>'
             );
         })
         $('#RemoveCategorySelect').selectpicker('refresh');
@@ -194,13 +203,13 @@
 
     SaveCategories = () => {
         let outletId = $('#OutletSelection').val();
-        if(outletId == "" || outletId == undefined || outletId == NaN){
+        if (outletId == "" || outletId == undefined || outletId == NaN) {
             swal.fire('You must choose an outlet', '', 'info');
             return;
         }
 
         let categoryName = $("#CategoryName").val();
-        if(categoryName == "" || categoryName == undefined || categoryName == NaN){
+        if (categoryName == "" || categoryName == undefined || categoryName == NaN) {
             swal.fire('You must have a category name', '', 'info');
             return;
         }
@@ -216,12 +225,12 @@
                 "userId": localStorage.getItem('userId')
             },
             Success: (res) => {
-                if(res.response.length == 0) {
+                if (res.response.length == 0) {
                     swal.fire(categoryName + ' already exists!', '', "info");
                     return;
                 }
                 swal.fire('Successfully Saved!', '', "success");
-                RemoveCategoryDropdownRefresh(res); 
+                RemoveCategoryDropdownRefresh(res);
                 CategoryHirarchyRefresh(res);
                 $('#CategoryName').val('');
                 $('.dd-empty').remove();
@@ -233,13 +242,13 @@
 
     RemoveCategories = () => {
         let outletId = $('#OutletSelection').val();
-        if(outletId == "" || outletId == undefined || outletId == NaN){
+        if (outletId == "" || outletId == undefined || outletId == NaN) {
             swal.fire('You must choose an outlet', '', 'info');
             return;
         }
 
         let categoryName = $("#RemoveCategorySelect").val();
-        if(categoryName == "" || categoryName == undefined || categoryName == NaN){
+        if (categoryName == "" || categoryName == undefined || categoryName == NaN) {
             swal.fire('You must select a category name', '', 'info');
             return;
         }
@@ -249,7 +258,7 @@
             Method: 'DELETE',
             Success: (res) => {
                 swal.fire('Success!', '', "success");
-                RemoveCategoryDropdownRefresh(res); 
+                RemoveCategoryDropdownRefresh(res);
                 CategoryHirarchyRefresh(res);
                 $('.dd-empty').remove();
             },
@@ -261,7 +270,7 @@
     $('#OutletSelection').change((elem) => {
         // Must select an outlet
         let outletId = $('#OutletSelection').val();
-        if(outletId == "" || outletId == undefined || outletId == NaN){
+        if (outletId == "" || outletId == undefined || outletId == NaN) {
             swal.fire('You must choose an outlet', '', 'error');
             return;
         }
@@ -310,11 +319,11 @@
     });
 </script>
 <style>
-    #CategoryManager form{
+    #CategoryManager form {
         width: 100%;
     }
 
-    #CategoryManager .custom-btn{
+    #CategoryManager .custom-btn {
         min-width: 10vw;
     }
 </style>

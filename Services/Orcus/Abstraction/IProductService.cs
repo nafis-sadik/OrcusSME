@@ -14,5 +14,6 @@ namespace Services.Orcus.Abstraction
         public bool AddProductUnitTypes(ProductUnitTypeModel productUnitType);
         public bool PurchaseProduct(ProductModel product);
         public bool? SellProduct(ProductModel product);
+        public List<ProductModel> GetInventory(ProductModel product);
     }
 }

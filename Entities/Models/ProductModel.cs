@@ -17,5 +17,6 @@
         public int PurchasingPrice { get; set; }
         public int RetailPrice { get; set; }
         public float DueAmount { get; set; }
+        public string UserId { get; set; }
     }
 }

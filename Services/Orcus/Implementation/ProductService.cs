@@ -102,13 +102,17 @@ namespace Services.Orcus.Implementation
                         productData.ProductId = _productRepo.AsQueryable().Count() + 1;
                 }
                 productData.ProductName = product.ProductName;
-                productData.CategoryId = product.CategoryId;
+                if (product.SubCategoryId != 0)
+                    productData.CategoryId = product.SubCategoryId;
+                else
+                    productData.CategoryId = product.CategoryId;
                 productData.Description = product.ProductDescription;
                 productData.ProductUnitTypeId = product.UnitType;
                 productData.Price = product.RetailPrice;
                 productData.Quantity = product.Quantity;
                 productData.ShortDescription = product.ShortDescription;
                 productData.Specifications = product.ProductSpecs;
+                productData.ProductUnitTypeId = product.UnitId;
 
                 if (product.ProductId != 0)
                     _productRepo.Update(productData);
@@ -211,6 +215,51 @@ namespace Services.Orcus.Implementation
 
                 return false;
             }
+        }
+
+        public List<ProductModel> GetInventory(ProductModel product)
+        {
+            int pk;
+            List <ProductModel> products = new List<ProductModel> ();
+            try
+            {
+                // Check if the person owns the outlet or not
+                IEnumerable<Product> data;
+                if (product.OutletId > 0)
+                {
+                    // Get all products of given outlet
+                }
+                else
+                {
+                    // Get all products relevant to this person
+                }
+            }
+            catch (Exception ex)
+            {
+                _productUnitTypeRepo.Rollback();
+
+                if (!_crashLogRepo.AsQueryable().Any())
+                    pk = 0;
+                else
+                    pk = _crashLogRepo.GetMaxPK("CrashLogId") + 1;
+
+                string msg = (string.IsNullOrEmpty(ex.Message) || ex.Message.ToLower().Contains(CommonConstants.MsgInInnerException.ToLower()))
+                            ? ex.InnerException.Message
+                            : ex.Message;
+                _crashLogRepo.Add(new Crashlog
+                {
+                    CrashLogId = pk,
+                    ClassName = "ProductService",
+                    MethodName = "SellProduct",
+                    ErrorMessage = ex.Message,
+                    ErrorInner = msg,
+                    Data = JsonSerializer.Serialize(product),
+                    TimeStamp = DateTime.Now
+                });
+                return null;
+            }
+
+            return products;
         }
     }
 }

@@ -263,9 +263,9 @@
         $('#PurchaseForm').on('submit', (element) => {
             element.preventDefault();
             let param = {
-                URL: Route.Base + Route.Categories.SaveHierarchy,
+                URL: Route.Base + Route.Product.Purchase,
                 Method: 'POST',
-                Data: JSON.stringify({
+                Data: {
                     OutletId: $('#Outlets').val(),
                     CategoryId: $('#Category').val(),
                     SubCategoryId: $('#SubCategory').val(),
@@ -276,9 +276,12 @@
                     RetailPrice: $('#RetailPrice').val(),
                     DueAmount: $('#DueAmount').val(),
                     ProductDescription: $('#ProductDescription').val(),
-                }),
+                },
                 Success: (res) => {
                     swal.fire('Successfully Saved!', '', "success");
+                },
+                Error: (res) => {
+                    console.log(res.responseJSON);
                 }
             };
             APIConsumptionAuth(param);

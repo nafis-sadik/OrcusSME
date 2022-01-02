@@ -35,7 +35,7 @@ namespace WebAPI.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPut]
         [Route("ProductUnitTypes")]
         public IActionResult AddProductUnitTypes(ProductUnitTypeModel purchaseModel)
@@ -61,6 +61,19 @@ namespace WebAPI.Controllers
         [HttpPost]
         [Route("Sell")]
         public IActionResult Sell(ProductModel purchaseModel)
+        {
+            if (_productService.SellProduct(purchaseModel) == true)
+                return Ok(new { Response = "Success" });
+            else if (_productService.SellProduct(purchaseModel) == null)
+                return Conflict(new { Response = "Product not found" });
+            else
+                return Conflict(new { Response = CommonConstants.HttpResponseMessages.Exception });
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("Inventory")]
+        public IActionResult GetInventory(ProductModel purchaseModel)
         {
             if (_productService.SellProduct(purchaseModel) == true)
                 return Ok(new { Response = "Success" });
