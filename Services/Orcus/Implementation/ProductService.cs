@@ -220,7 +220,7 @@ namespace Services.Orcus.Implementation
         public List<ProductModel> GetInventory(ProductModel product)
         {
             int pk;
-            List <ProductModel> products = new List<ProductModel> ();
+            IEnumerable<ProductModel> products = new List<ProductModel>();
             try
             {
                 // Check if the person owns the outlet or not
