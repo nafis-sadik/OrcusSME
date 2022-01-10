@@ -5,6 +5,7 @@ using DataLayer.MSSQL;
 using DataLayer.MySql;
 using Microsoft.EntityFrameworkCore;
 using Repositories;
+using Repositories.Implementation;
 using Services.Orcus.Abstraction;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace Services.Orcus.Implementation
         private readonly ICrashLogRepo _crashLogRepo;
         private readonly IInventoryLogRepo _inventoryLogRepo;
         private readonly IProductRepo _productRepo;
+        private readonly IOutletManagerRepo _outletManagerRepo;
 
         public ProductService()
         {
@@ -29,6 +31,7 @@ namespace Services.Orcus.Implementation
             _crashLogRepo = new CrashLogRepo(context);
             _inventoryLogRepo = new InventoryLogRepo(context);
             _productRepo = new ProductRepo(context);
+            _outletManagerRepo = new OutletManagerRepo(context);
         }
 
         public IEnumerable<ProductUnitTypeModel> GetProductUnitTypes()
@@ -217,21 +220,52 @@ namespace Services.Orcus.Implementation
             }
         }
 
-        public List<ProductModel> GetInventory(ProductModel product)
+        public IEnumerable<ProductModel> GetInventory(ProductModel productModel)
         {
             int pk;
-            IEnumerable<ProductModel> products = new List<ProductModel>();
+            IEnumerable<ProductModel> response = new List<ProductModel>();
             try
             {
-                // Check if the person owns the outlet or not
-                IEnumerable<Product> data;
-                if (product.OutletId > 0)
-                {
-                    // Get all products of given outlet
-                }
+                // Return all outlets when no outlet selected
+                if (productModel.OutletId <= 0)
+                    return null;
                 else
                 {
-                    // Get all products relevant to this person
+                    // Check if the person owns the outlet or not
+                    Outlet outlet = _outletManagerRepo.Get(productModel.OutletId);
+                    if (outlet.UserId != productModel.UserId)
+                        return null;
+                    // Get all products of the outlet
+                    IQueryable<Product> products = _productRepo.AsQueryable().Where(x => x.Category.OutletId == productModel.OutletId);
+                    List<ProductModel> productsList = new List<ProductModel>();
+                    int productCounter, sellCounter;
+                    // Convert Entities into Models
+                    foreach (Product product in products)
+                    {
+                        productCounter = 0;
+                        sellCounter = 0;
+                        // Calculate inventory size from inventory log
+                        var records = _inventoryLogRepo.AsQueryable().Where(x => x.ProductId == product.ProductId).Select(x => new { x.InventoryUpdateType, x.Quantity }).ToList();
+                        foreach (var data in records)
+                        {
+                            if (data.InventoryUpdateType == CommonConstants.ActivityTypes.Purchase)
+                                productCounter += data.Quantity;
+                            else
+                            {
+                                productCounter -= data.Quantity;
+                                sellCounter++;
+                            }
+                        }
+                        productsList.Add(new ProductModel
+                        {
+                            ProductId = product.ProductId,
+                            ProductName = product.ProductName,
+                            Quantity = productCounter,
+                            PurchasingPrice = 0,
+                            RetailPrice = 0,
+                            OutletName = outlet.OutletName
+                        });
+                    }
                 }
             }
             catch (Exception ex)
@@ -253,13 +287,13 @@ namespace Services.Orcus.Implementation
                     MethodName = "SellProduct",
                     ErrorMessage = ex.Message,
                     ErrorInner = msg,
-                    Data = JsonSerializer.Serialize(product),
+                    Data = JsonSerializer.Serialize(productModel),
                     TimeStamp = DateTime.Now
                 });
                 return null;
             }
 
-            return products;
+            return response;
         }
     }
 }
