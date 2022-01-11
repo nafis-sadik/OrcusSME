@@ -15,7 +15,8 @@
                            aria-haspopup="true"
                            aria-expanded="false">
                             <i class="zmdi zmdi-more"></i> </a>
-                        <ul class="dropdown-menu">
+                        <ul id="OutletList"
+                            class="dropdown-menu">
                             <li><a href="javascript:void(0);">Action</a></li>
                             <li><a href="javascript:void(0);">Another action</a></li>
                             <li><a href="javascript:void(0);">Something else</a></li>
@@ -28,7 +29,7 @@
                 </ul>
             </div>
             <div class="body table-responsive">
-                <table id="Delete-Products-Table"
+                <table id="ProductTable"
                        class="table bg-purple">
                     <thead>
                         <tr>
@@ -39,8 +40,8 @@
                             <th>Quantity</th>
                             <th>Purchase Price</th>
                             <th>Selling Price</th>
-                            <th>Average Sales</th>
-                            <th>Average Returns</th>
+                            <!-- <th>Average Sales</th> -->
+                            <!-- <th>Average Returns</th> -->
                             <th style="padding: 10px 20px !important; margin: 5px 5px !important;">Edit</th>
                             <th style="padding: 10px 20px !important; margin: 5px 5px !important;">Archive</th>
                         </tr>
@@ -51,7 +52,7 @@
                 </table>
             </div>
             <style>
-                #Delete-Products-Table .btn {
+                #ProductTable .btn {
                     padding: 10px 20px !important;
                     margin: 5px 5px !important;
                 }
@@ -60,24 +61,59 @@
     </div>
 </div>
 <script>
-    $('#Delete-Products-Table tbody').empty();
-    for (let i = 0; i < 5; i++) {
-        $('#Delete-Products-Table tbody').append(
-            '<tr class="l-blue">'
-            + '<th scope="row">' + (i + 1) + '</th>'
-            + '<td style="text-align: center;">'
-            + '<img src = "../assets/images/ecommerce/1.png" width = "48" alt = "Product img" >'
-            + '</td>'
-            + '<td>Medium Beige - Anti-Pollution CC Cream</td>'
-            + '<td>Gul Nurah</td>'
-            + '<td style="text-align: center;">290</td>'
-            + '<td style="text-align: center;">650</td>'
-            + '<td style="text-align: center;">800</td>'
-            + '<td style="text-align: center;">28</td>'
-            + '<td style="text-align: center;">28</td>'
-            + '<td> <button class="btn l-blush waves-effect" title = "Edit" > <i class="zmdi zmdi-edit"></i></button> </td>'
-            + '<td> <button class="btn l-blush waves-effect" title="Delete"><i class="zmdi zmdi-delete"></i></button> </td>'
-            + '</tr>'
-        );
+    let loadProducts = (outletId = '') => {
+        $('#ProductTable tbody').empty();
+        let url = '';
+        if (outletId == '')
+            url = Route.Base + Route.Product.Inventory + localStorage.getItem('userId');
+        else
+            url = Route.Base + Route.Product.Inventory + localStorage.getItem('userId') + '/' + outletId;
+        let param = {
+            URL: url,
+            Method: 'GET',
+            Success: (res) => {
+                if (res.response.length > 0) {
+                    for (let i = 0; i < res.response.length; i++) {
+                        $('#ProductTable tbody').append(
+                            '<tr class="l-blue">'
+                            + '<th scope="row">' + (i + 1) + '</th>'
+                            + '<td style="text-align: left;">'
+                            + '<img src = "../assets/images/ecommerce/1.png" width = "48" alt = "Product img" >'
+                            + '</td>'
+                            + '<td style="text-align: left;">' + res.response[i].productName + '</td>'
+                            + '<td>' + res.response[i].outletName + '</td>'
+                            + '<td style="text-align: left;">' + res.response[i].quantity + '</td>'
+                            + '<td style="text-align: left;">' + res.response[i].purchasingPrice + '</td>'
+                            + '<td style="text-align: left;">' + res.response[i].retailPrice + '</td>'
+                            // + '<td style="text-align: center;">' + res.response[i].AverageSales + '</td>'
+                            // + '<td style="text-align: center;">' + res.response[i].AverageProductReturns + '</td>'
+                            + '<td> <button class="btn l-blush waves-effect" title = "Edit" > <i class="zmdi zmdi-edit"></i></button> </td>'
+                            + '<td> <button class="btn l-blush waves-effect" title="Delete"><i class="zmdi zmdi-delete"></i></button> </td>'
+                            + '</tr>'
+                        );
+                    }
+                }
+            }
+        };
+
+        APIConsumptionAuth(param);
     }
+
+    $(document).ready(() => {
+        loadProducts();
+
+        param = {
+            URL: Route.Base + Route.Outlet.GetUserOutlets + '/' + localStorage.getItem('userId'),
+            Method: 'GET',
+            Success: (res) => {
+                $('#OutletList').empty();
+                for (let i = 0; i < res.response.length; i++) {
+                    $('#OutletList').append('<li><a onClick="loadProducts(' + res.response[i].outletId + ');">' + res.response[i].outletName + '</a></li>')
+                }
+            },
+            Error: (res) => { }
+        }
+
+        APIConsumptionAuth(param);
+    });
 </script>

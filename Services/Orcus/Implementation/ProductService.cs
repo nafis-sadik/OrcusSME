@@ -226,47 +226,54 @@ namespace Services.Orcus.Implementation
             IEnumerable<ProductModel> response = new List<ProductModel>();
             try
             {
+                // Return null if UserId is null or empty
+                if (string.IsNullOrEmpty(productModel.UserId))
+                    return response;
+
+                List<Product> products = new List<Product>();
+                List<ProductModel> productsList = new List<ProductModel>();
                 // Return all outlets when no outlet selected
                 if (productModel.OutletId <= 0)
-                    return null;
+                {
+                    // Get Outlet Ids of Person
+                    List<Outlet> outlets = _outletManagerRepo.AsQueryable().Where(x => x.UserId == productModel.UserId).ToList();
+                    foreach (Outlet outlet in outlets)
+                        productsList.AddRange(_productRepo.AsQueryable()
+                            .Where(product => product.Category.OutletId == outlet.OutletId)
+                            .Select(product => new ProductModel
+                            {
+                                ProductId = product.ProductId,
+                                ProductName = product.ProductName,
+                                Quantity = product.Quantity,
+                                PurchasingPrice = 0,
+                                RetailPrice = 0,
+                                OutletName = product.Category.Outlet.OutletName
+                            })
+                            .ToList());
+                }
                 else
                 {
                     // Check if the person owns the outlet or not
                     Outlet outlet = _outletManagerRepo.Get(productModel.OutletId);
                     if (outlet.UserId != productModel.UserId)
                         return null;
+
                     // Get all products of the outlet
-                    IQueryable<Product> products = _productRepo.AsQueryable().Where(x => x.Category.OutletId == productModel.OutletId);
-                    List<ProductModel> productsList = new List<ProductModel>();
-                    int productCounter, sellCounter;
-                    // Convert Entities into Models
-                    foreach (Product product in products)
-                    {
-                        productCounter = 0;
-                        sellCounter = 0;
-                        // Calculate inventory size from inventory log
-                        var records = _inventoryLogRepo.AsQueryable().Where(x => x.ProductId == product.ProductId).Select(x => new { x.InventoryUpdateType, x.Quantity }).ToList();
-                        foreach (var data in records)
-                        {
-                            if (data.InventoryUpdateType == CommonConstants.ActivityTypes.Purchase)
-                                productCounter += data.Quantity;
-                            else
-                            {
-                                productCounter -= data.Quantity;
-                                sellCounter++;
-                            }
-                        }
-                        productsList.Add(new ProductModel
+                    productsList.AddRange(_productRepo.AsQueryable()
+                        .Where(x => x.Category.OutletId == productModel.OutletId)
+                        .Select(product => new ProductModel
                         {
                             ProductId = product.ProductId,
                             ProductName = product.ProductName,
-                            Quantity = productCounter,
+                            Quantity = product.Quantity,
                             PurchasingPrice = 0,
                             RetailPrice = 0,
-                            OutletName = outlet.OutletName
-                        });
-                    }
+                            OutletName = product.Category.Outlet.OutletName
+                        })
+                        .ToList());
                 }
+
+                response = productsList;
             }
             catch (Exception ex)
             {

@@ -72,13 +72,24 @@ namespace WebAPI.Controllers
 
         [Authorize]
         [HttpGet]
-        [Route("Inventory")]
-        public IActionResult GetInventory(ProductModel purchaseModel)
+        [Route("Inventory/{UserId}/{OutletId?}")]
+        public IActionResult GetInventory(string userId, int? outletId)
         {
-            if (_productService.SellProduct(purchaseModel) == true)
-                return Ok(new { Response = "Success" });
-            else if (_productService.SellProduct(purchaseModel) == null)
-                return Conflict(new { Response = "Product not found" });
+            if (outletId == null)
+                outletId = 0;
+            ProductModel purchaseModel = new ProductModel
+            {
+                UserId = userId,
+                OutletId = (int)outletId
+            };
+            IEnumerable<ProductModel> inventory = _productService.GetInventory(purchaseModel);
+            if (inventory != null)
+            {
+                if (inventory.Any())
+                    return Ok(new { Response = inventory });
+                else
+                    return Conflict(new { Response = CommonConstants.HttpResponseMessages.InvalidInput });
+            }
             else
                 return Conflict(new { Response = CommonConstants.HttpResponseMessages.Exception });
         }
