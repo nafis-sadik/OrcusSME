@@ -22,6 +22,7 @@ namespace DataLayer.Entities
         public string Specifications { get; set; }
         public int Quantity { get; set; }
         public int ProductUnitTypeId { get; set; }
+        public string Status { get; set; }
 
         public virtual Category Category { get; set; }
         public virtual ProductUnitType ProductUnitType { get; set; }

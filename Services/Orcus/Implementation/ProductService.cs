@@ -112,7 +112,7 @@ namespace Services.Orcus.Implementation
                 productData.Description = product.ProductDescription;
                 productData.ProductUnitTypeId = product.UnitType;
                 productData.Price = product.RetailPrice;
-                productData.Quantity = product.Quantity;
+                productData.Quantity += product.Quantity;
                 productData.ShortDescription = product.ShortDescription;
                 productData.Specifications = product.ProductSpecs;
                 productData.ProductUnitTypeId = product.UnitId;
@@ -220,23 +220,23 @@ namespace Services.Orcus.Implementation
             }
         }
 
-        public IEnumerable<ProductModel> GetInventory(ProductModel productModel)
+        public IEnumerable<ProductModel> GetInventory(string userId, int? outletId)
         {
-            int pk;
+            int OutletId = Convert.ToInt32(outletId);
             IEnumerable<ProductModel> response = new List<ProductModel>();
             try
             {
                 // Return null if UserId is null or empty
-                if (string.IsNullOrEmpty(productModel.UserId))
+                if (string.IsNullOrEmpty(userId))
                     return response;
 
                 List<Product> products = new List<Product>();
                 List<ProductModel> productsList = new List<ProductModel>();
                 // Return all outlets when no outlet selected
-                if (productModel.OutletId <= 0)
+                if (OutletId <= 0)
                 {
                     // Get Outlet Ids of Person
-                    List<Outlet> outlets = _outletManagerRepo.AsQueryable().Where(x => x.UserId == productModel.UserId).ToList();
+                    List<Outlet> outlets = _outletManagerRepo.AsQueryable().Where(x => x.UserId == userId).ToList();
                     foreach (Outlet outlet in outlets)
                         productsList.AddRange(_productRepo.AsQueryable()
                             .Where(product => product.Category.OutletId == outlet.OutletId)
@@ -254,13 +254,13 @@ namespace Services.Orcus.Implementation
                 else
                 {
                     // Check if the person owns the outlet or not
-                    Outlet outlet = _outletManagerRepo.Get(productModel.OutletId);
-                    if (outlet.UserId != productModel.UserId)
+                    Outlet outlet = _outletManagerRepo.Get(OutletId);
+                    if (outlet.UserId != userId)
                         return null;
 
                     // Get all products of the outlet
                     productsList.AddRange(_productRepo.AsQueryable()
-                        .Where(x => x.Category.OutletId == productModel.OutletId)
+                        .Where(x => x.Category.OutletId == OutletId)
                         .Select(product => new ProductModel
                         {
                             ProductId = product.ProductId,
@@ -277,6 +277,7 @@ namespace Services.Orcus.Implementation
             }
             catch (Exception ex)
             {
+                int pk;
                 _productUnitTypeRepo.Rollback();
 
                 if (!_crashLogRepo.AsQueryable().Any())
@@ -294,13 +295,62 @@ namespace Services.Orcus.Implementation
                     MethodName = "SellProduct",
                     ErrorMessage = ex.Message,
                     ErrorInner = msg,
-                    Data = JsonSerializer.Serialize(productModel),
+                    Data = JsonSerializer.Serialize("string userId = " + userId + ", int? outletId = " + outletId),
                     TimeStamp = DateTime.Now
                 });
                 return null;
             }
 
             return response;
+        }
+
+        public bool? ArchiveProduct(string userId, int productId)
+        {
+            try
+            {
+                // Check if product exists
+                Product Product = _productRepo.Get(productId);
+                if (Product == null)
+                    return false;
+                var categories = _outletManagerRepo.AsQueryable().Where(x => x.UserId == userId).Select(x => x.Categories);
+
+                // Veridy user's product 
+                bool ownedProduct = false;
+                foreach (Category category in categories)
+                    if (category.CategoryId == Product.CategoryId) { ownedProduct = true; }
+                if (!ownedProduct) return false;
+
+                // Archive the product
+                Product.Status = CommonConstants.StatusTypes.Archived;
+                _productRepo.Update(Product);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                int pk;
+                _productRepo.Rollback();
+
+                if (!_crashLogRepo.AsQueryable().Any())
+                    pk = 0;
+                else
+                    pk = _crashLogRepo.GetMaxPK("CrashLogId") + 1;
+
+                string msg = (string.IsNullOrEmpty(ex.Message) || ex.Message.ToLower().Contains(CommonConstants.MsgInInnerException.ToLower()))
+                            ? ex.InnerException.Message
+                            : ex.Message;
+                _crashLogRepo.Add(new Crashlog
+                {
+                    CrashLogId = pk,
+                    ClassName = "ProductService",
+                    MethodName = "ArchiveProduct",
+                    ErrorMessage = ex.Message,
+                    ErrorInner = msg,
+                    Data = JsonSerializer.Serialize("string userId = " + userId + ", int? productId = " + productId),
+                    TimeStamp = DateTime.Now
+                });
+
+                return null;
+            }
         }
     }
 }

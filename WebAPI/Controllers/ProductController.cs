@@ -77,12 +77,8 @@ namespace WebAPI.Controllers
         {
             if (outletId == null)
                 outletId = 0;
-            ProductModel purchaseModel = new ProductModel
-            {
-                UserId = userId,
-                OutletId = (int)outletId
-            };
-            IEnumerable<ProductModel> inventory = _productService.GetInventory(purchaseModel);
+
+            IEnumerable<ProductModel> inventory = _productService.GetInventory(userId, outletId);
             if (inventory != null)
             {
                 if (inventory.Any())
@@ -90,6 +86,20 @@ namespace WebAPI.Controllers
                 else
                     return Conflict(new { Response = CommonConstants.HttpResponseMessages.InvalidInput });
             }
+            else
+                return Conflict(new { Response = CommonConstants.HttpResponseMessages.Exception });
+        }
+
+        [Authorize]
+        [HttpDelete]
+        [Route("ArchiveProduct/{userId}/{productId?}")]
+        public IActionResult ArchiveProduct(string userId, int productId)
+        {
+            bool? response = _productService.ArchiveProduct(userId, productId);
+            if (response == true)
+                return Ok(new { Response = "Success" });
+            else if (response == null)
+                return Conflict(new { Response = CommonConstants.HttpResponseMessages.InvalidInput });
             else
                 return Conflict(new { Response = CommonConstants.HttpResponseMessages.Exception });
         }
