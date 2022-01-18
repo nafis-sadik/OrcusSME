@@ -81,10 +81,7 @@ namespace WebAPI.Controllers
             IEnumerable<ProductModel> inventory = _productService.GetInventory(userId, outletId);
             if (inventory != null)
             {
-                if (inventory.Any())
-                    return Ok(new { Response = inventory });
-                else
-                    return Conflict(new { Response = CommonConstants.HttpResponseMessages.InvalidInput });
+                return Ok(new { Response = inventory });
             }
             else
                 return Conflict(new { Response = CommonConstants.HttpResponseMessages.Exception });

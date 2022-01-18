@@ -228,7 +228,7 @@ namespace Services.Orcus.Implementation
             {
                 // Return null if UserId is null or empty
                 if (string.IsNullOrEmpty(userId))
-                    return response;
+                    return null;
 
                 List<Product> products = new List<Product>();
                 List<ProductModel> productsList = new List<ProductModel>();

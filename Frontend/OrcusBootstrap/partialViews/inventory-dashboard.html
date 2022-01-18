@@ -42,8 +42,8 @@
                             <th>Selling Price</th>
                             <!-- <th>Average Sales</th> -->
                             <!-- <th>Average Returns</th> -->
-                            <th style="padding: 10px 20px !important; margin: 5px 5px !important;">Edit</th>
-                            <th style="padding: 10px 20px !important; margin: 5px 5px !important;">Archive</th>
+                            <th style="padding: 10px 20px !important; margin: 5px 5px !important;">Actions</th>
+                            <!-- <th style="padding: 10px 20px !important; margin: 5px 5px !important;">Archive</th> -->
                         </tr>
                     </thead>
                     <tbody>
@@ -61,7 +61,9 @@
     </div>
 </div>
 <script>
+    var SelectedOutlet;
     loadProducts = (outletId = '') => {
+        SelectedOutlet = outletId;
         $('#ProductTable tbody').empty();
         let url = '';
         if (outletId == '')
@@ -87,12 +89,24 @@
                             + '<td style="text-align: left;">' + res.response[i].retailPrice + '</td>'
                             // + '<td style="text-align: center;">' + res.response[i].AverageSales + '</td>'
                             // + '<td style="text-align: center;">' + res.response[i].AverageProductReturns + '</td>'
-                            + '<td> <button class="btn l-blush waves-effect" title = "Edit" > <i class="zmdi zmdi-edit"></i></button> </td>'
-                            + '<td> <button class="btn l-blush waves-effect" title="Delete"><i class="zmdi zmdi-delete"></i></button> </td>'
+                            + '<td> <button class="btn l-blush waves-effect" title = "Edit" > <i class="zmdi zmdi-edit"></i></button>'
+                            + '<button onClick="archiveProduct(' + res.response[i].productId + ')" class="btn l-blush waves-effect" title="Archive"><i class="zmdi zmdi-delete"></i></button>  </td>'
                             + '</tr>'
                         );
                     }
                 }
+            }
+        };
+
+        APIConsumptionAuth(param);
+    }
+
+    archiveProduct = (productId) => {
+        let param = {
+            URL: Route.Base + Route.Product.Inventory + localStorage.getItem('userId') + '/' + productId,
+            Method: 'DELETE',
+            Success: (res) => {
+                swal.fire('Successfully Saved!', '', "success").then(() => { loadProducts(SelectedOutlet) });
             }
         };
 

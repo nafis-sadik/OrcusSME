@@ -19,7 +19,8 @@ const Route = {
         UnitType: '/Product/ProductUnitTypes/',
         Purchase: '/Product/Purchase',
         Sell: '/Product/Sell',
-        Inventory: '/Product/Inventory/'
+        Inventory: '/Product/Inventory/',
+        Archive: '/Product/ArchiveProduct/'
     }
 }
 
@@ -127,7 +128,8 @@ const Service = {
                 
                 $(id).append(
                     '<li><a partial="promo-config">Promo Code Config</a></li>'+
-                    '<li><a partial="discount-campaign">Discount Campaign Manager</a></li>'
+                    '<li><a partial="discount-campaign">Discount Campaign Manager</a></li>',
+                    '<li><a partial="sales-return">Sales Return</a></li>'
                 );
                 
                 $.each($(".menu .list li.active"),function(a,b){var c=$(b).find("a:eq(0)");c.addClass("toggled"),c.next().show()});
