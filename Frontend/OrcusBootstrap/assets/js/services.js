@@ -20,7 +20,7 @@ const Route = {
         Purchase: '/Product/Purchase',
         Sell: '/Product/Sell',
         Inventory: '/Product/Inventory/',
-        Archive: '/Product/ArchiveProduct/'
+        ArchiveProduct: '/Product/ArchiveProduct/'
     }
 }
 

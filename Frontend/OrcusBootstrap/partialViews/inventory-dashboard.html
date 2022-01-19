@@ -103,10 +103,18 @@
 
     archiveProduct = (productId) => {
         let param = {
-            URL: Route.Base + Route.Product.Inventory + localStorage.getItem('userId') + '/' + productId,
+            URL: Route.Base + Route.Product.ArchiveProduct,
+            Data: {
+                UserId: localStorage.getItem('userId'),
+                ProductId: productId
+            },
             Method: 'DELETE',
             Success: (res) => {
+                console.log(res);
                 swal.fire('Successfully Saved!', '', "success").then(() => { loadProducts(SelectedOutlet) });
+            },
+            Error: (res) => {
+                console.log(res);
             }
         };
 

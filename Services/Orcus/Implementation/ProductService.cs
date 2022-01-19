@@ -23,6 +23,7 @@ namespace Services.Orcus.Implementation
         private readonly IInventoryLogRepo _inventoryLogRepo;
         private readonly IProductRepo _productRepo;
         private readonly IOutletManagerRepo _outletManagerRepo;
+        private readonly ICategoryRepo _categoryRepo;
 
         public ProductService()
         {
@@ -32,6 +33,7 @@ namespace Services.Orcus.Implementation
             _inventoryLogRepo = new InventoryLogRepo(context);
             _productRepo = new ProductRepo(context);
             _outletManagerRepo = new OutletManagerRepo(context);
+            _categoryRepo = new CategoryRepo(context);
         }
 
         public IEnumerable<ProductUnitTypeModel> GetProductUnitTypes()
@@ -236,10 +238,10 @@ namespace Services.Orcus.Implementation
                 if (OutletId <= 0)
                 {
                     // Get Outlet Ids of Person
-                    List<Outlet> outlets = _outletManagerRepo.AsQueryable().Where(x => x.UserId == userId).ToList();
+                    List<Outlet> outlets = _outletManagerRepo.AsQueryable().Where(x => x.UserId == userId && x.Status == CommonConstants.StatusTypes.Active).ToList();
                     foreach (Outlet outlet in outlets)
                         productsList.AddRange(_productRepo.AsQueryable()
-                            .Where(product => product.Category.OutletId == outlet.OutletId)
+                            .Where(product => product.Category.OutletId == outlet.OutletId && product.Status == CommonConstants.StatusTypes.Active)
                             .Select(product => new ProductModel
                             {
                                 ProductId = product.ProductId,
@@ -312,13 +314,11 @@ namespace Services.Orcus.Implementation
                 Product Product = _productRepo.Get(productId);
                 if (Product == null)
                     return false;
-                var categories = _outletManagerRepo.AsQueryable().Where(x => x.UserId == userId).Select(x => x.Categories);
 
-                // Veridy user's product 
-                bool ownedProduct = false;
-                foreach (Category category in categories)
-                    if (category.CategoryId == Product.CategoryId) { ownedProduct = true; }
-                if (!ownedProduct) return false;
+                // Veridy user's product
+                string prductOwnerId = _outletManagerRepo.Get((decimal)_categoryRepo.AsQueryable().FirstOrDefault(x => x.CategoryId == _productRepo.Get(productId).CategoryId).OutletId).UserId;
+                if (prductOwnerId != userId)
+                    return false;
 
                 // Archive the product
                 Product.Status = CommonConstants.StatusTypes.Archived;

@@ -3,9 +3,11 @@ using DataLayer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Services.Orcus.Abstraction;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -89,16 +91,34 @@ namespace WebAPI.Controllers
 
         [Authorize]
         [HttpDelete]
-        [Route("ArchiveProduct/{userId}/{productId?}")]
-        public IActionResult ArchiveProduct(string userId, int productId)
+        [Route("ArchiveProduct")]
+        public IActionResult ArchiveProduct()
         {
-            bool? response = _productService.ArchiveProduct(userId, productId);
-            if (response == true)
-                return Ok(new { Response = "Success" });
-            else if (response == null)
-                return Conflict(new { Response = CommonConstants.HttpResponseMessages.InvalidInput });
-            else
-                return Conflict(new { Response = CommonConstants.HttpResponseMessages.Exception });
+            try
+            {
+                string requestBodyData;
+                using (StreamReader reader = new StreamReader(Request.Body))
+                {
+                    requestBodyData = reader.ReadLineAsync().Result;
+                    if (string.IsNullOrEmpty(requestBodyData))
+                        return BadRequest(CommonConstants.HttpResponseMessages.InvalidInput);
+                    ProductModel requestBodyObject = JsonConvert.DeserializeObject<ProductModel>(requestBodyData);
+
+                    bool? response = _productService.ArchiveProduct(requestBodyObject.UserId, requestBodyObject.ProductId);
+                    if (response == true)
+                        return Ok(new { Response = "Success" });
+                    else if (response == null)
+                        return Conflict(new { Response = CommonConstants.HttpResponseMessages.InvalidInput });
+                    else
+                        return Conflict(new { Response = CommonConstants.HttpResponseMessages.Exception });
+                }
+
+                return Ok(requestBodyData);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         //[Authorize]
