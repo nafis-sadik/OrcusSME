@@ -118,6 +118,7 @@ namespace Services.Orcus.Implementation
                 productData.ShortDescription = product.ShortDescription;
                 productData.Specifications = product.ProductSpecs;
                 productData.ProductUnitTypeId = product.UnitId;
+                productData.Status = CommonConstants.StatusTypes.Active;
 
                 if (product.ProductId != 0)
                     _productRepo.Update(productData);
