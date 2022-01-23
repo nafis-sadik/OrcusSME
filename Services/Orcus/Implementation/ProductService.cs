@@ -236,7 +236,7 @@ namespace Services.Orcus.Implementation
                 List<Product> products = new List<Product>();
                 List<ProductModel> productsList = new List<ProductModel>();
                 // Return all outlets when no outlet selected
-                if (OutletId <= 0)
+                if (outletId < 0 || outletId == null)
                 {
                     // Get Outlet Ids of Person
                     List<Outlet> outlets = _outletManagerRepo.AsQueryable().Where(x => x.UserId == userId && x.Status == CommonConstants.StatusTypes.Active).ToList();
@@ -257,7 +257,7 @@ namespace Services.Orcus.Implementation
                 else
                 {
                     // Check if the person owns the outlet or not
-                    Outlet outlet = _outletManagerRepo.Get(OutletId);
+                    Outlet outlet = _outletManagerRepo.Get(Convert.ToInt32(outletId));
                     if (outlet.UserId != userId)
                         return null;
 

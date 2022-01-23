@@ -43,7 +43,7 @@ namespace Repositories.Implementation
         public virtual T Get(int id)
         {
             DetachAllEntities();
-            return _dbSet.Find(id);
+            return _dbSet.Find((decimal)id);
         }
         public virtual T Get(decimal id)
         {
