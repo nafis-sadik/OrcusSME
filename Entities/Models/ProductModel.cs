@@ -11,7 +11,7 @@
         public string ShortDescription { get; set; }
         public string ProductSpecs { get; set; }
         public string OutletName { get; set; }
-        public int UnitId { get; set; }
+        public int UnitTypeId { get; set; }
         public int UnitType { get; set; }
         public int Quantity { get; set; }
         public int PurchasingPrice { get; set; }

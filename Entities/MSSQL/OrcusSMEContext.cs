@@ -9,8 +9,6 @@ namespace DataLayer.MSSQL
 {
     public partial class OrcusSMEContext : DbContext
     {
-        // Scaffold-DbContext "User Id=DESKTOP-BHB3CJL;Database=OrcusSME;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer 
-
         public OrcusSMEContext()
         {
         }
@@ -28,6 +26,7 @@ namespace DataLayer.MSSQL
         public virtual DbSet<Crashlog> Crashlogs { get; set; }
         public virtual DbSet<EmailAddress> EmailAddresses { get; set; }
         public virtual DbSet<Image> Images { get; set; }
+        public virtual DbSet<InventoryLog> InventoryLogs { get; set; }
         public virtual DbSet<Outlet> Outlets { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductAttribute> ProductAttributes { get; set; }
@@ -241,6 +240,25 @@ namespace DataLayer.MSSQL
                 entity.Property(e => e.TableName).IsRequired();
             });
 
+            modelBuilder.Entity<InventoryLog>(entity =>
+            {
+                entity.ToTable("InventoryLog");
+
+                entity.Property(e => e.InventoryLogId).ValueGeneratedNever();
+
+                entity.Property(e => e.ActivityDate).HasColumnType("datetime");
+
+                entity.Property(e => e.InventoryUpdateType)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.InventoryLogs)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_InventoryLog_Products");
+            });
+
             modelBuilder.Entity<Outlet>(entity =>
             {
                 entity.HasIndex(e => e.UserId, "IX_Outlets_UserId");
@@ -291,15 +309,20 @@ namespace DataLayer.MSSQL
                     .HasMaxLength(10)
                     .IsFixedLength(true);
 
+                entity.Property(e => e.Status)
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
+
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.CategoryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Products_Categories");
 
-                entity.HasOne(d => d.ProductUnitType)
+                entity.HasOne(d => d.UnitType)
                     .WithMany(p => p.Products)
-                    .HasForeignKey(d => d.ProductUnitTypeId)
+                    .HasForeignKey(d => d.UnitTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Products_ProductUnitTypes");
             });

@@ -112,12 +112,11 @@ namespace Services.Orcus.Implementation
                 else
                     productData.CategoryId = product.CategoryId;
                 productData.Description = product.ProductDescription;
-                productData.ProductUnitTypeId = product.UnitType;
-                productData.Price = product.RetailPrice;
+                productData.RetailPrice = product.RetailPrice;
                 productData.Quantity += product.Quantity;
                 productData.ShortDescription = product.ShortDescription;
                 productData.Specifications = product.ProductSpecs;
-                productData.ProductUnitTypeId = product.UnitId;
+                productData.UnitTypeId = product.UnitTypeId;
                 productData.Status = CommonConstants.StatusTypes.Active;
 
                 if (product.ProductId != 0)
@@ -137,7 +136,7 @@ namespace Services.Orcus.Implementation
                     InventoryUpdateType = CommonConstants.ActivityTypes.Purchase,
                     Price = product.PurchasingPrice,
                     ProductId = productData.ProductId,
-                    Quantity = productData.Quantity,
+                    Quantity = (int)productData.Quantity,
                 });
 
                 return true;
@@ -191,7 +190,7 @@ namespace Services.Orcus.Implementation
                     InventoryUpdateType = CommonConstants.ActivityTypes.Sell,
                     Price = product.RetailPrice,
                     ProductId = productData.ProductId,
-                    Quantity = productData.Quantity,
+                    Quantity = (int)productData.Quantity,
                 });
 
                 return true;
@@ -247,9 +246,9 @@ namespace Services.Orcus.Implementation
                             {
                                 ProductId = product.ProductId,
                                 ProductName = product.ProductName,
-                                Quantity = product.Quantity,
-                                PurchasingPrice = 0,
-                                RetailPrice = 0,
+                                Quantity = (int)product.Quantity,
+                                PurchasingPrice = product.PurchasingPrice,
+                                RetailPrice = (int)product.RetailPrice,
                                 OutletName = product.Category.Outlet.OutletName
                             })
                             .ToList());
@@ -268,9 +267,9 @@ namespace Services.Orcus.Implementation
                         {
                             ProductId = product.ProductId,
                             ProductName = product.ProductName,
-                            Quantity = product.Quantity,
-                            PurchasingPrice = 0,
-                            RetailPrice = 0,
+                            Quantity = (int)product.Quantity,
+                            PurchasingPrice = product.PurchasingPrice,
+                            RetailPrice = (int)product.RetailPrice,
                             OutletName = product.Category.Outlet.OutletName
                         })
                         .ToList());

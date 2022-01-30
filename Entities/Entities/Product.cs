@@ -17,15 +17,16 @@ namespace DataLayer.Entities
         public string ProductName { get; set; }
         public int CategoryId { get; set; }
         public string Description { get; set; }
-        public double Price { get; set; }
+        public double RetailPrice { get; set; }
         public string ShortDescription { get; set; }
         public string Specifications { get; set; }
-        public int Quantity { get; set; }
-        public int ProductUnitTypeId { get; set; }
+        public int? Quantity { get; set; }
+        public int UnitTypeId { get; set; }
         public string Status { get; set; }
+        public int PurchasingPrice { get; set; }
 
         public virtual Category Category { get; set; }
-        public virtual ProductUnitType ProductUnitType { get; set; }
+        public virtual ProductUnitType UnitType { get; set; }
         public virtual ICollection<InventoryLog> InventoryLogs { get; set; }
         public virtual ICollection<ProductAttribute> ProductAttributes { get; set; }
     }

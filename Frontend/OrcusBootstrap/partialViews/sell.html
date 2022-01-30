@@ -156,28 +156,17 @@
 
 
 <script>
+    productsInCurrentOutlet = {};
+
     onLoad = () => {
         Service.RefreshOutletListOnDropdown(['OutletSelection']);
+        $('#mainTable tbody').empty();
     }
 
     $(document).ready(() => {
         $('#ProductSection').hide();
         $('select').selectpicker();
         $('#mainTable').editableTableWidget();
-
-        $('table td').on('change', function (evt, Quantity) {
-            // do something with the new cell value
-            let Rate = parseInt($(evt.currentTarget).prev().text(), 10);
-            Quantity = parseInt(Quantity, 10);
-            $(evt.currentTarget).next().text(Rate * Quantity);
-
-            let prices = $('.Price');
-            let totalPrice = 0;
-            for (let i = 0; i < prices.length; i++) {
-                totalPrice += parseInt($(prices[i]).text(), 10);
-            }
-            $('.TotalPrice').text(totalPrice);
-        });
 
         $('#OutletSelection').change(() => {
             if ($('#OutletSelection').val() == "") {
@@ -189,15 +178,18 @@
                     URL: Route.Base + Route.Product.Inventory + localStorage.getItem('userId') + '/' + $('#OutletSelection').val(),
                     Method: 'GET',
                     Success: (res) => {
+                        productsInCurrentOutlet = {};
                         elemId = 'ProductSelection';
                         elems = res.response;
                         if (elemId[0] != '#') { elemId = '#' + elemId; }
                         $(elemId).empty();
                         $(elemId).append('<option value="">-- Please select --</option>');
                         $.each(res.response, (index, product) => {
+                            productId = product.productId;
                             $(elemId).append(
-                                '<option value="' + product.productId + '">' + product.productName + '</option>'
+                                '<option value="' + productId + '">' + product.productName + '</option>'
                             );
+                            productsInCurrentOutlet[productId] = product;
                             $(elemId).selectpicker('refresh');
                         })
                     }
@@ -206,6 +198,27 @@
                 APIConsumptionAuth(param);
             }
             $('#ProductSelection').append();
+        });
+
+        $('#ProductSelection').change((elem) => {
+            let selectedProduct = productsInCurrentOutlet[$('#ProductSelection').val()];
+
+            $('#mainTable tbody').append('<tr> <th>' + selectedProduct.productName + '</th> <td tabindex="1" class="Price">' + selectedProduct.retailPrice + '</td> <td tabindex="1">1</td> <th>' + selectedProduct.retailPrice + '</th> </tr>');
+
+            $('table td').on('change', function (evt, Quantity) {
+                // do something with the new cell value
+                let Rate = parseInt($(evt.currentTarget).prev().text(), 10);
+                Quantity = parseInt(Quantity, 10);
+                $(evt.currentTarget).next().text(Rate * Quantity);
+
+                let prices = $('.Price');
+                let totalPrice = 0;
+                for (let i = 0; i < prices.length; i++) {
+                    totalPrice += parseInt($(prices[i]).text(), 10);
+                }
+                $('.TotalPrice').text(totalPrice);
+            });
+
         });
     });
 </script>
