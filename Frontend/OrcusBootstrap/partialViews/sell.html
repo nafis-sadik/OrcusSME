@@ -157,6 +157,7 @@
 
 <script>
     productsInCurrentOutlet = {};
+    cart = []
 
     onLoad = () => {
         Service.RefreshOutletListOnDropdown(['OutletSelection']);
@@ -201,6 +202,7 @@
         });
 
         $('#ProductSelection').change((elem) => {
+            // Add to list
             let selectedProduct = productsInCurrentOutlet[$('#ProductSelection').val()];
 
             $('#mainTable tbody').append('<tr> <th>' + selectedProduct.productName + '</th> <td tabindex="1" class="Price">' + selectedProduct.retailPrice + '</td> <td tabindex="1">1</td> <th>' + selectedProduct.retailPrice + '</th> </tr>');
@@ -219,6 +221,13 @@
                 $('.TotalPrice').text(totalPrice);
             });
 
+            // Cart Management
+            console.log(selectedProduct);
+            cart.push({
+                "ProductId": selectedProduct.productId,
+                "RetailPricePrice": selectedProduct.retailPrice,
+                "Quantity": 5
+            });
         });
     });
 </script>
