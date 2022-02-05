@@ -94,7 +94,7 @@
                                         <th>Rate</th>
                                         <th>Quantity</th>
                                         <th>Price</th>
-                                        <th>Remove</th>
+                                        <th style="width:150px;">Remove</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -111,8 +111,8 @@
                                         <th><strong>TOTAL</strong></th>
                                         <th></th>
                                         <th></th>
-                                        <th></th>
                                         <th class="TotalPrice">0</th>
+                                        <th></th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -187,54 +187,64 @@
             // Manages and refreshes the cart
             cartManager($('#ProductSelection').val());
 
-            $('table td').on('change', function (evt, Quantity) {
+            $('#mainTable td').on('change', function (evt, Quantity) {
                 // do something with the new cell value
-                let Rate = parseInt($(evt.currentTarget).prev().text(), 10);
-                Quantity = parseInt(Quantity, 10);
-                $(evt.currentTarget).next().text(Rate * Quantity);
+                console.log($('.Price'));
+                console.log($('.Quantity'));
+                console.log(evt);
+                let totalPrice = 500;
+                // let Rate = parseInt($(evt.currentTarget).prev().text(), 10);
+                // Quantity = parseInt(Quantity, 10);
+                // $(evt.currentTarget).next().text(Rate * Quantity);
 
-                let prices = $('.Price');
-                let totalPrice = 0;
-                for (let i = 0; i < prices.length; i++) {
-                    totalPrice += parseInt($(prices[i]).text(), 10);
-                }
+                // let prices = $('.Price');
+                // let totalPrice = 0;
+                // for (let i = 0; i < prices.length; i++) {
+                //     totalPrice += parseInt($(prices[i]).text(), 10);
+                // }
                 $('.TotalPrice').text(totalPrice);
             });
 
         });
     });
 
-    cartManager = (selectedProductId) => {
+    cartManager = (selectedProductId = NaN) => {
         let selectedProduct = productsInCurrentOutlet[selectedProductId];
-
-        // Add product to Cart
-        if (!cart.includes(selectedProduct)) {
-            cart.push(selectedProduct);
-        } else {
-            cart.pop(selectedProduct);
+        if (selectedProductId != NaN) {
+            // Add product to Cart
+            if (!cart.includes(selectedProduct)) {
+                selectedProduct.quantity = 1;
+                selectedProduct.outletId = $('#OutletSelection').val();
+                cart.push(selectedProduct);
+            } else {
+                let temp = cart;
+                cart = [];
+                for (let i = 0; i < temp.length; i++) {
+                    console.log(temp[i]);
+                    if (temp[i] != selectedProduct) {
+                        cart.push(temp[i]);
+                    }
+                }
+            }
         }
+        $('#ProductSelection').val('');
+        $('#ProductSelection').selectpicker('refresh');
 
         // Clear existing list
         $('#mainTable tbody').empty();
 
         // Updating list
         $(cart).each((index, element) => {
-            console.log(element);
             $('#mainTable tbody').append(
                 '<tr>'
                 + '<th>' + element.productName + '</th>'
                 + ' <td tabindex="1" class="Price">' + element.retailPrice + '</td>'
-                + ' <td tabindex="1">1</td>'
+                + ' <td tabindex="2" class="Quantity">' + element.quantity + '</td>'
                 + ' <td>' + element.retailPrice + '</td>'
                 + ' <td> <button type="button" onclick="cartManager(' + element.productId + ')"class="btn l-blush waves-effect" title="Archive"><i class="zmdi zmdi-delete"></i></button></td>'
                 + '</tr>'
             );
         })
-    }
-
-    removeFromCart = (productId) => {
-        alert(productId);
-        return
     }
 </script>
 
