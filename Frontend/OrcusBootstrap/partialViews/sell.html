@@ -102,7 +102,7 @@
                                         <th>Segway</th>
                                         <th>330</th>
                                         <td>0</td>
-                                        <th class="Price">0</th>
+                                        <th class="Rates">0</th>
                                         <th>0</th>
                                     </tr>
                                 </tbody>
@@ -188,25 +188,27 @@
             cartManager($('#ProductSelection').val());
 
             $('#mainTable td').on('change', function (evt, Quantity) {
-                // do something with the new cell value
-                console.log($('.Price'));
-                console.log($('.Quantity'));
-                console.log(evt);
-                let totalPrice = 500;
-                // let Rate = parseInt($(evt.currentTarget).prev().text(), 10);
-                // Quantity = parseInt(Quantity, 10);
-                // $(evt.currentTarget).next().text(Rate * Quantity);
-
-                // let prices = $('.Price');
-                // let totalPrice = 0;
-                // for (let i = 0; i < prices.length; i++) {
-                //     totalPrice += parseInt($(prices[i]).text(), 10);
-                // }
-                $('.TotalPrice').text(totalPrice);
+                updateCartValue();
             });
-
         });
     });
+
+    updateCartValue = () => {
+        debugger;
+        // do something with the new cell value
+        let rates = $('.Rates');
+        let quantities = $('.Quantity');
+        let price = $('.Price');
+        let totalPrice = 0;
+
+        for (let i = 0; i < rates.length; i++) {
+            totalPrice += $(rates[i]).text() * $(quantities[i]).text();
+            $(price[i]).text($(rates[i]).text() * $(quantities[i]).text());
+            cart[i].quantity = $(quantities[i]).text();
+        }
+
+        $('.TotalPrice').text(totalPrice);
+    }
 
     cartManager = (selectedProductId = NaN) => {
         let selectedProduct = productsInCurrentOutlet[selectedProductId];
@@ -220,7 +222,6 @@
                 let temp = cart;
                 cart = [];
                 for (let i = 0; i < temp.length; i++) {
-                    console.log(temp[i]);
                     if (temp[i] != selectedProduct) {
                         cart.push(temp[i]);
                     }
@@ -238,13 +239,15 @@
             $('#mainTable tbody').append(
                 '<tr>'
                 + '<th>' + element.productName + '</th>'
-                + ' <td tabindex="1" class="Price">' + element.retailPrice + '</td>'
+                + ' <td tabindex="1" class="Rates">' + element.retailPrice + '</td>'
                 + ' <td tabindex="2" class="Quantity">' + element.quantity + '</td>'
-                + ' <td>' + element.retailPrice + '</td>'
+                + ' <td class="Price">' + element.retailPrice + '</td>'
                 + ' <td> <button type="button" onclick="cartManager(' + element.productId + ')"class="btn l-blush waves-effect" title="Archive"><i class="zmdi zmdi-delete"></i></button></td>'
                 + '</tr>'
             );
         })
+
+        updateCartValue();
     }
 </script>
 
