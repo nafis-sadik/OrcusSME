@@ -143,6 +143,14 @@
         $('#mainTable tbody').empty();
     }
 
+    downloadVowcher = (htmlId, pdfName) => {
+        if (htmlId[0] != '#') { htmlId = '#' + htmlId; }
+        let pdfEngine = jspdf();
+        let doc = document.querySelector(htmlId);
+        pdfEngine.fromHTML(doc, 0, 0);
+        pdfEngine.save('pdfName.pdf');
+    }
+
     $(document).ready(() => {
         $('#ProductSection').hide();
         $('select').selectpicker();
