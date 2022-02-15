@@ -256,7 +256,7 @@ namespace Services.Orcus.Implementation
                 else
                 {
                     // Check if the person owns the outlet or not
-                    Outlet outlet = _outletManagerRepo.Get(Convert.ToInt32(outletId));
+                    Outlet outlet = _outletManagerRepo.Get(Convert.ToDecimal(outletId));
                     if (outlet.UserId != userId)
                         return null;
 

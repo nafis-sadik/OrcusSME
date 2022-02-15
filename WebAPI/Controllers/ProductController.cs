@@ -62,14 +62,18 @@ namespace WebAPI.Controllers
         [Authorize]
         [HttpPost]
         [Route("Sell")]
-        public IActionResult Sell(ProductModel purchaseModel)
+        public IActionResult Sell(List<ProductModel> productModels)
         {
-            if (_productService.SellProduct(purchaseModel) == true)
-                return Ok(new { Response = "Success" });
-            else if (_productService.SellProduct(purchaseModel) == null)
-                return Conflict(new { Response = "Product not found" });
-            else
-                return Conflict(new { Response = CommonConstants.HttpResponseMessages.Exception });
+            foreach(ProductModel productModel in productModels)
+            {
+                if (_productService.SellProduct(productModel) == true)
+                    continue;
+                else if (_productService.SellProduct(productModel) == null)
+                    continue;
+                else
+                    return Conflict(new { Response = CommonConstants.HttpResponseMessages.Exception });
+            }
+            return Ok(new { Response = "Success" });
         }
 
         [Authorize]

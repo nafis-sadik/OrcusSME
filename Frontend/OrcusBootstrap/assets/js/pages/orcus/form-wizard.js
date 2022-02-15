@@ -36,7 +36,18 @@ $(function () {
             return form.valid();
         },
         onFinished: function (event, currentIndex) {
-            swal.fire("Good job!", "Submitted!", "success");
+            let param = {
+                URL: Route.Base + Route.Product.Sell,
+                Method: 'POST',
+                Data: cart,
+                Success: (res) => {
+                    swal.fire("Success", "Order has been placed successfully!!", "success");
+                },
+                Error: (res) => {
+                    console.log(res.responseJSON);
+                }
+            };
+            APIConsumptionAuth(param);
         }
     });
 
