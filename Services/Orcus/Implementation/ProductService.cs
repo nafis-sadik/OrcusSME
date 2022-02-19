@@ -224,7 +224,6 @@ namespace Services.Orcus.Implementation
 
         public IEnumerable<ProductModel> GetInventory(string userId, int? outletId)
         {
-            int OutletId = Convert.ToInt32(outletId);
             IEnumerable<ProductModel> response = new List<ProductModel>();
             try
             {
@@ -235,10 +234,12 @@ namespace Services.Orcus.Implementation
                 List<Product> products = new List<Product>();
                 List<ProductModel> productsList = new List<ProductModel>();
                 // Return all outlets when no outlet selected
-                if (outletId < 0 || outletId == null)
+                if (outletId <= 0 || outletId == null)
                 {
                     // Get Outlet Ids of Person
-                    List<Outlet> outlets = _outletManagerRepo.AsQueryable().Where(x => x.UserId == userId && x.Status == CommonConstants.StatusTypes.Active).ToList();
+                    var outlets = _outletManagerRepo.AsQueryable()
+                        .Where(x => x.UserId == userId && x.Status == CommonConstants.StatusTypes.Active)
+                        .ToList();
                     foreach (Outlet outlet in outlets)
                         productsList.AddRange(_productRepo.AsQueryable()
                             .Where(product => product.Category.OutletId == outlet.OutletId && product.Status == CommonConstants.StatusTypes.Active)
@@ -262,7 +263,7 @@ namespace Services.Orcus.Implementation
 
                     // Get all products of the outlet
                     productsList.AddRange(_productRepo.AsQueryable()
-                        .Where(x => x.Category.OutletId == OutletId)
+                        .Where(x => x.Category.OutletId == outletId)
                         .Select(product => new ProductModel
                         {
                             ProductId = product.ProductId,

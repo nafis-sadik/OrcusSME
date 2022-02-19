@@ -10,9 +10,10 @@ namespace DataLayer.Entities
         public Outlet()
         {
             Categories = new HashSet<Category>();
+            Customers = new HashSet<Customer>();
         }
 
-        public decimal OutletId { get; set; }
+        public int OutletId { get; set; }
         public string OutletName { get; set; }
         public string OutletAddresss { get; set; }
         public string EcomUrl { get; set; }
@@ -23,5 +24,6 @@ namespace DataLayer.Entities
 
         public virtual User User { get; set; }
         public virtual ICollection<Category> Categories { get; set; }
+        public virtual ICollection<Customer> Customers { get; set; }
     }
 }

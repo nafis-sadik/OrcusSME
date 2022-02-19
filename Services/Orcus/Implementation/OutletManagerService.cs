@@ -167,10 +167,13 @@ namespace Services.Orcus.Implementation
 
         public List<Models.Outlet> GetOutletsByUserId(string userId)
         {
-            List<Models.Outlet> response = null;
+            List<Models.Outlet> response = new List<Models.Outlet>();
             try
             {
-                response = _outletManagerRepo.AsQueryable().Where(x => x.UserId == userId && x.Status == CommonConstants.StatusTypes.Active).Select(x => new Models.Outlet { OutletId = x.OutletId, OutletName = x.OutletName }).ToList();
+                response = _outletManagerRepo.AsQueryable()
+                    .Where(x => x.UserId == userId && x.Status == CommonConstants.StatusTypes.Active)
+                    .Select(x => new Models.Outlet { OutletId = (decimal)x.OutletId, OutletName = x.OutletName })
+                    .ToList();
             }
             catch (Exception ex)
             {

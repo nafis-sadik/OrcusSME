@@ -1,8 +1,7 @@
 ﻿using System;
-using DataLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-
+using DataLayer.Entities;
 #nullable disable
 
 namespace DataLayer.MSSQL
@@ -24,9 +23,11 @@ namespace DataLayer.MSSQL
         public virtual DbSet<CommonCode> CommonCodes { get; set; }
         public virtual DbSet<ContactNumber> ContactNumbers { get; set; }
         public virtual DbSet<Crashlog> Crashlogs { get; set; }
+        public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<EmailAddress> EmailAddresses { get; set; }
         public virtual DbSet<Image> Images { get; set; }
         public virtual DbSet<InventoryLog> InventoryLogs { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Outlet> Outlets { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductAttribute> ProductAttributes { get; set; }
@@ -101,8 +102,6 @@ namespace DataLayer.MSSQL
                 entity.Property(e => e.CategoryName)
                     .HasMaxLength(50)
                     .IsUnicode(false);
-
-                entity.Property(e => e.OutletId).HasColumnType("decimal(18, 0)");
 
                 entity.Property(e => e.Status)
                     .HasMaxLength(1)
@@ -192,6 +191,29 @@ namespace DataLayer.MSSQL
                 entity.Property(e => e.TimeStamp).HasColumnType("datetime");
             });
 
+            modelBuilder.Entity<Customer>(entity =>
+            {
+                entity.Property(e => e.CustomerId).ValueGeneratedNever();
+
+                entity.Property(e => e.Address)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.ContactNo)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.ContactNumber).HasMaxLength(255);
+
+                entity.Property(e => e.CustomerName).HasMaxLength(255);
+
+                entity.HasOne(d => d.Outletl)
+                    .WithMany(p => p.Customers)
+                    .HasForeignKey(d => d.OutletlId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Customers_Outlets");
+            });
+
             modelBuilder.Entity<EmailAddress>(entity =>
             {
                 entity.HasKey(e => e.EmailPk)
@@ -252,6 +274,11 @@ namespace DataLayer.MSSQL
                     .IsRequired()
                     .HasMaxLength(50);
 
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.InventoryLogs)
+                    .HasForeignKey(d => d.OrderId)
+                    .HasConstraintName("FK_InventoryLog_Orders");
+
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.InventoryLogs)
                     .HasForeignKey(d => d.ProductId)
@@ -259,11 +286,22 @@ namespace DataLayer.MSSQL
                     .HasConstraintName("FK_InventoryLog_Products");
             });
 
+            modelBuilder.Entity<Order>(entity =>
+            {
+                entity.Property(e => e.OrderId).ValueGeneratedNever();
+
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.CustomerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Orders_Customers");
+            });
+
             modelBuilder.Entity<Outlet>(entity =>
             {
                 entity.HasIndex(e => e.UserId, "IX_Outlets_UserId");
 
-                entity.Property(e => e.OutletId).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.OutletId).ValueGeneratedNever();
 
                 entity.Property(e => e.EcomUrl)
                     .HasColumnType("text")
