@@ -14,6 +14,8 @@ using Services.Orcus.Implementation;
 using System.Text;
 using Services.Orcus.Abstraction;
 using UMS.Services.Implementation;
+using Services.CommonServices.Abstraction;
+using Services.CommonServices.Implementation;
 
 namespace WebAPI
 {
@@ -71,6 +73,11 @@ namespace WebAPI
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped(typeof(IProductService), typeof(ProductService));
 
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped(typeof(ICategoryService), typeof(CategoryService));
+
+            services.AddScoped<IFileService, FileService>();
+            services.AddScoped(typeof(IFileService), typeof(FileService));
             // Repos
             //services.AddScoped<IUserRepo, UserRepo>();
             //services.AddScoped(typeof(IUserRepo), typeof(UserRepo));

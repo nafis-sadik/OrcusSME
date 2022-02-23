@@ -18,5 +18,6 @@
         public int RetailPrice { get; set; }
         public float DueAmount { get; set; }
         public string UserId { get; set; }
+        public int [] ProductImageIds { get; set; }
     }
 }

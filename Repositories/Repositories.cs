@@ -51,4 +51,14 @@ namespace Repositories
     {
         public ProductRepo(OrcusSMEContext context) : base(context) { }
     }
+    public interface IFileRepo : IRepositoryBase<File> { }
+    public class FileRepo : RepositoryBase<File>, IFileRepo
+    {
+        public FileRepo(OrcusSMEContext context) : base(context) { }
+    }
+    public interface IProductPictureRepo : IRepositoryBase<ProductPicture> { }
+    public class ProductPictureRepo : RepositoryBase<ProductPicture>, IProductPictureRepo
+    {
+        public ProductPictureRepo(OrcusSMEContext context) : base(context) { }
+    }
 }

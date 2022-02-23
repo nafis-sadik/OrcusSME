@@ -24,6 +24,7 @@ namespace Services.Orcus.Implementation
         private readonly IProductRepo _productRepo;
         private readonly IOutletManagerRepo _outletManagerRepo;
         private readonly ICategoryRepo _categoryRepo;
+        private readonly IProductPictureRepo _productPicRepo;
 
         public ProductService()
         {
@@ -34,6 +35,7 @@ namespace Services.Orcus.Implementation
             _productRepo = new ProductRepo(context);
             _outletManagerRepo = new OutletManagerRepo(context);
             _categoryRepo = new CategoryRepo(context);
+            _productPicRepo = new ProductPictureRepo(context);
         }
 
         public IEnumerable<ProductUnitTypeModel> GetProductUnitTypes()
@@ -138,6 +140,15 @@ namespace Services.Orcus.Implementation
                     ProductId = productData.ProductId,
                     Quantity = (int)productData.Quantity,
                 });
+
+                foreach(int id in product.ProductImageIds)
+                {
+                    _productPicRepo.Add(new ProductPicture
+                    {
+                        ProductPictureId = pk,
+                        FileId = id,
+                    });
+                }
 
                 return true;
             }

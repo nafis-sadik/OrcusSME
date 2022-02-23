@@ -46,17 +46,13 @@
                         </div>
                         <div class="col-sm-4">
                             <span>Unit</span>
-                            <select id="Unit"
-                                    class="form-control show-tick">
+                            <select id="Unit" class="form-control show-tick">
                                 <option value="">-- Please select --</option>
                             </select>
                         </div>
                         <div class="form-group col-sm-4">
                             <span>Quantity</span>
-                            <input id="Quantity"
-                                   type="number"
-                                   class="form-control"
-                                   placeholder="Quantity" />
+                            <input id="Quantity" type="number" class="form-control" placeholder="Quantity" />
                         </div>
                     </div>
                     <h2 class="card-inside-title">Product Pricing</h2>
@@ -139,17 +135,13 @@
                                     <h2><strong>Upload Product Images</strong> Drag & Drop OR With Click & Choose </h2>
                                 </div>
                                 <div class="body">
-                                    <div id="frmFileUpload"
-                                         class="dropzone"
-                                         enctype="multipart/form-data">
+                                    <div id="frmFileUpload" class="dropzone" enctype="multipart/form-data">
                                         <div class="dz-message">
                                             <div class="drag-icon-cph"> <i class="material-icons">touch_app</i> </div>
                                             <h3>Drop files here or click to upload.</h3>
                                         </div>
                                         <div class="fallback">
-                                            <input name="file"
-                                                   type="file"
-                                                   multiple />
+                                            <input name="file" type="file" multiple id="DropzoneFiles" />
                                         </div>
                                     </div>
                                 </div>
@@ -166,12 +158,42 @@
     </div>
     <script>
         dropzone = new Dropzone('#frmFileUpload', {
-            url: "/file/post",
-            parallelUploads: 5,
-            uploadMultiple: true,
+            url: "https://localhost:44375/api/Files/UploadFiles",
+            autoProcessQueue: false,
+            paramName: "DocumentPhotos", // The name that will be used to transfer the file
             acceptedFiles: '.png, .jpg, .jpeg',
-            autoProcessQueue: false
-        });
+            uploadMultiple: true,
+            parallelUploads: 50,
+            success: function (file, response) {
+                let param = {
+                    URL: Route.Base + Route.Product.Purchase,
+                    Method: 'POST',
+                    Data: {
+                        OutletId: $('#Outlets').val(),
+                        CategoryId: $('#Category').val(),
+                        SubCategoryId: $('#SubCategory').val(),
+                        ProductName: $('#ProductName').val(),
+                        UnitId: $('#Unit').val(),
+                        Quantity: $('#Quantity').val(),
+                        PurchasingPrice: $('#PurchasingPrice').val(),
+                        RetailPrice: $('#RetailPrice').val(),
+                        DueAmount: $('#DueAmount').val(),
+                        ProductDescription: $('#ProductDescription').val(),
+                        ProductImageIds: response
+                    },
+                    Success: (res) => {
+                        swal.fire('Successfully Saved!', '', "success");
+                    },
+                    Error: (res) => {
+                        console.log(res.responseJSON);
+                    }
+                };
+                APIConsumptionAuth(param);
+            },
+            error: (file, response) => {
+                console.log(response);
+            }
+        })
 
         onLoad = () => {
             $('#PurchasingPrice').change(() => {
@@ -272,7 +294,7 @@
 
         calculateNetAmount = () => {
             let dueAmount = $('#DueAmount').val();
-            if (dueAmount == NaN || dueAmount == null || dueAmount == undefined || dueAmount == "") {
+            if (dueAmount == NaN || dueAmount == null || dueAmount == "") {
                 dueAmount = 0;
                 $('#DueAmount').val('0');
             }
@@ -301,30 +323,7 @@
 
         $('#PurchaseForm').on('submit', (element) => {
             element.preventDefault();
-            let param = {
-                URL: Route.Base + Route.Product.Purchase,
-                Method: 'POST',
-                Data: {
-                    OutletId: $('#Outlets').val(),
-                    CategoryId: $('#Category').val(),
-                    SubCategoryId: $('#SubCategory').val(),
-                    ProductName: $('#ProductName').val(),
-                    UnitId: $('#Unit').val(),
-                    Quantity: $('#Quantity').val(),
-                    PurchasingPrice: $('#PurchasingPrice').val(),
-                    RetailPrice: $('#RetailPrice').val(),
-                    DueAmount: $('#DueAmount').val(),
-                    ProductDescription: $('#ProductDescription').val(),
-                },
-                Success: (res) => {
-                    swal.fire('Successfully Saved!', '', "success");
-                },
-                Error: (res) => {
-                    console.log(res.responseJSON);
-                }
-            };
-            APIConsumptionAuth(param);
-            // dropzone.processQueue();
+            dropzone.processQueue();
         })
     </script>
 </div>

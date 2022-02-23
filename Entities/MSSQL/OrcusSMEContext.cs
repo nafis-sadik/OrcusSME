@@ -1,7 +1,8 @@
 ﻿using System;
+using DataLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using DataLayer.Entities;
+
 #nullable disable
 
 namespace DataLayer.MSSQL
@@ -25,12 +26,14 @@ namespace DataLayer.MSSQL
         public virtual DbSet<Crashlog> Crashlogs { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<EmailAddress> EmailAddresses { get; set; }
+        public virtual DbSet<File> Files { get; set; }
         public virtual DbSet<Image> Images { get; set; }
         public virtual DbSet<InventoryLog> InventoryLogs { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Outlet> Outlets { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductAttribute> ProductAttributes { get; set; }
+        public virtual DbSet<ProductPicture> ProductPictures { get; set; }
         public virtual DbSet<ProductUnitType> ProductUnitTypes { get; set; }
         public virtual DbSet<Service> Services { get; set; }
         public virtual DbSet<SubscriptionLog> SubscriptionLogs { get; set; }
@@ -251,6 +254,11 @@ namespace DataLayer.MSSQL
                     .HasConstraintName("FK_EmailId_User");
             });
 
+            modelBuilder.Entity<File>(entity =>
+            {
+                entity.Property(e => e.FileId).ValueGeneratedNever();
+            });
+
             modelBuilder.Entity<Image>(entity =>
             {
                 entity.Property(e => e.ImageId).ValueGeneratedNever();
@@ -391,6 +399,23 @@ namespace DataLayer.MSSQL
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ProductAttributes_Products");
+            });
+
+            modelBuilder.Entity<ProductPicture>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.HasOne(d => d.File)
+                    .WithMany()
+                    .HasForeignKey(d => d.FileId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProductPictures_Files");
+
+                entity.HasOne(d => d.ProductPictureNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.ProductPictureId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProductPictures_Products");
             });
 
             modelBuilder.Entity<ProductUnitType>(entity =>
