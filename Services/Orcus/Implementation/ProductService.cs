@@ -93,21 +93,13 @@ namespace Services.Orcus.Implementation
             }
         }
 
-        public bool PurchaseProduct(ProductModel product)
+        public bool PurchaseProduct(ProductModel product, out int productId)
         {
             int pk;
+            productId = 0;
             try
             {
                 Product productData = new Product();
-                if (product.ProductId != 0)
-                    productData = _productRepo.Get(product.ProductId);
-                else
-                {
-                    if (!_productRepo.AsQueryable().Any())
-                        productData.ProductId = 1;
-                    else
-                        productData.ProductId = _productRepo.AsQueryable().Count() + 1;
-                }
                 productData.ProductName = product.ProductName;
                 if (product.SubCategoryId != 0)
                     productData.CategoryId = product.SubCategoryId;
@@ -124,7 +116,20 @@ namespace Services.Orcus.Implementation
                 if (product.ProductId != 0)
                     _productRepo.Update(productData);
                 else
+                {
+                    if (product.ProductId != 0)
+                        productData = _productRepo.Get(product.ProductId);
+                    else
+                    {
+                        if (!_productRepo.AsQueryable().Any())
+                            productData.ProductId = 1;
+                        else
+                            productData.ProductId = _productRepo.AsQueryable().Count() + 1;
+                    }
+
                     _productRepo.Add(productData);
+                    productId = productData.ProductId;
+                }
 
                 if (!_inventoryLogRepo.AsQueryable().Any())
                     pk = 1;

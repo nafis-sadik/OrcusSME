@@ -157,40 +157,46 @@
         </div>
     </div>
     <script>
+        let testFunction = () => {
+            let RandomStringGenerator = () => {
+                var result = '';
+                var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                for (var i = 0; i < characters.length; i++) {
+                    result += characters[Math.floor(Math.random() * characters.length)];
+                }
+                return result;
+            }
+
+            let getRandomInt = (max) => {
+                return Math.floor(Math.random() * max).toString();
+            }
+
+            $('#ProductName').val(RandomStringGenerator());
+            $('#Unit').val(getRandomInt(3));
+            $('#Quantity').val(getRandomInt(1000));
+            $('#PurchasingPrice').val(getRandomInt(1000));
+            $('#RetailPrice').val(getRandomInt(1000));
+            $('#DueAmount').val(getRandomInt(1000));
+            $('#ProductDescription').val(RandomStringGenerator());
+            $('select').selectpicker('refresh');
+        }
         dropzone = new Dropzone('#frmFileUpload', {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'ProductId': 55
+            },
             url: "https://localhost:44375/api/Files/UploadFiles",
+            maxFilesize: 4096,
             autoProcessQueue: false,
             paramName: "DocumentPhotos", // The name that will be used to transfer the file
             acceptedFiles: '.png, .jpg, .jpeg',
             uploadMultiple: true,
             parallelUploads: 50,
-            success: function (file, response) {
-                let param = {
-                    URL: Route.Base + Route.Product.Purchase,
-                    Method: 'POST',
-                    Data: {
-                        OutletId: $('#Outlets').val(),
-                        CategoryId: $('#Category').val(),
-                        SubCategoryId: $('#SubCategory').val(),
-                        ProductName: $('#ProductName').val(),
-                        UnitId: $('#Unit').val(),
-                        Quantity: $('#Quantity').val(),
-                        PurchasingPrice: $('#PurchasingPrice').val(),
-                        RetailPrice: $('#RetailPrice').val(),
-                        DueAmount: $('#DueAmount').val(),
-                        ProductDescription: $('#ProductDescription').val(),
-                        ProductImageIds: response
-                    },
-                    Success: (res) => {
-                        swal.fire('Successfully Saved!', '', "success");
-                    },
-                    Error: (res) => {
-                        console.log(res.responseJSON);
-                    }
-                };
-                APIConsumptionAuth(param);
+            successmultiple: function (file, response) {
+                swal.fire('Successfully Saved!', '', "success");
             },
             error: (file, response) => {
+                console.log(file)
                 console.log(response);
             }
         })
@@ -323,7 +329,34 @@
 
         $('#PurchaseForm').on('submit', (element) => {
             element.preventDefault();
+
             dropzone.processQueue();
+
+            return
+            let param = {
+                URL: Route.Base + Route.Product.Purchase,
+                Method: 'POST',
+                Data: {
+                    OutletId: $('#Outlets').val(),
+                    CategoryId: $('#Category').val(),
+                    SubCategoryId: $('#SubCategory').val(),
+                    ProductName: $('#ProductName').val(),
+                    UnitId: $('#Unit').val(),
+                    Quantity: $('#Quantity').val(),
+                    PurchasingPrice: $('#PurchasingPrice').val(),
+                    RetailPrice: $('#RetailPrice').val(),
+                    DueAmount: $('#DueAmount').val(),
+                    ProductDescription: $('#ProductDescription').val()
+                },
+                Success: (res) => {
+                    dropzone.processQueue();
+                },
+                Error: (res) => {
+                    console.log(res.responseJSON);
+                }
+            };
+
+            APIConsumptionAuth(param);
         })
     </script>
 </div>

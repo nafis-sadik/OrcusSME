@@ -8,6 +8,6 @@ namespace Services.CommonServices.Abstraction
 {
     public interface IFileService
     {
-        public int[] SaveFiles(string [] FileNames, string [] FilePaths);
+        public int[] SaveProductImages(string [] FileNames, int productId);
     }
 }

@@ -53,8 +53,8 @@ namespace WebAPI.Controllers
         [Route("Purchase")]
         public IActionResult Purchase(ProductModel purchaseModel)
         {
-            if (_productService.PurchaseProduct(purchaseModel))
-                return Ok(new { Response = "Success" });
+            if (_productService.PurchaseProduct(purchaseModel, out int productId))
+                return Ok(new { Response = productId });
             else
                 return Conflict(new { Response = CommonConstants.HttpResponseMessages.Exception });
         }

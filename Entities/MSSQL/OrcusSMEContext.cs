@@ -403,7 +403,8 @@ namespace DataLayer.MSSQL
 
             modelBuilder.Entity<ProductPicture>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.ProductPictureId)
+                    .HasName("PK__ProductU__5085C454884EB7EB");
 
                 entity.HasOne(d => d.File)
                     .WithMany()
