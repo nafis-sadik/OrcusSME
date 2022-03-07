@@ -25,9 +25,9 @@ namespace Services.Orcus.Implementation
             _crashLogRepo = new CrashLogRepo(context);
         }
 
-        public List<Models.Outlet> AddOutlet(Models.Outlet outlet)
+        public List<Models.OutletModel> AddOutlet(Models.OutletModel outlet)
         {
-            List<Models.Outlet> response = new List<Models.Outlet>();
+            List<Models.OutletModel> response = new List<Models.OutletModel>();
             try
             {
                 int pk = 0;
@@ -44,7 +44,7 @@ namespace Services.Orcus.Implementation
                 });
 
                 if (status)
-                    response = _outletManagerRepo.AsQueryable().Where(x => x.UserId == outlet.UserId && x.Status == CommonConstants.StatusTypes.Active).Select(x => new Models.Outlet { OutletId = x.OutletId, OutletName = x.OutletName }).ToList();
+                    response = _outletManagerRepo.AsQueryable().Where(x => x.UserId == outlet.UserId && x.Status == CommonConstants.StatusTypes.Active).Select(x => new Models.OutletModel { OutletId = x.OutletId, OutletName = x.OutletName }).ToList();
                 else
                     return null;
             }
@@ -77,9 +77,9 @@ namespace Services.Orcus.Implementation
             return response;
         }
 
-        public List<Models.Outlet> ArchiveOutlet(Models.Outlet outlet)
+        public List<Models.OutletModel> ArchiveOutlet(Models.OutletModel outlet)
         {
-            List<Models.Outlet> response = new List<Models.Outlet>();
+            List<Models.OutletModel> response = new List<Models.OutletModel>();
             Outlet oldData = _outletManagerRepo.AsQueryable().FirstOrDefault(x => x.OutletId == outlet.OutletId);
             try
             {
@@ -89,7 +89,7 @@ namespace Services.Orcus.Implementation
                     _outletManagerRepo.Update(oldData);
                 }
 
-                response = _outletManagerRepo.AsQueryable().Where(x => x.UserId == outlet.UserId && x.Status == CommonConstants.StatusTypes.Active).Select(x => new Models.Outlet { OutletId = x.OutletId, OutletName = x.OutletName }).ToList();
+                response = _outletManagerRepo.AsQueryable().Where(x => x.UserId == outlet.UserId && x.Status == CommonConstants.StatusTypes.Active).Select(x => new Models.OutletModel { OutletId = x.OutletId, OutletName = x.OutletName }).ToList();
             }
             catch (Exception ex)
             {
@@ -121,13 +121,13 @@ namespace Services.Orcus.Implementation
             return response;
         }
 
-        public Models.Outlet GetOutlet(decimal outletId)
+        public Models.OutletModel GetOutlet(decimal outletId)
         {
-            Models.Outlet response;
+            Models.OutletModel response;
             try
             {
                 Outlet outlet = _outletManagerRepo.Get(outletId);
-                response = new Models.Outlet
+                response = new Models.OutletModel
                 {
                     OutletId = outlet.OutletId,
                     OutletName = outlet.OutletName,
@@ -165,14 +165,14 @@ namespace Services.Orcus.Implementation
             return response;
         }
 
-        public List<Models.Outlet> GetOutletsByUserId(string userId)
+        public List<Models.OutletModel> GetOutletsByUserId(string userId)
         {
-            List<Models.Outlet> response = new List<Models.Outlet>();
+            List<Models.OutletModel> response = new List<Models.OutletModel>();
             try
             {
                 response = _outletManagerRepo.AsQueryable()
                     .Where(x => x.UserId == userId && x.Status == CommonConstants.StatusTypes.Active)
-                    .Select(x => new Models.Outlet { OutletId = (decimal)x.OutletId, OutletName = x.OutletName })
+                    .Select(x => new Models.OutletModel { OutletId = x.OutletId, OutletName = x.OutletName })
                     .ToList();
             }
             catch (Exception ex)
@@ -249,9 +249,9 @@ namespace Services.Orcus.Implementation
             }
         }
 
-        public List<Models.Outlet> UpdateOutlet(Models.Outlet outlet)
+        public List<Models.OutletModel> UpdateOutlet(Models.OutletModel outlet)
         {
-            List<Models.Outlet> response = new List<Models.Outlet>();
+            List<Models.OutletModel> response = new List<Models.OutletModel>();
             try
             {
                 Outlet oldData = _outletManagerRepo.AsQueryable().FirstOrDefault(x => x.OutletId == outlet.OutletId);
@@ -265,7 +265,7 @@ namespace Services.Orcus.Implementation
                     _outletManagerRepo.Update(oldData);
                 }
 
-                response = _outletManagerRepo.AsQueryable().Where(x => x.UserId == outlet.UserId && x.Status == CommonConstants.StatusTypes.Active).Select(x => new Models.Outlet { OutletId = x.OutletId, OutletName = x.OutletName }).ToList();
+                response = _outletManagerRepo.AsQueryable().Where(x => x.UserId == outlet.UserId && x.Status == CommonConstants.StatusTypes.Active).Select(x => new Models.OutletModel { OutletId = x.OutletId, OutletName = x.OutletName }).ToList();
             }
             catch (Exception ex)
             {

@@ -9,11 +9,11 @@ namespace Services.Orcus.Abstraction
 {
     public interface IOutletManagerService
     {
-        public List<Outlet> AddOutlet(Outlet outlet);
-        public List<Outlet> UpdateOutlet(Outlet outlet);
-        public List<Outlet> ArchiveOutlet(Outlet outlet);
-        public List<Outlet> GetOutletsByUserId(string UserId);
-        public Outlet GetOutlet(decimal OutletId);
+        public List<OutletModel> AddOutlet(OutletModel outlet);
+        public List<OutletModel> UpdateOutlet(OutletModel outlet);
+        public List<OutletModel> ArchiveOutlet(OutletModel outlet);
+        public List<OutletModel> GetOutletsByUserId(string UserId);
+        public OutletModel GetOutlet(decimal OutletId);
         public bool? OrderSite(decimal OutletId, out string response);
     }
 }

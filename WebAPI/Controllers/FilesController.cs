@@ -10,6 +10,11 @@ using Services.CommonServices.Abstraction;
 
 namespace WebAPI.Controllers
 {
+    public class Chutar
+    {
+        public int ProductId { get; set; }
+    }
+
     [Route("api/Files")]
     [ApiController]
     public class FilesController : ControllerBase
@@ -23,17 +28,17 @@ namespace WebAPI.Controllers
         [Authorize]
         [HttpPost]
         [Route("UploadFiles")]
-        public async Task<IActionResult> UploadImages()
+        public async Task<IActionResult> UploadImages([FromForm] int productId, List<IFormFile> file)
         {
-            IFormFileCollection DocumentPhotos = Request.Form.Files;
             try
             {
+                IFormFileCollection DocumentPhotos = Request.Form.Files;
                 if (DocumentPhotos == null || !DocumentPhotos.Any())
                     return NotFound(new int[] { });
 
                 string[] FileNames = new string[DocumentPhotos.Count];
                 string uploads = Path.Combine("Images");
-                int productId = int.Parse(Request.Headers["ProductId"]);
+                //int productId = 545;
                 for (int i = 0; i < DocumentPhotos.Count(); i++)
                 {
                     if (DocumentPhotos[i].Length > 0)

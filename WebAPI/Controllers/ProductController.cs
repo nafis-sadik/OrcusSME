@@ -3,6 +3,7 @@ using DataLayer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using Newtonsoft.Json;
 using Services.Orcus.Abstraction;
 using System;
@@ -50,10 +51,23 @@ namespace WebAPI.Controllers
 
         [Authorize]
         [HttpPost]
-        [Route("Purchase")]
-        public IActionResult Purchase(ProductModel purchaseModel)
+        [Route("SaveProduct")]
+        public IActionResult AddProduct(ProductModel purchaseModel)
         {
-            if (_productService.PurchaseProduct(purchaseModel, out int productId))
+            var productId = _productService.SaveProduct(purchaseModel);
+            if (productId != null)
+                return Ok(new { Response = productId });
+            else
+                return Conflict(new { Response = CommonConstants.HttpResponseMessages.Exception });
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("Purchase")]
+        public IActionResult PurchaseProduct(ProductModel purchaseModel)
+        {
+            bool productId = _productService.PurchaseProduct(purchaseModel.ProductId, purchaseModel.Quantity, purchaseModel.PurchasingPrice);
+            if (productId)
                 return Ok(new { Response = productId });
             else
                 return Conflict(new { Response = CommonConstants.HttpResponseMessages.Exception });
@@ -77,14 +91,11 @@ namespace WebAPI.Controllers
         }
 
         [Authorize]
-        [HttpGet]
-        [Route("Inventory/{UserId}/{OutletId?}")]
-        public IActionResult GetInventory(string userId, int? outletId)
+        [HttpPost]
+        [Route("Inventory")]
+        public IActionResult GetInventory(OutletModel outletModel)
         {
-            if (outletId == null)
-                outletId = 0;
-
-            IEnumerable<ProductModel> inventory = _productService.GetInventory(userId, outletId);
+            IEnumerable<ProductModel> inventory = _productService.GetInventory(outletModel);
             if (inventory != null)
             {
                 return Ok(new { Response = inventory });

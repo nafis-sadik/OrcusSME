@@ -4,6 +4,7 @@ using DataLayer.Models;
 using DataLayer.MSSQL;
 using DataLayer.MySql;
 using Microsoft.EntityFrameworkCore;
+using Models;
 using Repositories;
 using Repositories.Implementation;
 using Services.Orcus.Abstraction;
@@ -93,13 +94,20 @@ namespace Services.Orcus.Implementation
             }
         }
 
-        public bool PurchaseProduct(ProductModel product, out int productId)
+        public int? SaveProduct(ProductModel product)
         {
             int pk;
-            productId = 0;
+            Product productData;
             try
             {
-                Product productData = new Product();
+                if (product.ProductId <= 0)
+                    productData = new Product();
+                else
+                    productData = _productRepo.Get(product.ProductId);
+
+                if(productData == null)
+                    return null;
+
                 productData.ProductName = product.ProductName;
                 if (product.SubCategoryId != 0)
                     productData.CategoryId = product.SubCategoryId;
@@ -112,75 +120,29 @@ namespace Services.Orcus.Implementation
                 productData.Specifications = product.ProductSpecs;
                 productData.UnitTypeId = product.UnitTypeId;
                 productData.Status = CommonConstants.StatusTypes.Active;
-
-                if (product.ProductId != 0)
-                    _productRepo.Update(productData);
-                else
-                {
-                    if (product.ProductId != 0)
-                        productData = _productRepo.Get(product.ProductId);
-                    else
-                    {
-                        if (!_productRepo.AsQueryable().Any())
-                            productData.ProductId = 1;
-                        else
-                            productData.ProductId = _productRepo.AsQueryable().Count() + 1;
-                    }
-
+                if (product.ProductId <= 0)
                     _productRepo.Add(productData);
-                    productId = productData.ProductId;
-                }
-
-                if (!_inventoryLogRepo.AsQueryable().Any())
-                    pk = 1;
                 else
-                    pk = _inventoryLogRepo.AsQueryable().Count() + 1;
+                    _productRepo.Update(productData);
 
-                _inventoryLogRepo.Add(new InventoryLog
-                {
-                    InventoryLogId = pk,
-                    ActivityDate = DateTime.Now,
-                    InventoryUpdateType = CommonConstants.ActivityTypes.Purchase,
-                    Price = product.PurchasingPrice,
-                    ProductId = productData.ProductId,
-                    Quantity = (int)productData.Quantity,
-                });
-
-                foreach(int id in product.ProductImageIds)
-                {
-                    _productPicRepo.Add(new ProductPicture
-                    {
-                        ProductPictureId = pk,
-                        FileId = id,
-                    });
-                }
-
-                return true;
+                return productData.ProductId;
             }
             catch (Exception ex)
             {
                 _productUnitTypeRepo.Rollback();
+                _productRepo.Rollback();
 
-                if (!_crashLogRepo.AsQueryable().Any())
-                    pk = 0;
-                else
-                    pk = _crashLogRepo.GetMaxPK("CrashLogId") + 1;
-
-                string msg = (string.IsNullOrEmpty(ex.Message) || ex.Message.ToLower().Contains(CommonConstants.MsgInInnerException.ToLower()))
-                            ? ex.InnerException.Message
-                            : ex.Message;
                 _crashLogRepo.Add(new Crashlog
                 {
-                    CrashLogId = pk,
                     ClassName = "ProductService",
-                    MethodName = "PurchaseProduct",
+                    MethodName = "SaveProduct",
                     ErrorMessage = ex.Message,
-                    ErrorInner = msg,
+                    ErrorInner = ex.InnerException == null ? "" : ex.InnerException.Message,
                     Data = JsonSerializer.Serialize(product),
                     TimeStamp = DateTime.Now
                 });
 
-                return false;
+                return null;
             }
         }
 
@@ -192,16 +154,9 @@ namespace Services.Orcus.Implementation
                 if (productData == null) return null;
                 productData.Quantity -= product.Quantity;
                 _productRepo.Update(productData);
-                
-
-                if (!_inventoryLogRepo.AsQueryable().Any())
-                    pk = 1;
-                else
-                    pk = _inventoryLogRepo.AsQueryable().Count() + 1;
 
                 _inventoryLogRepo.Add(new InventoryLog
                 {
-                    InventoryLogId = pk,
                     ActivityDate = DateTime.Now,
                     InventoryUpdateType = CommonConstants.ActivityTypes.Sell,
                     Price = product.RetailPrice,
@@ -238,61 +193,45 @@ namespace Services.Orcus.Implementation
             }
         }
 
-        public IEnumerable<ProductModel> GetInventory(string userId, int? outletId)
+        public IEnumerable<ProductModel> GetInventory(OutletModel outletModel)
         {
             IEnumerable<ProductModel> response = new List<ProductModel>();
             try
             {
-                // Return null if UserId is null or empty
-                if (string.IsNullOrEmpty(userId))
-                    return null;
-
-                List<Product> products = new List<Product>();
-                List<ProductModel> productsList = new List<ProductModel>();
+                List<int> outlets = new List<int>();
                 // Return all outlets when no outlet selected
-                if (outletId <= 0 || outletId == null)
+                if (outletModel.OutletId <= 0)
                 {
                     // Get Outlet Ids of Person
-                    var outlets = _outletManagerRepo.AsQueryable()
-                        .Where(x => x.UserId == userId && x.Status == CommonConstants.StatusTypes.Active)
-                        .ToList();
-                    foreach (Outlet outlet in outlets)
-                        productsList.AddRange(_productRepo.AsQueryable()
-                            .Where(product => product.Category.OutletId == outlet.OutletId && product.Status == CommonConstants.StatusTypes.Active)
-                            .Select(product => new ProductModel
-                            {
-                                ProductId = product.ProductId,
-                                ProductName = product.ProductName,
-                                Quantity = (int)product.Quantity,
-                                PurchasingPrice = product.PurchasingPrice,
-                                RetailPrice = (int)product.RetailPrice,
-                                OutletName = product.Category.Outlet.OutletName
-                            })
-                            .ToList());
+                    outlets.AddRange(_outletManagerRepo.AsQueryable()
+                        .Where(x => x.UserId == outletModel.UserId && x.Status == CommonConstants.StatusTypes.Active)
+                        .Select(x => x.OutletId)
+                        .ToList());
                 }
                 else
                 {
                     // Check if the person owns the outlet or not
-                    Outlet outlet = _outletManagerRepo.Get(Convert.ToDecimal(outletId));
-                    if (outlet.UserId != userId)
+                    Outlet outlet = _outletManagerRepo.Get(outletModel.OutletId);
+                    if (outlet == null || outlet.UserId != outletModel.UserId)
                         return null;
 
-                    // Get all products of the outlet
-                    productsList.AddRange(_productRepo.AsQueryable()
-                        .Where(x => x.Category.OutletId == outletId)
-                        .Select(product => new ProductModel
-                        {
-                            ProductId = product.ProductId,
-                            ProductName = product.ProductName,
-                            Quantity = (int)product.Quantity,
-                            PurchasingPrice = product.PurchasingPrice,
-                            RetailPrice = (int)product.RetailPrice,
-                            OutletName = product.Category.Outlet.OutletName
-                        })
-                        .ToList());
+                    outlets.Add((int)outletModel.OutletId);
                 }
 
-                response = productsList;
+
+                return _productRepo.AsQueryable()
+                    .Where(product => outlets.Contains(product.Category.OutletId) && product.Status == CommonConstants.StatusTypes.Active)
+                    .Select(product => new ProductModel
+                    {
+                        ProductId = product.ProductId,
+                        ProductName = product.ProductName,
+                        Quantity = product.Quantity,
+                        RetailPrice = (int)product.RetailPrice,
+                        OutletName = product.Category.Outlet.OutletName
+                    })
+                    .Skip(outletModel.Skip)
+                    .Take(outletModel.PageSize)
+                    .ToList();
             }
             catch (Exception ex)
             {
@@ -309,12 +248,11 @@ namespace Services.Orcus.Implementation
                             : ex.Message;
                 _crashLogRepo.Add(new Crashlog
                 {
-                    CrashLogId = pk,
                     ClassName = "ProductService",
                     MethodName = "SellProduct",
                     ErrorMessage = ex.Message,
                     ErrorInner = msg,
-                    Data = JsonSerializer.Serialize("string userId = " + userId + ", int? outletId = " + outletId),
+                    Data = JsonSerializer.Serialize("string userId = " + outletModel.UserId + ", int? outletId = " + outletModel.OutletId),
                     TimeStamp = DateTime.Now
                 });
                 return null;
@@ -367,6 +305,45 @@ namespace Services.Orcus.Implementation
                 });
 
                 return null;
+            }
+        }
+
+        public bool PurchaseProduct(int productId, int quantity, double purchasingPrice)
+        {
+            try
+            {
+                Product product = _productRepo.Get(productId);
+                if (product == null) return false;
+                product.Quantity += quantity;
+                _productRepo.Update(product);
+
+                _inventoryLogRepo.Add(new InventoryLog
+                {
+                    ActivityDate = DateTime.Now,
+                    InventoryUpdateType = CommonConstants.ActivityTypes.Purchase,
+                    Price = purchasingPrice,
+                    ProductId = product.ProductId,
+                    Quantity = quantity,
+                });
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _productUnitTypeRepo.Rollback();
+                _productRepo.Rollback();
+
+                _crashLogRepo.Add(new Crashlog
+                {
+                    ClassName = "ProductService",
+                    MethodName = "PurchaseProduct",
+                    ErrorMessage = ex.Message,
+                    ErrorInner = ex.InnerException == null? "" : ex.InnerException.Message,
+                    Data = JsonSerializer.Serialize("ProductId <=> " + productId + " Quantity <=> " + quantity + " Purchasing Price <=> " + purchasingPrice),
+                    TimeStamp = DateTime.Now
+                });
+
+                return false;
             }
         }
     }

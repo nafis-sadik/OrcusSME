@@ -19,9 +19,9 @@ namespace WebAPI.Controllers
         [Authorize]
         [HttpPut]
         [Route("Add")]
-        public IActionResult Add(Outlet outlet)
+        public IActionResult Add(OutletModel outlet)
         {
-            List<Outlet> data = _outletManagerService.AddOutlet(outlet);
+            List<OutletModel> data = _outletManagerService.AddOutlet(outlet);
             if (data != null && data.Count > 0)
                 return new OkObjectResult(new { Response = data });
             else if(data == null)
@@ -33,9 +33,9 @@ namespace WebAPI.Controllers
         [Authorize]
         [HttpPost]
         [Route("Archive")]
-        public IActionResult Archive(Outlet outlet)
+        public IActionResult Archive(OutletModel outlet)
         {
-            List<Outlet> data = _outletManagerService.ArchiveOutlet(outlet);
+            List<OutletModel> data = _outletManagerService.ArchiveOutlet(outlet);
             if (data.Count > 0)
                 return new OkObjectResult(new { Response = data });
             else
@@ -45,9 +45,9 @@ namespace WebAPI.Controllers
         [Authorize]
         [HttpPost]
         [Route("Update")]
-        public IActionResult Update(Outlet outlet)
+        public IActionResult Update(OutletModel outlet)
         {
-            List<Outlet> data = _outletManagerService.UpdateOutlet(outlet);
+            List<OutletModel> data = _outletManagerService.UpdateOutlet(outlet);
             if (data.Count > 0)
                 return new OkObjectResult(new { Response = data });
             else
@@ -59,7 +59,7 @@ namespace WebAPI.Controllers
         [Route("GetUserOutlets/{userId}")]
         public IActionResult GetOutletsByUserId(string userId)
         {
-            List<Outlet> data = _outletManagerService.GetOutletsByUserId(userId);
+            List<OutletModel> data = _outletManagerService.GetOutletsByUserId(userId);
             if (data != null)
                 return new OkObjectResult( new { Response = data } );
             else
@@ -71,7 +71,7 @@ namespace WebAPI.Controllers
         [Route("GetOutlet/{OutletId}")]
         public IActionResult GetOutlet(decimal OutletId)
         {
-            Outlet data = _outletManagerService.GetOutlet(OutletId);
+            OutletModel data = _outletManagerService.GetOutlet(OutletId);
             if (data != null)
                 return new OkObjectResult(new { Response = data });
             else

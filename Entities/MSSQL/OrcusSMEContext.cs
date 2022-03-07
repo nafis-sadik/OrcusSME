@@ -1,7 +1,7 @@
 ﻿using System;
-using DataLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using DataLayer.Entities;
 
 #nullable disable
 
@@ -27,7 +27,6 @@ namespace DataLayer.MSSQL
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<EmailAddress> EmailAddresses { get; set; }
         public virtual DbSet<File> Files { get; set; }
-        public virtual DbSet<Image> Images { get; set; }
         public virtual DbSet<InventoryLog> InventoryLogs { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Outlet> Outlets { get; set; }
@@ -100,8 +99,6 @@ namespace DataLayer.MSSQL
             {
                 entity.HasIndex(e => e.OutletId, "IX_Categories_OutletId");
 
-                entity.Property(e => e.CategoryId).ValueGeneratedNever();
-
                 entity.Property(e => e.CategoryName)
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -119,8 +116,6 @@ namespace DataLayer.MSSQL
 
             modelBuilder.Entity<CommonCode>(entity =>
             {
-                entity.Property(e => e.CommonCodeId).ValueGeneratedNever();
-
                 entity.Property(e => e.CommonCodeName)
                     .HasMaxLength(10)
                     .IsFixedLength(true);
@@ -173,8 +168,6 @@ namespace DataLayer.MSSQL
             {
                 entity.ToTable("Crashlog");
 
-                entity.Property(e => e.CrashLogId).ValueGeneratedNever();
-
                 entity.Property(e => e.ClassName)
                     .IsRequired()
                     .HasMaxLength(20)
@@ -196,8 +189,6 @@ namespace DataLayer.MSSQL
 
             modelBuilder.Entity<Customer>(entity =>
             {
-                entity.Property(e => e.CustomerId).ValueGeneratedNever();
-
                 entity.Property(e => e.Address)
                     .IsRequired()
                     .HasMaxLength(255);
@@ -254,27 +245,9 @@ namespace DataLayer.MSSQL
                     .HasConstraintName("FK_EmailId_User");
             });
 
-            modelBuilder.Entity<File>(entity =>
-            {
-                entity.Property(e => e.FileId).ValueGeneratedNever();
-            });
-
-            modelBuilder.Entity<Image>(entity =>
-            {
-                entity.Property(e => e.ImageId).ValueGeneratedNever();
-
-                entity.Property(e => e.FkId).HasColumnName("FK_Id");
-
-                entity.Property(e => e.StorageLocation).IsRequired();
-
-                entity.Property(e => e.TableName).IsRequired();
-            });
-
             modelBuilder.Entity<InventoryLog>(entity =>
             {
                 entity.ToTable("InventoryLog");
-
-                entity.Property(e => e.InventoryLogId).ValueGeneratedNever();
 
                 entity.Property(e => e.ActivityDate).HasColumnType("datetime");
 
@@ -296,8 +269,6 @@ namespace DataLayer.MSSQL
 
             modelBuilder.Entity<Order>(entity =>
             {
-                entity.Property(e => e.OrderId).ValueGeneratedNever();
-
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.CustomerId)
@@ -308,8 +279,6 @@ namespace DataLayer.MSSQL
             modelBuilder.Entity<Outlet>(entity =>
             {
                 entity.HasIndex(e => e.UserId, "IX_Outlets_UserId");
-
-                entity.Property(e => e.OutletId).ValueGeneratedNever();
 
                 entity.Property(e => e.EcomUrl)
                     .HasColumnType("text")
@@ -345,8 +314,6 @@ namespace DataLayer.MSSQL
             {
                 entity.HasIndex(e => e.CategoryId, "IX_Products_CategoryId");
 
-                entity.Property(e => e.ProductId).ValueGeneratedNever();
-
                 entity.Property(e => e.ProductName)
                     .IsRequired()
                     .HasMaxLength(120);
@@ -381,8 +348,6 @@ namespace DataLayer.MSSQL
 
                 entity.HasIndex(e => e.ProductId, "IX_ProductAttributes_ProductId");
 
-                entity.Property(e => e.AttributeId).ValueGeneratedNever();
-
                 entity.Property(e => e.AttributeValues)
                     .IsRequired()
                     .HasMaxLength(10)
@@ -403,28 +368,23 @@ namespace DataLayer.MSSQL
 
             modelBuilder.Entity<ProductPicture>(entity =>
             {
-                entity.HasKey(e => e.ProductPictureId)
-                    .HasName("PK__ProductU__5085C454884EB7EB");
-
                 entity.HasOne(d => d.File)
-                    .WithMany()
+                    .WithMany(p => p.ProductPictures)
                     .HasForeignKey(d => d.FileId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ProductPictures_Files");
+                    .HasConstraintName("FK_ProductPictures_Files1");
 
-                entity.HasOne(d => d.ProductPictureNavigation)
-                    .WithMany()
-                    .HasForeignKey(d => d.ProductPictureId)
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.ProductPictures)
+                    .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ProductPictures_Products");
+                    .HasConstraintName("FK_ProductPictures_Products2");
             });
 
             modelBuilder.Entity<ProductUnitType>(entity =>
             {
                 entity.HasKey(e => e.UnitTypeIds)
                     .HasName("PK__ProductU__5085C454884EB7EB");
-
-                entity.Property(e => e.UnitTypeIds).ValueGeneratedNever();
 
                 entity.Property(e => e.Status)
                     .HasMaxLength(1)

@@ -48,7 +48,6 @@ namespace Services.CommonServices.Implementation
                 {
                     var file = new DataLayer.Entities.File
                     {
-                        FileId = i + pk,
                         FileName = FileNames[i],
                         FilePath = Path.Combine("Images", FileNames[i])
                     };

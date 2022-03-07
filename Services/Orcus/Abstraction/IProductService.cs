@@ -1,5 +1,6 @@
 ﻿using DataLayer.Entities;
 using DataLayer.Models;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,10 @@ namespace Services.Orcus.Abstraction
     {
         public IEnumerable<ProductUnitTypeModel> GetProductUnitTypes();
         public bool AddProductUnitTypes(ProductUnitTypeModel productUnitType);
-        public bool PurchaseProduct(ProductModel product, out int productId);
+        public int? SaveProduct(ProductModel product);
+        public bool PurchaseProduct(int productId, int quantity, double purchasingPrice);
         public bool? SellProduct(ProductModel product);
-        public IEnumerable<ProductModel> GetInventory(string userId, int? outletId);
+        public IEnumerable<ProductModel> GetInventory(OutletModel outletModel);
         public bool? ArchiveProduct(string userId, int productId);
     }
 }
