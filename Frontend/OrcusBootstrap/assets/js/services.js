@@ -18,8 +18,9 @@ const Route = {
     Product: {
         UnitType: '/Product/ProductUnitTypes/',
         Purchase: '/Product/Purchase',
+        Save: '/Product/SaveProduct',
         Sell: '/Product/Sell',
-        Inventory: '/Product/Inventory/',
+        Inventory: '/Product/Inventory',
         ArchiveProduct: '/Product/ArchiveProduct/'
     }
 }

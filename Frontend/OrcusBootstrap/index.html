@@ -287,7 +287,7 @@
                                 <li><a partial="inventory-dashboard">Inventory Dashboard</a></li>
                                 <li><a partial="category-manager">Category Manager</a></li>
                                 <!-- <li><a partial="suppliers">Supplier</a></li> -->
-                                <li><a partial="purchase">Purchase</a></li>
+                                <li><a partial="save-product">Add/Save Product</a></li>
                                 <li><a partial="sell">Sell</a></li>
                             </ul>
                         </li>
@@ -934,9 +934,14 @@
         </div>
     </section>
     <!-- Jquery Core Js -->
-    <script src=" https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src=" https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
     <script src="assets/bundles/vendorscripts.bundle.js"></script> <!-- slimscroll, waves Scripts Plugin Js -->
     <script src="assets/bundles/morrisscripts.bundle.js"></script> <!-- Morris Plugin Js -->
     <script src="assets/bundles/jvectormap.bundle.js"></script> <!-- JVectorMap Plugin Js -->
@@ -962,7 +967,7 @@
 
     <script>
         Service.RefreshOutletListOnLeftSideBar('UpdateList');
-        controller(window.location.href + '/partialViews/purchase.html');
+        controller(window.location.href + '/partialViews/inventory-dashboard.html');
         $(document).ready(() => {
             $('#LogOut').click(() => {
                 localStorage.removeItem('token');

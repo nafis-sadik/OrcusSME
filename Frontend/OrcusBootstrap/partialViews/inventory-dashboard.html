@@ -58,21 +58,35 @@
                 }
             </style>
         </div>
+        <div class="card">
+            <div class="body">
+                <ul class="pagination pagination-primary m-b-0">
+                    <li class="page-item"><a class="page-link"><i
+                               class="zmdi zmdi-arrow-left"></i></a></li>
+                    <li class="page-item active"><a class="page-link">1</a></li>
+                    <li class="page-item"><a class="page-link">2</a></li>
+                    <li class="page-item"><a class="page-link">3</a></li>
+                    <li class="page-item"><a class="page-link">4</a></li>
+                    <li class="page-item"><a class="page-link"><i class="zmdi zmdi-arrow-right"></i></a></li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
 <script>
     var SelectedOutlet;
-    loadProducts = (outletId = '') => {
+    loadProducts = (outletId = 0) => {
         SelectedOutlet = outletId;
         $('#ProductTable tbody').empty();
-        let url = '';
-        if (outletId == '')
-            url = Route.Base + Route.Product.Inventory + localStorage.getItem('userId');
-        else
-            url = Route.Base + Route.Product.Inventory + localStorage.getItem('userId') + '/' + outletId;
         let param = {
-            URL: url,
-            Method: 'GET',
+            URL: Route.Base + Route.Product.Inventory,
+            Method: 'POST',
+            Data: {
+                UserId: localStorage.getItem('userId'),
+                OutletId: outletId,
+                Page: 1,
+                PageSize: 10
+            },
             Success: (res) => {
                 if (res.response.length > 0) {
                     for (let i = 0; i < res.response.length; i++) {
@@ -137,5 +151,40 @@
         }
 
         APIConsumptionAuth(param);
+
+        let currentPage = 1;
+        let minPage = 0;
+        let maxPage = 4;
+        $('.pagination li').click((elem) => {
+            $('.pagination li').removeClass('active');
+
+            if ($(elem.target).first().text() != '') {
+                currentPage = $(elem.target).first().text();
+            }
+            else {
+                if (!$(elem.target).first().hasClass('zmdi-arrow-right')) {
+                    if (currentPage > 1)
+                        currentPage = parseInt(currentPage) - 1;
+                }
+                else
+                    currentPage = parseInt(currentPage) + 1;
+            }
+
+            visiblePages = $('.pagination li');
+            for (let i = 0; i < visiblePages.length; i++) {
+                if (currentPage > maxPage) {
+                    if (i > 0 && i < visiblePages.length - 1) {
+                        $(visiblePages[i]).empty();
+                        $(visiblePages[i]).append('<a class="page-link">' + i + currentPage + '</a>');
+                        maxPage = currentPage;
+                    }
+                }
+
+                if (parseInt($(visiblePages[i]).text()) == parseInt(currentPage)) {
+                    $(visiblePages[i]).addClass('active');
+                }
+            }
+            console.log(currentPage);
+        });
     });
 </script>
