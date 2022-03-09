@@ -27,16 +27,11 @@ namespace Services.Orcus.Implementation
         {
             try
             {
-                int pk = _categoryRepo.AsQueryable().Count() + 1;
-                List<CategoryModel> AlreadyExists = _categoryRepo.AsQueryable().Where(x => x.OutletId == category.outletId && x.CategoryName == category.CategoryName) != null ? new List<CategoryModel>() : null;
-                if (AlreadyExists != null && AlreadyExists.Count > 0)
-                    return AlreadyExists;
                 _categoryRepo.Add(new DataLayer.Entities.Category
                 {
-                    CategoryId = pk,
                     CategoryName = category.CategoryName,
                     OutletId = category.outletId,
-                    ParentCategoryId = category.ParentCategoryId,
+                    ParentCategoryId = null,
                     Status = CommonConstants.StatusTypes.Active
                 });
 
@@ -46,11 +41,8 @@ namespace Services.Orcus.Implementation
             {
                 _categoryRepo.Rollback();
 
-                int pk = _crashLogRepo.AsQueryable().Count() + 1;
-
                 _crashLogRepo.Add(new DataLayer.Entities.Crashlog
                 {
-                    CrashLogId = pk,
                     ClassName = "CategoryService",
                     MethodName = "AddCategory",
                     ErrorMessage = ex.Message.ToString(),
@@ -100,11 +92,11 @@ namespace Services.Orcus.Implementation
             {
                 List<CategoryModel> response = new List<CategoryModel>();
                 response = _categoryRepo.AsQueryable().Where(x => x.OutletId == OutletId && x.Status == CommonConstants.StatusTypes.Active)
-                    .Select(x => new DataLayer.Models.CategoryModel
+                    .Select(x => new CategoryModel
                     {
                         CategoryId = x.CategoryId,
                         CategoryName = x.CategoryName,
-                        outletId = (int)x.OutletId,
+                        outletId = x.OutletId,
                         ParentCategoryId = x.ParentCategoryId,
                         UserId = x.Outlet.UserId
                     }).OrderBy(x => x.ParentCategoryId).ToList();
@@ -224,11 +216,8 @@ namespace Services.Orcus.Implementation
             {
                 _categoryRepo.Rollback();
 
-                int pk = _crashLogRepo.AsQueryable().Count() + 1;
-
                 _crashLogRepo.Add(new DataLayer.Entities.Crashlog
                 {
-                    CrashLogId = pk,
                     ClassName = "CategoryService",
                     MethodName = "GetCategoriesByOutlets",
                     ErrorMessage = ex.Message,

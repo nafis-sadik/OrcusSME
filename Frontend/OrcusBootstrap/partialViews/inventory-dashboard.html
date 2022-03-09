@@ -153,7 +153,7 @@
         APIConsumptionAuth(param);
 
         let currentPage = 1;
-        let minPage = 0;
+        let minPage = 1;
         let maxPage = 4;
         $('.pagination li').click((elem) => {
             $('.pagination li').removeClass('active');
@@ -172,11 +172,16 @@
 
             visiblePages = $('.pagination li');
             for (let i = 0; i < visiblePages.length; i++) {
-                if (currentPage > maxPage) {
-                    if (i > 0 && i < visiblePages.length - 1) {
-                        $(visiblePages[i]).empty();
-                        $(visiblePages[i]).append('<a class="page-link">' + i + currentPage + '</a>');
+                if (i > 0 && i < visiblePages.length - 1) {
+                    if (currentPage > maxPage) {
+                        while (i < visiblePages.length - 1) {
+                            $($('.pagination li a')[i]).html(parseInt($($('.pagination li a')[i]).html()) + 1);
+                            i++;
+                        }
+                        minPage++;
                         maxPage = currentPage;
+                        $(visiblePages[4]).addClass('active');
+                        break;
                     }
                 }
 

@@ -204,7 +204,6 @@
             }
         });
 
-
         dropzone.on('sending', function (file, xhr, formData) {
             // Will send the filesize along with the file as POST data.
             formData.append("productId", localStorage.getItem('productId'));
@@ -281,7 +280,7 @@
                     return;
                 }
                 $.each(subCategories, (key, subCategory) => {
-                    if (subCategory.parentCategoryId != null) {
+                    if (subCategory.parentCategoryId != null && $('#Category').val() == subCategory.parentCategoryId) {
                         $('#SubCategory').append(
                             '<option value="' + subCategory.categoryId + '">' + subCategory.categoryName + '</option>'
                         );
