@@ -18,5 +18,6 @@ namespace Services.Orcus.Abstraction
         public bool? SellProduct(ProductModel product);
         public IEnumerable<ProductModel> GetInventory(OutletModel outletModel);
         public bool? ArchiveProduct(string userId, int productId);
+        public ProductModel GetProductById(int productId);
     }
 }

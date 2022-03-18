@@ -13,7 +13,7 @@ namespace Services.Orcus.Abstraction
         public List<OutletModel> UpdateOutlet(OutletModel outlet);
         public List<OutletModel> ArchiveOutlet(OutletModel outlet);
         public List<OutletModel> GetOutletsByUserId(string UserId);
-        public OutletModel GetOutlet(decimal OutletId);
-        public bool? OrderSite(decimal OutletId, out string response);
+        public OutletModel GetOutlet(int OutletId);
+        public bool? OrderSite(int OutletId, out string response);
     }
 }

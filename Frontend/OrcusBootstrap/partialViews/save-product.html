@@ -237,6 +237,9 @@
         $(document).ready(() => {
             var subCategories = [];
 
+            let productId = localStorage.getItem("productId");
+            alert(productId);
+
             $('#Outlets').change(() => {
                 $('#Category').empty();
                 $('#SubCategory').empty();

@@ -29,5 +29,6 @@ namespace DataLayer.Models
         public string SearchString { get; set; }
         public int Skip => _pageSize * (_page - 1);
         public string UserId { get; set; }
+        public int PageCount { get; set; }
     }
 }

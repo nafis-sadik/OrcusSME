@@ -25,7 +25,7 @@ namespace Services.Orcus.Implementation
         private readonly IProductRepo _productRepo;
         private readonly IOutletManagerRepo _outletManagerRepo;
         private readonly ICategoryRepo _categoryRepo;
-        private readonly IProductPictureRepo _productPicRepo;
+        //private readonly IProductPictureRepo _productPicRepo;
 
         public ProductService()
         {
@@ -36,7 +36,7 @@ namespace Services.Orcus.Implementation
             _productRepo = new ProductRepo(context);
             _outletManagerRepo = new OutletManagerRepo(context);
             _categoryRepo = new CategoryRepo(context);
-            _productPicRepo = new ProductPictureRepo(context);
+            //_productPicRepo = new ProductPictureRepo(context);
         }
 
         public IEnumerable<ProductUnitTypeModel> GetProductUnitTypes()
@@ -96,7 +96,6 @@ namespace Services.Orcus.Implementation
 
         public int? SaveProduct(ProductModel product)
         {
-            int pk;
             Product productData;
             try
             {
@@ -271,7 +270,7 @@ namespace Services.Orcus.Implementation
                     return false;
 
                 // Veridy user's product
-                string prductOwnerId = _outletManagerRepo.Get((decimal)_categoryRepo.AsQueryable().FirstOrDefault(x => x.CategoryId == _productRepo.Get(productId).CategoryId).OutletId).UserId;
+                string prductOwnerId = _outletManagerRepo.Get(_categoryRepo.AsQueryable().FirstOrDefault(x => x.CategoryId == _productRepo.Get(productId).CategoryId).OutletId).UserId;
                 if (prductOwnerId != userId)
                     return false;
 
@@ -345,6 +344,23 @@ namespace Services.Orcus.Implementation
 
                 return false;
             }
+        }
+
+        public ProductModel GetProductById(int productId)
+        {
+            Product product =_productRepo.Get(productId);
+            ProductModel productData = new ProductModel();
+            productData.ProductName = product.ProductName;
+            productData.CategoryId = product.CategoryId;
+            productData.SubCategoryId = (int)_categoryRepo.AsQueryable().Where(c => c.CategoryId == productId).FirstOrDefault().ParentCategoryId;
+            productData.ProductDescription = product.Description;
+            productData.ShortDescription = product.ShortDescription;
+            productData.RetailPrice = (int)product.RetailPrice;
+            productData.Quantity += product.Quantity;
+            productData.ShortDescription = product.ShortDescription;
+            productData.ProductSpecs = product.Specifications;
+            productData.UnitTypeId = product.UnitTypeId;
+            return productData;
         }
     }
 }

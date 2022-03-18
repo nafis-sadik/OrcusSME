@@ -136,6 +136,22 @@ namespace WebAPI.Controllers
             }
         }
 
+        [Authorize]
+        [HttpGet]
+        [Route("GetProduct")]
+        public IActionResult GetProduct(int productId)
+        {
+            try
+            {
+                ProductModel productModel = _productService.GetProductById(productId);
+                return Ok(productModel);
+            }
+            catch (Exception ex)
+            {
+                return Conflict(ex.Message);
+            }
+        }
+
         //[Authorize]
         //[HttpPut]
         //[Route("ProductUnitTypes")]

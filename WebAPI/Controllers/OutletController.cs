@@ -69,7 +69,7 @@ namespace WebAPI.Controllers
         [Authorize]
         [HttpGet]
         [Route("GetOutlet/{OutletId}")]
-        public IActionResult GetOutlet(decimal OutletId)
+        public IActionResult GetOutlet(int OutletId)
         {
             OutletModel data = _outletManagerService.GetOutlet(OutletId);
             if (data != null)
@@ -81,7 +81,7 @@ namespace WebAPI.Controllers
         [Authorize]
         [HttpGet]
         [Route("OrderSite/{OutletId}")]
-        public IActionResult OrderSite(decimal OutletId)
+        public IActionResult OrderSite(int OutletId)
         {
             bool? responseType = _outletManagerService.OrderSite(OutletId, out string response);
             if (responseType == true)

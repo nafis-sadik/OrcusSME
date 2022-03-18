@@ -30,16 +30,11 @@ namespace Services.Orcus.Implementation
             List<Models.OutletModel> response = new List<Models.OutletModel>();
             try
             {
-                int pk = 0;
-                if (_outletManagerRepo.AsQueryable().Any())
-                    pk = (int)_outletManagerRepo.AsQueryable().Max(x => x.OutletId) + 1;
-
                 bool status = _outletManagerRepo.Add(new Outlet
                 {
                     OutletAddresss = outlet.OutletAddresss,
                     OutletName = outlet.OutletName,
                     UserId = outlet.UserId,
-                    OutletId = pk,
                     Status = CommonConstants.StatusTypes.Active
                 });
 
@@ -52,16 +47,9 @@ namespace Services.Orcus.Implementation
             {
                 _outletManagerRepo.Rollback();
 
-                int pk;
-                if (!_crashLogRepo.AsQueryable().Any())
-                    pk = 0;
-                else
-                    pk = _crashLogRepo.AsQueryable().Max(x => x.CrashLogId) + 1;
-
                 if (ex.InnerException != null)
                     _crashLogRepo.Add(new Crashlog
                     {
-                        CrashLogId = pk,
                         ClassName = "OutletManagerService",
                         MethodName = "AddOutlet",
                         ErrorMessage = ex.Message,
@@ -94,18 +82,11 @@ namespace Services.Orcus.Implementation
             catch (Exception ex)
             {
                 _outletManagerRepo.Rollback();
-
-                int pk;
-                if (!_crashLogRepo.AsQueryable().Any())
-                    pk = 0;
-                else
-                    pk = _crashLogRepo.AsQueryable().Max(x => x.CrashLogId) + 1;
-
+                
                 if (ex.InnerException != null)
                     if (oldData != null)
                         _crashLogRepo.Add(new Crashlog
                         {
-                            CrashLogId = pk,
                             ClassName = "OutletManagerService",
                             MethodName = "ArchiveOutlet",
                             ErrorMessage = ex.Message,
@@ -121,7 +102,7 @@ namespace Services.Orcus.Implementation
             return response;
         }
 
-        public Models.OutletModel GetOutlet(decimal outletId)
+        public Models.OutletModel GetOutlet(int outletId)
         {
             Models.OutletModel response;
             try
@@ -203,7 +184,7 @@ namespace Services.Orcus.Implementation
             return response;
         }
 
-        public bool? OrderSite(decimal outletId, out string response)
+        public bool? OrderSite(int outletId, out string response)
         {
             try
             {
