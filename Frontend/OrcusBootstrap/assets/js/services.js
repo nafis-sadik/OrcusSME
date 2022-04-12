@@ -21,7 +21,8 @@ const Route = {
         Save: '/Product/SaveProduct',
         Sell: '/Product/Sell',
         Inventory: '/Product/Inventory',
-        ArchiveProduct: '/Product/ArchiveProduct/'
+        ArchiveProduct: '/Product/ArchiveProduct/',
+        GetProduct: '/Product/GetProduct/'
     }
 }
 

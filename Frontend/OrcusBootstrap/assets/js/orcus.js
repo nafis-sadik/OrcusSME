@@ -34,7 +34,7 @@ const LeftBarInit = () => {
             return;
         let partialArr = partial.split('.');
         if(partialArr[partialArr.length-1] != 'html'){
-            partial += '.html'; 
+            partial += '.html';
         }
 
         controller(window.location.href + '/partialViews/' + partial);

@@ -23,14 +23,12 @@
                         </ul>
                     </li>
                     <li class="remove">
-                        <a role="button"
-                           class="boxs-close"><i class="zmdi zmdi-close"></i></a>
+                        <a role="button" class="boxs-close"><i class="zmdi zmdi-close"></i></a>
                     </li>
                 </ul>
             </div>
             <div class="body table-responsive">
-                <table id="ProductTable"
-                       class="table bg-purple">
+                <table id="ProductTable" class="table bg-purple">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -61,8 +59,7 @@
         <div class="card">
             <div class="body">
                 <ul class="pagination pagination-primary m-b-0">
-                    <li class="page-item previous"><a class="page-link"><i
-                               class="zmdi zmdi-arrow-left"></i></a></li>
+                    <li class="page-item previous"><a class="page-link"><i class="zmdi zmdi-arrow-left"></i></a></li>
                     <li class="page-item page active"><a class="page-link">1</a></li>
                     <li class="page-item page"><a class="page-link">2</a></li>
                     <li class="page-item page"><a class="page-link">3</a></li>
@@ -133,7 +130,19 @@
 
     updateProduct = (productId) => {
         controller(window.location.href + '/partialViews/save-product.html');
-        localStorage.setItem("productId", productId);
+        console.log(Route.Base + Route.Product.GetProduct + productId);
+        let param = {
+            URL: Route.Base + Route.Product.GetProduct + productId,
+            Method: 'GET',
+            Success: (res) => {
+                localStorage.setItem("loadedProduct", JSON.stringify(res));
+            },
+            Error: (res) => {
+                console.log(res);
+            }
+        }
+
+        APIConsumptionAuth(param);
     }
 
     archiveProduct = (productId) => {

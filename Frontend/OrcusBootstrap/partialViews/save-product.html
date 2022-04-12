@@ -149,7 +149,7 @@
                         </div>
                         <div class="col-sm-12 col-lg-6">
                             <button type="submit"
-                                    class="col-sm-12 col-lg-6 btn btn-raised btn-primary btn-round waves-effect m-lg-l-20 custom-btn">Purchase</button>
+                                    class="col-sm-12 col-lg-6 btn btn-raised btn-primary btn-round waves-effect m-lg-l-20 custom-btn">Save</button>
                         </div>
                     </div>
                 </div>
@@ -210,6 +210,65 @@
             localStorage.removeItem('productId');
         });
 
+        loadCategories = (categoryId = null) => {
+            $('#Category').empty();
+            $('#SubCategory').empty();
+            $('#Category').append('<option value=""> -- Please select -- </option>');
+            $('#SubCategory').append('<option value=""> -- Please select -- </option>');
+            $('select').selectpicker('refresh');
+            if ($('#Outlets').val() == '') {
+                resetForm('SaveForm');
+                return;
+            }
+            let param = {
+                URL: Route.Base + Route.Categories.Get + $("#Outlets").val(),
+                Method: 'GET',
+                Success: (res) => {
+                    subCategories = [];
+                    if (res.response.length > 1) {
+                        $.each(res.response, (key, category) => {
+                            if (category.parentCategoryId == null) {
+                                $('#Category').append(
+                                    '<option value="' + category.categoryId + '">' + category.categoryName + '</option>'
+                                );
+                            }
+                            else {
+                                subCategories.push(category);
+                            }
+                        });
+                    }
+                    if (categoryId != null) {
+                        $('#Category').val(categoryId);
+                    }
+                    $('select').selectpicker('refresh');
+                },
+            };
+
+            APIConsumptionAuth(param);
+        }
+
+        loadUnits = (unitId = null) => {
+            let param = {
+                URL: Route.Base + Route.Product.UnitType,
+                Method: 'GET',
+                Success: (res) => {
+                    $('#Unit').empty();
+                    $('#Unit').append('<option value="">-- Please select --</option>');
+                    $.each(res.response, (key, unit) => {
+                        $('#Unit').append(
+                            '<option value="' + unit.unitTypeId + '">' + unit.unitTypeName + '</option>'
+                        );
+                    });
+                    if (unitId != null) {
+                        $('#Unit').val(unitId);
+                    }
+                    $('select').selectpicker('refresh');
+                },
+            };
+
+            APIConsumptionAuth(param);
+        };
+
         onLoad = () => {
             $('#PurchasingPrice').change(() => {
                 calculatePrice();
@@ -229,8 +288,6 @@
                 calculateNetAmount();
             });
 
-            loadUnits();
-
             Service.RefreshOutletListOnDropdown(['Outlets']);
         }
 
@@ -238,40 +295,34 @@
             var subCategories = [];
 
             let productId = localStorage.getItem("productId");
-            alert(productId);
+            let product = JSON.parse(localStorage.getItem('loadedProduct'));
+
+
+            if (product != null) {
+                console.log(product);
+                $('#ProductDescription').val(product.productDescription);
+                $('#ProductDescription').val(product.productDescription);
+                $('#ProductName').val(product.productName);
+                $('#Quantity').val(product.quantity);
+                $('#RetailPrice').val(product.retailPrice);
+                $('#PurchasingPrice').val(product.purchasingPrice);
+                loadUnits(product.unitTypeId);
+                $('select').selectpicker('refresh');
+                console.log($('#Outlets').html());
+                // $('#Outlets').val(product.outletId);
+                // $('select').selectpicker('refresh');
+                // loadCategories(product.categoryId);
+
+                // console.log($('#Outlets').val());
+                // $('#Category').val(product.categoryId);
+                // $('#SubCategory').val(product.subCategoryId);
+                // localStorage.removeItem('loadedProduct');
+            } else {
+                loadUnits();
+            }
 
             $('#Outlets').change(() => {
-                $('#Category').empty();
-                $('#SubCategory').empty();
-                $('#Category').append('<option value=""> -- Please select -- </option>');
-                $('#SubCategory').append('<option value=""> -- Please select -- </option>');
-                $('select').selectpicker('refresh');
-                if ($('#Outlets').val() == '') {
-                    resetForm('SaveForm');
-                    return;
-                }
-                let param = {
-                    URL: Route.Base + Route.Categories.Get + $("#Outlets").val(),
-                    Method: 'GET',
-                    Success: (res) => {
-                        subCategories = [];
-                        if (res.response.length > 1) {
-                            $.each(res.response, (key, category) => {
-                                if (category.parentCategoryId == null) {
-                                    $('#Category').append(
-                                        '<option value="' + category.categoryId + '">' + category.categoryName + '</option>'
-                                    );
-                                }
-                                else {
-                                    subCategories.push(category);
-                                }
-                            });
-                        }
-                        $('select').selectpicker('refresh');
-                    },
-                };
-
-                APIConsumptionAuth(param);
+                loadCategories();
             });
 
             $('#Category').change(() => {
@@ -291,6 +342,7 @@
                     $('select').selectpicker('refresh');
                 });
             });
+
         });
 
         calculateProfit = () => {
@@ -319,30 +371,8 @@
             $('#NetAmount').val($('#TotalAmount').val() - $('#DueAmount').val());
         }
 
-        loadUnits = () => {
-            let param = {
-                URL: Route.Base + Route.Product.UnitType,
-                Method: 'GET',
-                Success: (res) => {
-                    $('#Unit').empty();
-                    $('#Unit').append('<option value="">-- Please select --</option>');
-                    $.each(res.response, (key, unit) => {
-                        $('#Unit').append(
-                            '<option value="' + unit.unitTypeId + '">' + unit.unitTypeName + '</option>'
-                        );
-                    });
-
-                    $('select').selectpicker('refresh');
-                },
-            };
-
-            APIConsumptionAuth(param);
-        };
-
         $('#SaveForm').on('submit', (element) => {
             element.preventDefault();
-
-            // dropzone.processQueue();
 
             let param = {
                 URL: Route.Base + Route.Product.Save,
