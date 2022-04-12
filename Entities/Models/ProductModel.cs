@@ -1,4 +1,6 @@
-﻿namespace DataLayer.Models
+﻿using System.Collections.Generic;
+
+namespace DataLayer.Models
 {
     public class ProductModel
     {
@@ -19,5 +21,7 @@
         public float DueAmount { get; set; }
         public string UserId { get; set; }
         public int [] ProductImageIds { get; set; }
+        public IEnumerable<CategoryModel> Categories { get; set; }
+        public IEnumerable<CategoryModel> SubCategories { get; set; }
     }
 }

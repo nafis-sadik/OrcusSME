@@ -349,18 +349,41 @@ namespace Services.Orcus.Implementation
         public ProductModel GetProductById(int productId)
         {
             Product product =_productRepo.Get(productId);
-            ProductModel productData = new ProductModel();
-            productData.ProductName = product.ProductName;
-            productData.CategoryId = product.CategoryId;
-            productData.SubCategoryId = (int)_categoryRepo.AsQueryable().Where(c => c.CategoryId == productId).FirstOrDefault().ParentCategoryId;
-            productData.ProductDescription = product.Description;
-            productData.ShortDescription = product.ShortDescription;
-            productData.RetailPrice = (int)product.RetailPrice;
-            productData.Quantity += product.Quantity;
-            productData.ShortDescription = product.ShortDescription;
-            productData.ProductSpecs = product.Specifications;
-            productData.UnitTypeId = product.UnitTypeId;
-            return productData;
+            try
+            {
+                ProductModel productData = new ProductModel();
+                productData.ProductName = product.ProductName;
+                productData.CategoryId = product.CategoryId;
+                var subCategory = _categoryRepo.AsQueryable().Where(c => c.CategoryId == product.CategoryId).FirstOrDefault();
+                if(subCategory != null)
+                {
+                    productData.SubCategoryId = (int)subCategory.ParentCategoryId;
+                    productData.OutletId = _outletManagerRepo.AsQueryable().FirstOrDefault(x => x.OutletId == subCategory.OutletId).OutletId;
+                }
+                productData.ProductDescription = product.Description;
+                productData.ShortDescription = product.ShortDescription;
+                productData.RetailPrice = (int)product.RetailPrice;
+                productData.Quantity += product.Quantity;
+                productData.ShortDescription = product.ShortDescription;
+                productData.ProductSpecs = product.Specifications;
+                productData.UnitTypeId = product.UnitTypeId;
+
+                return productData;
+            }
+            catch (Exception ex)
+            {
+                _crashLogRepo.Add(new Crashlog
+                {
+                    ClassName = "ProductService",
+                    MethodName = "GetProductById",
+                    ErrorMessage = ex.Message,
+                    ErrorInner = ex.InnerException == null ? "" : ex.InnerException.Message,
+                    Data = JsonSerializer.Serialize("ProductId <=> " + productId),
+                    TimeStamp = DateTime.Now
+                });
+
+                return null;
+            }
         }
     }
 }

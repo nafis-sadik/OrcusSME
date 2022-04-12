@@ -138,7 +138,7 @@ namespace WebAPI.Controllers
 
         [Authorize]
         [HttpGet]
-        [Route("GetProduct")]
+        [Route("GetProduct/{productId}")]
         public IActionResult GetProduct(int productId)
         {
             try
